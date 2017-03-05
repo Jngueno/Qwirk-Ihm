@@ -1,10 +1,52 @@
-/// <reference path="../../typings/index.d.ts" />
+/*
+ * Angular 2 decorators and services
+ */
+import {
+  Component,
+  OnInit,
+  ViewEncapsulation
+} from '@angular/core';
+import { AppState } from './app.service';
 
-import {Component} from '@angular/core';
-
+/*
+ * App Component
+ * Top Level Component
+ */
 @Component({
-    selector: 'qwirk-container',
-    template: `<h1>Test webpack</h1>`
+  selector: 'app',
+  encapsulation: ViewEncapsulation.None,
+  styleUrls: [
+    './app.component.css'
+  ],
+  template: `
+    <nav>
+      <a [routerLink]=" ['./connection'] "
+        routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
+        Connection
+      </a>
+    </nav>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  `
 })
+export class AppComponent implements OnInit {
+  public name = 'Qwirk App';
 
-export class AppComponent {}
+  constructor(
+    public appState: AppState
+  ) {}
+
+  public ngOnInit() {
+    console.log('Initial App State', this.appState.state);
+  }
+
+}
+
+/*
+ * Please review the https://github.com/AngularClass/angular2-examples/ repo for
+ * more angular app examples that you may copy/paste
+ * (The examples may not be updated as quickly. Please open an issue on github for us to update it)
+ * For help or questions please contact us at @AngularClass on twitter
+ * or our chat on Slack at https://AngularClass.com/slack-join
+ */

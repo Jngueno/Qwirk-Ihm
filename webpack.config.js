@@ -1,34 +1,19 @@
-var webpack = require("webpack");
+/**
+ * @author: @AngularClass
+ */
 
-module.exports = {
-  entry: {
-    "vendor": "./src/vendor",
-    "app": "./src/main"
-  },
-  output: {
-    path: __dirname,
-    filename: "./dist/[name].bundle.js"
-  },
-  resolve: {
-    extensions: ['', '.ts', '.js']
-  },
-  devtool: 'source-map',
-  module: {
-    loaders: [
-      {
-        test: /\.ts/,
-        loaders: ['ts-loader'],
-        exclude: /node_modules/
-      }
-    ]
-  },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"./dist/vendor.bundle.js"),
-      new webpack.ProvidePlugin({
-          $: "jquery",
-          jQuery: "jquery",
-          "window.jQuery": "jquery",
-          Hammer: "hammerjs/hammer"
-      })
-  ]
+// Look in ./config folder for webpack.dev.js
+switch (process.env.NODE_ENV) {
+  case 'prod':
+  case 'production':
+    module.exports = require('./config/webpack.prod')({env: 'production'});
+    break;
+  case 'test':
+  case 'testing':
+    module.exports = require('./config/webpack.test')({env: 'test'});
+    break;
+  case 'dev':
+  case 'development':
+  default:
+    module.exports = require('./config/webpack.dev')({env: 'development'});
 }
