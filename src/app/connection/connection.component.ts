@@ -9,6 +9,9 @@ import {
 import { AppState } from '../app.service';
 import { Title } from './title';
 import { XLargeDirective } from './x-large';
+import { NgForm } from '@angular/forms';
+import { User } from './user';
+import {ConnectionService} from "./connection.service";
 
 @Component({
   // The selector is what angular internally uses
@@ -17,7 +20,8 @@ import { XLargeDirective } from './x-large';
   selector: 'connection',  // <connection></connection>
   // We need to tell Angular's Dependency Injection which providers are in our app.
   providers: [
-    Title
+    Title,
+    ConnectionService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
   styleUrls: [ './connection.component.css' ],
@@ -27,10 +31,15 @@ import { XLargeDirective } from './x-large';
 export class ConnectionComponent implements OnInit {
   // Set our default values
   public localState = { value: '' };
+
+  errorMessage: string;
+  user : User;
+  mode = 'Observable';
   // TypeScript public modifiers
   constructor(
     public appState: AppState,
-    public title: Title
+    public title: Title,
+    private connectionService: ConnectionService,
   ) {}
 
   public ngOnInit() {
@@ -42,5 +51,14 @@ export class ConnectionComponent implements OnInit {
     console.log('submitState', value);
     this.appState.set('value', value);
     this.localState.value = '';
+  }
+
+  public connectUser(form: NgForm) {
+    if(!form.value) { return; }
+    this.connectionService.getUser(form.value).subscribe(
+        user => this.user = user,
+        error => this.errorMessage = <any>error
+    );
+    console.log(form.value);
   }
 }

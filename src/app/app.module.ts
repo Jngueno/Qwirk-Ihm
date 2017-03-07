@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import { HttpModule, JsonpModule } from '@angular/http';
 import {
   NgModule,
   ApplicationRef
@@ -20,16 +20,18 @@ import { MaterializeModule } from 'angular2-materialize';
  */
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
+import { requestOptionsProvider }   from './default-request-options.service';
+
 // App is our top level component
 import { AppComponent } from './app.component';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
+import {ConnectionComponent} from "./connection/connection.component";
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
-import {ConnectionComponent} from "./connection/connection.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -58,12 +60,14 @@ type StoreType = {
     BrowserModule,
     FormsModule,
     HttpModule,
+    JsonpModule,
     MaterializeModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    requestOptionsProvider
   ]
 })
 export class AppModule {

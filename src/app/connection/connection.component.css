@@ -31,3 +31,12 @@
   padding-bottom: 85px;
   text-align: center;
 }
+
+.card-action .row {
+   margin: 0;
+}
+
+.signUp {
+  line-height: 36px;
+  margin: 0 !important;
+}
