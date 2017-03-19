@@ -3,34 +3,35 @@
  */
 // Observable Version
 import { Injectable }              from '@angular/core';
-import { Http, Response }          from '@angular/http';
-import { Headers, RequestOptions } from '@angular/http';
-import { Jsonp, URLSearchParams } from '@angular/http';
+import {Http, Response, Headers, RequestOptions}          from '@angular/http';
+
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { User } from './user';
-import { APPCONFIG } from './../config/param';
+import {IUser} from "../shared/models/user";
+import {APPCONFIG} from "../config/param";
 
 @Injectable()
 export class ConnectionService {
   private connectionUrl : string;
-  private user :User;
+  private user :IUser;
+  private errorMessage: string;
   private appConfig : APPCONFIG;
   constructor(private http : Http) {
     this.appConfig = new APPCONFIG();
-    this.connectionUrl = (this.appConfig.urlAPI || "http://localhost:8000/" ) + "login";
+    this.connectionUrl = (this.appConfig.urlAPI || "http://localhost:8000/" ) + "login/";
   }
 
-  getUser(params) : Observable<User> {
+  getUser(params) : Observable<IUser> {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     console.log(this.connectionUrl);
     return this.http.post(this.connectionUrl, params, options)
       .map(this.extractData)
-      .catch(this.handleError)
+
+
   }
   private extractData(res: Response) {
     let body = res.json();

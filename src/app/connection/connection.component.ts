@@ -12,8 +12,10 @@ import { AppState } from '../app.service';
 import { Title } from './title';
 import { XLargeDirective } from './x-large';
 import { NgForm } from '@angular/forms';
-import { User } from './user';
 import {ConnectionService} from "./connection.service";
+import {IUser} from "../shared/models/user";
+import {UserService} from "../shared/services/user.service";
+
 
 @Component({
   // The selector is what angular internally uses
@@ -38,14 +40,16 @@ export class ConnectionComponent implements OnInit {
   // Set our default values
   public localState = { value: '' };
 
-  errorMessage: string;
-  user : User;
+  user : IUser;
+  errorMessage = "";
   mode = 'Observable';
+
   // TypeScript public modifiers
   constructor(
     public appState: AppState,
     public title: Title,
     private connectionService: ConnectionService,
+    private userService: UserService
   ) {}
 
   public ngOnInit() {
@@ -60,6 +64,7 @@ export class ConnectionComponent implements OnInit {
   }
 
   public connectUser(form: NgForm) {
+    console.log("Hello from register");
     if(!form.value) { return; }
     this.connectionService.getUser(form.value).subscribe(
         user => this.user = user,

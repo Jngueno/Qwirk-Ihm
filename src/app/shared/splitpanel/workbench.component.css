@@ -1,0 +1,21 @@
+.upper {
+  height: 100%;
+  width: 100%;
+  background-color: #fdd;
+}
+
+.lower {
+  height: 100%;
+  width: 40%;
+  background-color: #bbb;
+}
+
+.left {
+  height: 100%;
+  background-color: #fff;
+}
+
+.right {
+  height: 100%;
+  background-color: #dfd;
+}

@@ -1,0 +1,73 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "firstName": "Housseini",
+      "lastName": "maiga",
+      "email": "housseini.maiga@gmail.com",
+      "username": "fouss.maiga",
+      "password": "test",
+      "groups": [],
+      "contacts": [],
+      "invitedGroups": [],
+      "isModerator": false
+    },
+    {
+      "id": 2,
+      "username": "test",
+      "firstname": "test",
+      "userIdentifier": "testt",
+      "password": "est",
+      "confirm-password": "test"
+    },
+    {
+      "firstName": "Housseini",
+      "lastName": "maiga",
+      "email": "housseini.maiga@gmail.com",
+      "username": "fouss.maiga",
+      "password": "test",
+      "groups": [],
+      "contacts": [],
+      "invitedGroups": [],
+      "isModerator": false,
+      "id": 3
+    },
+    {
+      "firstName": "Housseini",
+      "lastName": "maiga",
+      "email": "housseini.maiga@gmail.com",
+      "username": "fouss.maiga",
+      "password": "test",
+      "groups": [],
+      "contacts": [],
+      "invitedGroups": [],
+      "isModerator": false,
+      "id": 4
+    },
+    {
+      "username": "jngueno",
+      "firstname": "Ngueno",
+      "userIdentifier": "jngueno@yahoo.com",
+      "password": "Test",
+      "confirm-password": "Test",
+      "id": 5
+    },
+    {
+      "username": "Ario.maiga",
+      "firstname": "Ario",
+      "userIdentifier": "ario.maiga@yahoo.fr",
+      "password": "AZERTY",
+      "confirm-password": "AZERTY",
+      "id": 6
+    },
+    {
+      "username": "john.doe",
+      "firstname": "John",
+      "lastname": "Doe",
+      "mail": "john.doe@supinfo.com",
+      "password": "Test",
+      "confirm-password": "Test",
+      "id": 7
+    }
+  ]
+}

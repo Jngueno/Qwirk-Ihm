@@ -1,22 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
-import {
-  NgModule,
-  ApplicationRef
-} from '@angular/core';
-import {
-  removeNgStyles,
-  createNewHosts,
-  createInputTransfer
-} from '@angularclass/hmr';
-import {
-  RouterModule,
-  PreloadAllModules
-} from '@angular/router';
+import {NgModule, ApplicationRef} from '@angular/core';
+import {removeNgStyles, createNewHosts, createInputTransfer} from '@angularclass/hmr';
+import {RouterModule, PreloadAllModules} from '@angular/router';
 import { MaterializeModule } from 'angular2-materialize';
-import { AngularFireModule } from 'angularfire2';
-
+import {Angular2FontAwesomeModule} from 'angular2-font-awesome';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -34,6 +23,9 @@ import {ConnectionComponent} from "./connection/connection.component";
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
+import {RegisterComponent} from './register/register.component';
+import {UserService} from './shared/services/index';
+import {WorkbenchComponent} from "./shared/splitpanel/workbench.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -56,7 +48,9 @@ type StoreType = {
     AppComponent,
     AboutComponent,
     ConnectionComponent,
-    NoContentComponent
+    NoContentComponent,
+    RegisterComponent,
+    WorkbenchComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -64,12 +58,14 @@ type StoreType = {
     HttpModule,
     JsonpModule,
     MaterializeModule,
+    Angular2FontAwesomeModule,
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
-    requestOptionsProvider
+    requestOptionsProvider,
+    UserService
   ]
 })
 export class AppModule {

@@ -20,9 +20,9 @@ import { AppState } from './app.service';
   ],
   template: `
     <nav>
-      <a [routerLink]=" ['./connection'] "
+      <a [routerLink]=" ['./register'] "
         routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-        Connection
+        Register
       </a>
     </nav>
     <main>
