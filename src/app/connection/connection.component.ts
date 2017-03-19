@@ -12,9 +12,9 @@ import { AppState } from '../app.service';
 import { Title } from './title';
 import { XLargeDirective } from './x-large';
 import { NgForm } from '@angular/forms';
-import {ConnectionService} from "./connection.service";
-import {IUser} from "../shared/models/user";
-import {UserService} from "../shared/services/user.service";
+import { ConnectionService } from './connection.service';
+import { IUser } from '../shared/models/user';
+import { UserService } from '../shared/services/user.service';
 
 
 @Component({

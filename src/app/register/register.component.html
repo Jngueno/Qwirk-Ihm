@@ -7,16 +7,7 @@
 
     <form id="signUpForm" materialize #signupForm="ngForm" (ngSubmit)="register(signupForm)">
       <div class="card">
-        <div class="rounded-image-container">
-          <div class="rounded-image">
-            <img class="circle" src="../../assets/img/avatar.png">
-            <div class="rank-label-container">
-              <span class="label label-default rank-label">
-                <i fa class="fa fa-camera-retro fa-2x"></i>
-              </span>
-            </div>
-          </div>
-        </div>
+        <avatar-overlay></avatar-overlay>
         <div class="card-content">
           <div class="row">
             <div class="input-field col s12">

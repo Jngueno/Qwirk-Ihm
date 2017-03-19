@@ -19,13 +19,15 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
-import {ConnectionComponent} from "./connection/connection.component";
+import { ConnectionComponent } from './connection/connection.component';
+import { AvatarComponent } from './-avatar/avatar.component';
+import { AvatarOverlayComponent } from './-avatar/overlay/avatar-overlay.component';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
-import {RegisterComponent} from './register/register.component';
-import {UserService} from './shared/services/index';
-import {WorkbenchComponent} from "./shared/splitpanel/workbench.component";
+import { RegisterComponent } from './register/register.component';
+import { UserService } from './shared/services/index';
+import { WorkbenchComponent } from "./shared/splitpanel/workbench.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -50,6 +52,8 @@ type StoreType = {
     ConnectionComponent,
     NoContentComponent,
     RegisterComponent,
+    AvatarComponent,
+    AvatarOverlayComponent,
     WorkbenchComponent
   ],
   imports: [ // import Angular's modules
