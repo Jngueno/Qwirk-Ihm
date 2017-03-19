@@ -3,8 +3,10 @@
  */
 import {
   Component,
-  OnInit
+  OnInit, EventEmitter
 } from '@angular/core';
+
+import {MaterializeAction} from "angular2-materialize";
 
 import { AppState } from '../app.service';
 import { Title } from './title';
@@ -29,6 +31,10 @@ import {ConnectionService} from "./connection.service";
   templateUrl: './connection.component.html'
 })
 export class ConnectionComponent implements OnInit {
+
+  connectionStateAction = new EventEmitter<string|MaterializeAction>();
+  toastText = "";
+  toastTime = 4000;
   // Set our default values
   public localState = { value: '' };
 
@@ -59,6 +65,17 @@ export class ConnectionComponent implements OnInit {
         user => this.user = user,
         error => this.errorMessage = <any>error
     );
-    console.log(form.value);
+
+    if (this.errorMessage) {
+        this.toastText = this.errorMessage;
+    }
+    if (this.user) {
+        this.toastText = "Success";
+    }
+    console.log(this.user);
+  }
+
+  triggerConnectionState() {
+    this.connectionStateAction.emit('toast');
   }
 }

@@ -15,6 +15,8 @@ import {
   PreloadAllModules
 } from '@angular/router';
 import { MaterializeModule } from 'angular2-materialize';
+import { AngularFireModule } from 'angularfire2';
+
 /*
  * Platform and Environment providers/directives/pipes
  */

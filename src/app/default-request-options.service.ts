@@ -12,6 +12,7 @@ export class DefaultRequestOptions extends BaseRequestOptions {
 
     // Set the default 'Content-Type' header
     this.headers.set('Content-Type', 'application/json');
+    this.headers.set('Access-Control-Allow-Origin', '*');
   }
 }
 

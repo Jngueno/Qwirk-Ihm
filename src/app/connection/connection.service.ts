@@ -21,17 +21,20 @@ export class ConnectionService {
   private appConfig : APPCONFIG;
   constructor(private http : Http) {
     this.appConfig = new APPCONFIG();
-    this.connectionUrl = (this.appConfig.urlAPI || "http://localhost:8000/" ) + "user/";
+    this.connectionUrl = (this.appConfig.urlAPI || "http://localhost:8000/" ) + "login";
   }
 
   getUser(params) : Observable<User> {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
     console.log(this.connectionUrl);
-    return this.http.get(this.connectionUrl + params.userIdentifier + '/' + params.password)
+    return this.http.post(this.connectionUrl, params, options)
       .map(this.extractData)
       .catch(this.handleError)
   }
   private extractData(res: Response) {
     let body = res.json();
+    console.log(body);
     return body.data || { };
   }
 
@@ -39,8 +42,9 @@ export class ConnectionService {
     // In a real world app, we might use a remote logging infrastructure
     let errMsg: string;
     if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
+      console.log(JSON.stringify(error));
+      const body = error || '';
+      const err = body || JSON.stringify(body);
       errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
     } else {
       errMsg = error.message ? error.message : error.toString();
