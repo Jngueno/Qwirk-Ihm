@@ -24,3 +24,16 @@
   line-height: 36px;
   margin: 0 !important;
 }
+
+.restorePass {
+  position: absolute;
+  top: 10px;
+  font-size: 1.2em;
+  right: 20px;
+  -webkit-transition: opacity .25s ease;
+  cursor: pointer;
+}
+
+.restorePass:hover {
+  opacity: 0.75;;
+}

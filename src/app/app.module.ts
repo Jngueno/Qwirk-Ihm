@@ -20,8 +20,8 @@ import { AppState, InternalStateType } from './app.service';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 import { ConnectionComponent } from './connection/connection.component';
-import { AvatarComponent } from './-avatar/avatar.component';
-import { AvatarOverlayComponent } from './-avatar/overlay/avatar-overlay.component';
+import { AvatarComponent } from './_avatar/avatar.component';
+import { AvatarOverlayComponent } from './_avatar/overlay/avatar-overlay.component';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
