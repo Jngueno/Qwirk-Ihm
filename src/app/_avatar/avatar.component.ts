@@ -3,7 +3,7 @@
  */
 import {
   Component,
-  OnInit
+  OnInit, Input
 } from '@angular/core';
 
 @Component({
@@ -12,6 +12,8 @@ import {
   templateUrl: './avatar.component.html'
 })
 export class AvatarComponent implements OnInit {
+  @Input('urlImage')
+  urlImage: string;
   constructor(
   ) {}
 

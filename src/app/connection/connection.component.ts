@@ -40,6 +40,7 @@ export class ConnectionComponent implements OnInit {
   connectionStateAction = new EventEmitter<string|MaterializeAction>();
   toastText = "";
   toastTime = 4000;
+  profileImg = "../../assets/img/avatar.png";
   // Set our default values
   public localState = { value: '' };
 
@@ -72,19 +73,25 @@ export class ConnectionComponent implements OnInit {
   }
 
   public connectUser(value: any) {
+    console.log(value.userIdentifier, value.password);
     if(!value) { return; }
+
     this.authService.login(value.userIdentifier, value.password).subscribe(
       result => {
         if (result === true) {
           this.toastText = "Success";
           // login successful
           this.router.navigate(['/']);
+
+          this.connectionStateAction.emit('toast');
         } else {
           // login failed
           this.error = 'Username or password is incorrect';
           this.loading = false;
 
           this.toastText = this.errorMessage;
+
+          this.connectionStateAction.emit('toast');
         }
       }
     );
@@ -100,6 +107,40 @@ export class ConnectionComponent implements OnInit {
     }
 
     console.log('success');
-    this.resetService.sendReqResetPass(value.userIdentifier);
+    this.resetService.sendReqResetPass(value.userIdentifier).subscribe(
+      result => {
+        if (result) {
+          this.connectionStateAction.emit('toast');
+        }
+        else {
+
+          this.error = 'Not send';
+
+          this.toastText = this.error;
+
+          this.connectionStateAction.emit('toast');
+        }
+      }
+    );
+  }
+
+  getUserProfile(userIdentifier) {
+    let self = this;
+    this.userService.getUserProfile(userIdentifier).subscribe(
+      result => {
+        if (!result) {
+          self.profileImg = "../../assets/img/avatar.png";
+          return;
+        }
+        else {
+          self.profileImg = result;
+          return result;
+        }
+      },
+      err => {
+        self.profileImg = "../../assets/img/avatar.png";
+        return;
+      }
+    )
   }
 }

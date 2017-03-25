@@ -12,6 +12,8 @@
 
 .rounded-image .circle {
   border: 1px solid #aaaaaa;
+  width: 172px;
+  height: 172px;
 }
 
 .rounded-image:hover .overlay {

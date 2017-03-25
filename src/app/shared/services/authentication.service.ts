@@ -52,14 +52,30 @@ export class AuthenticationService {
 
           // store username and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('currentUser', JSON.stringify({ userIdentifier: user.username, token: token }));
-
-          // return true to indicate successful login
           return true;
         } else {
           // return false to indicate failed login
           return false;
         }
       })
+  }
+
+  uploadUserProfilePic(username, image) {
+
+    console.log("test");
+    let headers = new Headers();
+    headers.append("Content-Type", 'multipart/form-data');
+
+      return this.http.post(this.appConfig.getUrlAPI() + 'user/' + username, image, {headers: headers})
+        .map(response => {
+          let id = response.json() && response.json().id;
+          if(id) {
+            return true;
+          }
+          else {
+            return false;
+          }
+        });
   }
 
   logout(): void {

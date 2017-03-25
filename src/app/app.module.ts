@@ -28,6 +28,12 @@ import '../styles/headings.css';
 import { RegisterComponent } from './register/register.component';
 import { UserService } from './shared/services/index';
 import { WorkbenchComponent } from "./shared/splitpanel/workbench.component";
+import {ResetPasswordComponent} from "./resetPassword/resetPassword.component";
+import {AuthGuard} from "./_guards/auth.guard";
+import {AuthenticationService} from "./shared/services/authentication.service";
+import {HomeComponent} from "./home/home.component";
+import {LogoutComponent} from "./logout/logout.component";
+import {ResetGuard} from "./_guards/reset.guard";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -54,6 +60,9 @@ type StoreType = {
     RegisterComponent,
     AvatarComponent,
     AvatarOverlayComponent,
+    HomeComponent,
+    LogoutComponent,
+    ResetPasswordComponent,
     WorkbenchComponent
   ],
   imports: [ // import Angular's modules
@@ -63,13 +72,16 @@ type StoreType = {
     JsonpModule,
     MaterializeModule,
     Angular2FontAwesomeModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
     APP_PROVIDERS,
     requestOptionsProvider,
-    UserService
+    UserService,
+    AuthGuard,
+    ResetGuard,
+    AuthenticationService
   ]
 })
 export class AppModule {

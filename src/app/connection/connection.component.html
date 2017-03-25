@@ -5,13 +5,13 @@
       <h1 class="header">Sign In</h1>
     </div>
 
-    <form id="signInForm" materialize #signInForm="ngForm"  (ngSubmit)="connectUser(signInForm)">
+    <form id="signInForm" materialize #signInForm="ngForm"  (ngSubmit)="connectUser(signInForm.value)">
       <div class="card">
-        <avatar></avatar>
+        <avatar [urlImage]="profileImg"></avatar>
         <div class="card-content">
           <div class="row">
             <div class="input-field col s12">
-              <input id="userIdentifier" type="text" name="userIdentifier" class="active validate" required="" aria-required="true" ngModel>
+              <input id="userIdentifier" type="text" name="userIdentifier" class="active validate" required="" aria-required="true" (blur)="getUserProfile(signInForm.value.userIdentifier)" ngModel>
               <label for="userIdentifier" data-error="E-mail not valid">Username or E-mail</label>
             </div>
             <div class="input-field col s12">

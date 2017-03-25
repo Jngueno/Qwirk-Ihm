@@ -10,13 +10,22 @@ import {Observable} from "rxjs";
 export class ResetPassService {
   public appConfig = new APPCONFIG();
   response : any;
+  reset : any;
   constructor(private http: Http) {}
   sendReqResetPass(userIdentifier : string) : Observable<any>{
     console.log(userIdentifier);
     return this.http.post(this.appConfig.getUrlAPI() + 'forgot/', {userIdentifier : userIdentifier})
       .map((response : Response) => {
         this.response = response.json();
-        return this.response;
+        return !!this.response._id;
+      })
+  }
+
+  changeUserPassword(token : string, password : string) : Observable<any>{
+    return this.http.post(this.appConfig.getUrlAPI() + 'reset/', {password : password, resetPasswordToken : token})
+      .map((response : Response) => {
+        console.log(response.json());
+        return !!response.json();
       })
   }
 }

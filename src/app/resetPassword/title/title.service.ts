@@ -7,7 +7,7 @@ import { Http } from '@angular/http';
 @Injectable()
 export class Title {
 
-  public value = 'Sign In to Qwirk';
+  public value = 'Qwirk - Reset your password';
 
   constructor(
     public http: Http

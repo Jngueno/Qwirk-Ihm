@@ -7,7 +7,15 @@
 
     <form id="signUpForm" materialize #signupForm="ngForm" (ngSubmit)="register(signupForm)">
       <div class="card">
-        <avatar-overlay></avatar-overlay>
+        <div>
+          <avatar [urlImage]="profileImg"></avatar>
+          <div class="overlay file-field input-field" >
+              <span class="label label-default rank-label">
+                <i class="material-icons">camera_alt</i>
+                <input (click)="clickInputFile($event)" (change)="fileChangeEvent($event)" type="file" accept="image/*" name="profilePic" ngModel>
+              </span>
+          </div>
+        </div>
         <div class="card-content">
           <div class="row">
             <div class="input-field col s12">
@@ -44,7 +52,7 @@
               </button>
             </div>
             <div class="col s12 m6 right-align">
-              <a [routerLink]="['/connection']"class="signIn">SIGN IN</a>
+              <a [routerLink]="['/']"class="signIn">SIGN IN</a>
             </div>
           </div>
         </div>
