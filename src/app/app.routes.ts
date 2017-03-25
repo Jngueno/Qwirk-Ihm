@@ -3,9 +3,9 @@ import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
 
 import { DataResolver } from './app.resolver';
-import {ConnectionComponent} from "./connection/connection.component";
-import {RegisterComponent} from "./register/register.component";
-import {ResetPasswordComponent} from "./resetPassword/resetPassword.component";
+import {ConnectionComponent} from "./GIN/connection/connection.component";
+import {RegisterComponent} from "./GIN/register/register.component";
+import {ResetPasswordComponent} from "./GIN/resetPassword/resetPassword.component";
 import {AuthGuard} from "./_guards/auth.guard";
 import {HomeComponent} from "./home/home.component";
 import {ResetGuard} from "./_guards/reset.guard";

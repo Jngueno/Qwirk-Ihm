@@ -8,15 +8,15 @@ import {
 
 import {MaterializeAction} from "angular2-materialize";
 
-import { AppState } from '../app.service';
+import { AppState } from '../../app.service';
 import { Title } from './title';
 import { XLargeDirective } from './x-large';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthenticationService } from '../shared/services/authentication.service';
-import { IUser } from '../shared/models/user';
-import { UserService } from '../shared/services/user.service';
+import { AuthenticationService } from '../../shared/services/authentication.service';
+import { IUser } from '../../shared/models/user';
+import { UserService } from '../../shared/services/user.service';
 import { Router } from '@angular/router';
-import {ResetPassService} from "../shared/services/resetPass.service";
+import {ResetPassService} from "../../shared/services/resetPass.service";
 
 
 @Component({
@@ -31,9 +31,9 @@ import {ResetPassService} from "../shared/services/resetPass.service";
     ResetPassService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './connection.component.css' ],
+  styleUrls: [ 'connection.component.css' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './connection.component.html'
+  templateUrl: 'connection.component.html'
 })
 export class ConnectionComponent implements OnInit {
 

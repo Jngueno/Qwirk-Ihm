@@ -2,9 +2,9 @@
  * Created by Housseini  Maiga on 3/9/2017.
  */
 import {Component, OnInit} from '@angular/core';
-import {IUser} from "../shared/models/user";
-import {UserService} from "../shared/services/user.service";
-import { AuthenticationService } from "../shared/services/authentication.service";
+import {IUser} from "../../shared/models/user";
+import {UserService} from "../../shared/services/user.service";
+import { AuthenticationService } from "../../shared/services/authentication.service";
 import { Router } from '@angular/router';
 import {Headers} from "@angular/http";
 
@@ -12,8 +12,8 @@ import {Headers} from "@angular/http";
   providers: [
     AuthenticationService
   ],
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  templateUrl: 'register.component.html',
+  styleUrls: ['register.component.css']
 })
 export class RegisterComponent implements OnInit {
   user: IUser;

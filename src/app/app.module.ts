@@ -19,20 +19,20 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
-import { ConnectionComponent } from './connection/connection.component';
+import { ConnectionComponent } from './GIN/connection/connection.component';
 import { AvatarComponent } from './_avatar/avatar.component';
 import { AvatarOverlayComponent } from './_avatar/overlay/avatar-overlay.component';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
-import { RegisterComponent } from './register/register.component';
+import { RegisterComponent } from './GIN/register/register.component';
 import { UserService } from './shared/services/index';
 import { WorkbenchComponent } from "./shared/splitpanel/workbench.component";
-import {ResetPasswordComponent} from "./resetPassword/resetPassword.component";
+import {ResetPasswordComponent} from "./GIN/resetPassword/resetPassword.component";
 import {AuthGuard} from "./_guards/auth.guard";
 import {AuthenticationService} from "./shared/services/authentication.service";
 import {HomeComponent} from "./home/home.component";
-import {LogoutComponent} from "./logout/logout.component";
+import {LogoutComponent} from "./GIN/logout/logout.component";
 import {ResetGuard} from "./_guards/reset.guard";
 
 // Application wide providers

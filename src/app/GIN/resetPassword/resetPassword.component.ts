@@ -11,14 +11,14 @@ import {
 
 import {MaterializeAction} from "angular2-materialize";
 
-import { AppState } from '../app.service';
+import { AppState } from '../../app.service';
 import { Title } from './title';
 import { XLargeDirective } from './x-large';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { IUser } from '../shared/models/user';
-import { UserService } from '../shared/services/user.service';
+import { IUser } from '../../shared/models/user';
+import { UserService } from '../../shared/services/user.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import {ResetPassService} from "../shared/services/resetPass.service";
+import {ResetPassService} from "../../shared/services/resetPass.service";
 
 
 @Component({
@@ -32,9 +32,9 @@ import {ResetPassService} from "../shared/services/resetPass.service";
     ResetPassService
   ],
   // Our list of styles in our component. We may add more to compose many styles together
-  styleUrls: [ './resetPassword.component.css' ],
+  styleUrls: [ 'resetPassword.component.css' ],
   // Every Angular template is first compiled by the browser before Angular runs it's compiler
-  templateUrl: './resetPassword.component.html'
+  templateUrl: 'resetPassword.component.html'
 })
 export class ResetPasswordComponent implements OnInit {
 
