@@ -1,0 +1,14 @@
+
+<div class="rounded-image-container">
+  <div class="rounded-image">
+    <img class="circle" [src]="urlImage">
+
+
+    <div class="overlay file-field input-field" >
+              <span class="label label-default rank-label">
+                <i class="material-icons">camera_alt</i>
+                <input (click)="clickInputFile($event)" (change)="fileChangeEvent($event)"  type="file" accept="image/*" name="profilePic" ngModel>
+              </span>
+    </div>
+  </div>
+</div>
