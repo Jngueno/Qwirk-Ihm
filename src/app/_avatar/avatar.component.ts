@@ -14,6 +14,10 @@ import {
 export class AvatarComponent implements OnInit {
   @Input('urlImage')
   urlImage: string;
+
+  @Input('size')
+  size: string;
+
   constructor(
   ) {}
 

@@ -1,0 +1,44 @@
+.statusContent {
+  padding-top: 1rem;
+  position: relative;
+}
+
+.statusList {
+  background-color : transparent;
+  min-width: 0 !important;
+  box-shadow : unset;
+}
+
+.statusList li {
+  margin-bottom: 0.5rem;
+  min-height: 0;
+}
+
+.btn-floating.btn-small {
+  width: 15.5px;
+  height: 15.5px;
+}
+.btn-small {
+  height: 14px;
+  line-height: 14px;
+}
+
+.btn-floating.btn-small i {
+  line-height: 15px;
+  font-size: 14px;
+}
+
+.statusList li a {
+  line-height: 37px;
+  padding: 0;
+}
+
+.statusState {
+  text-align: center;
+  position: absolute;
+  bottom: 5px;
+  margin: auto;
+  display: block;
+  width: 100%;
+  padding-left: 60px;
+}
