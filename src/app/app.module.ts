@@ -34,6 +34,8 @@ import {AuthenticationService} from "./shared/services/authentication.service";
 import {HomeComponent} from "./home/home.component";
 import {LogoutComponent} from "./GIN/logout/logout.component";
 import {ResetGuard} from "./_guards/reset.guard";
+import {StatusComponent} from "./GIN/status/status.component";
+import {StatusService} from "./shared/services/status.service";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -63,6 +65,7 @@ type StoreType = {
     HomeComponent,
     LogoutComponent,
     ResetPasswordComponent,
+    StatusComponent,
     WorkbenchComponent
   ],
   imports: [ // import Angular's modules
@@ -81,7 +84,8 @@ type StoreType = {
     UserService,
     AuthGuard,
     ResetGuard,
-    AuthenticationService
+    AuthenticationService,
+    StatusService
   ]
 })
 export class AppModule {
