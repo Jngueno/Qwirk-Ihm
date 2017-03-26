@@ -10,18 +10,34 @@ import {log} from "util";
 
 @Injectable()
 export class StatusService {
+  private headers : Headers;
+  private appConfig = new APPCONFIG();
   constructor(
     private http : Http,
-    private headers : Headers,
-    private appConfig : APPCONFIG
   ) {}
 
   getCurrentStatus() {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
-    this.http.get(this.appConfig.getUrlAPI() + 'currentStatus', this.headers)
+    return this.http.get(this.appConfig.getUrlAPI() + 'currentStatus', {headers : this.headers})
       .map((response : Response) => {
-          return !!response.json();
+          return response.json();
+      })
+  }
+
+  getAllStatuses() {
+    return this.http.get(this.appConfig.getUrlAPI() + 'statuses')
+      .map((response: Response) => {
+          return response.json();
+      })
+  }
+
+  updateStatusCurrentUser(status : any) {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.post(this.appConfig.getUrlAPI() + 'currentStatus', status, {headers : this.headers})
+      .map((response : Response) => {
+          return response.json();
       })
   }
 }

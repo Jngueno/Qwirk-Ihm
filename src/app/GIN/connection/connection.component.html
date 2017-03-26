@@ -8,7 +8,7 @@
     <form id="signInForm" materialize #signInForm="ngForm"  (ngSubmit)="connectUser(signInForm.value)">
       <div class="card">
         <avatar [urlImage]="profileImg"></avatar>
-        <div class="card-content">
+        <div class="card-content signInContent">
           <div class="row">
             <div class="input-field col s12">
               <input id="userIdentifier" type="text" name="userIdentifier" class="active validate" required="" aria-required="true" (blur)="getUserProfile(signInForm.value.userIdentifier)" ngModel>

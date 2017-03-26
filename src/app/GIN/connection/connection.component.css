@@ -37,3 +37,13 @@
 .restorePass:hover {
   opacity: 0.75;;
 }
+
+avatar {
+  top: -85px;
+  position: absolute;
+  width: 100%;
+}
+
+.signInContent {
+  padding-top: 90px;
+}
