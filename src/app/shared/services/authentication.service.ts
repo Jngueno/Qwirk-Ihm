@@ -12,6 +12,7 @@ import 'rxjs/add/operator/map'
 export class AuthenticationService {
   public token: string;
   public appConfig = new APPCONFIG();
+  private headers: Headers;
 
 
   constructor(private http: Http) {
@@ -76,6 +77,15 @@ export class AuthenticationService {
             return false;
           }
         });
+  }
+
+  getCurrentUserProfile() {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.get(this.appConfig.getUrlAPI() + 'profile', {headers : this.headers})
+      .map((response : Response) => {
+        return response.json();
+      })
   }
 
   logout(): void {

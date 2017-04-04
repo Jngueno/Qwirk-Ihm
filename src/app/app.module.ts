@@ -41,6 +41,7 @@ import {LogoutComponent} from "./GIN/logout/logout.component";
 import {ResetGuard} from "./_guards/reset.guard";
 import {StatusComponent} from "./GIN/status/status.component";
 import {StatusService} from "./shared/services/status.service";
+import {ProfileComponent} from "./GIN/profile/profile.component";
 import {AvatarComponent} from "./_avatar/avatar.component";
 import {AvatarOverlayComponent} from "./_avatar/overlay/avatar-overlay.component";
 
@@ -78,6 +79,7 @@ type StoreType = {
     LogoutComponent,
     ResetPasswordComponent,
     StatusComponent,
+    ProfileComponent,
     WorkbenchComponent
   ],
   imports: [ // import Angular's modules
