@@ -20,10 +20,15 @@ import { AppState } from './app.service';
   ],
   template: `
     <nav>
+      <a [routerLink]=" ['./login'] "
+        routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
+        Sign In
+      </a>
       <a [routerLink]=" ['./register'] "
         routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-        Register
+        Sign Up
       </a>
+      <logout></logout>
     </nav>
     <main>
       <router-outlet></router-outlet>
@@ -32,13 +37,27 @@ import { AppState } from './app.service';
 })
 export class AppComponent implements OnInit {
   public name = 'Qwirk App';
+  public token: string;
+  public isToken : boolean;
 
   constructor(
     public appState: AppState
-  ) {}
+  ) {
+  }
 
   public ngOnInit() {
     console.log('Initial App State', this.appState.state);
+
+    // set token if saved in local storage
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.token = currentUser && currentUser.token;
+
+    if(this.token) {
+      this.isToken = true;
+    }
+    else {
+      this.isToken = false;
+    }
   }
 
 }

@@ -1,0 +1,24 @@
+.rounded-image-container {
+  position: relative;
+}
+
+.rounded-image {
+  text-align: center;
+  width: 100%;
+}
+
+.rounded-image .circle {
+  border: 1px solid #aaaaaa;
+  width: 172px;
+  height: 172px;
+}
+
+.rounded-image:hover .overlay {
+  opacity: 1;
+}
+
+
+.small .rounded-image .circle {
+  width: 100px;
+  height: 100px;
+}

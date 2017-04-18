@@ -55,5 +55,13 @@ export class UserService {
          }
        );
   }
+
+  getUserProfile(userIdentifier : string) {
+    return this.http.get(this.url + 'user/' + userIdentifier)
+      .map(response => {
+        if(response.status === 500) { return false; }
+        else { return this.url + 'user/' + userIdentifier; }
+      })
+  }
 }
 

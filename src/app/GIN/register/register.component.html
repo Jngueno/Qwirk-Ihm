@@ -7,32 +7,31 @@
 
     <form id="signUpForm" materialize #signupForm="ngForm" (ngSubmit)="register(signupForm)">
       <div class="card">
-        <div class="rounded-image-container">
-          <div class="rounded-image">
-            <img class="circle" src="../../assets/img/avatar.png">
-            <div class="rank-label-container">
+        <div>
+          <avatar [urlImage]="profileImg"></avatar>
+          <div class="overlay file-field input-field" >
               <span class="label label-default rank-label">
-                <i fa class="fa fa-camera-retro fa-2x"></i>
+                <i class="material-icons">camera_alt</i>
+                <input (click)="clickInputFile($event)" (change)="fileChangeEvent($event)" type="file" accept="image/*" name="profilePic" ngModel>
               </span>
-            </div>
           </div>
         </div>
-        <div class="card-content">
+        <div class="card-content signUpContent">
           <div class="row">
             <div class="input-field col s12">
               <input id="username" type="text" name="username" class="active validate" ngModel required="" aria-required="true">
               <label for="username" data-error="username is not valid">Username</label>
             </div>
             <div class="input-field col s12">
-              <input id="firstname" type="text" name="firstname" class="active validate" ngModel required="" aria-required="true">
+              <input id="firstname" type="text" name="firstName" class="validate" ngModel required="" aria-required="true">
               <label for="firstname" data-error="firstname is not valid">First Name</label>
             </div>
             <div class="input-field col s12">
-              <input id="lastname" type="text" name="lastname" class="active validate" ngModel required="" aria-required="true">
+              <input id="lastname" type="text" name="lastName" class="validate" ngModel required="" aria-required="true">
               <label for="lastname" data-error="lastname is not valid">Last Name</label>
             </div>
             <div class="input-field col s12">
-              <input id="email" type="text" name="mail" class="active validate" ngModel required="" aria-required="true">
+              <input id="email" type="text" name="email" class="validate" ngModel required="" aria-required="true">
               <label for="email" data-error="E-mail not valid">E-mail</label>
             </div>
             <div class="input-field col s12">
@@ -53,7 +52,7 @@
               </button>
             </div>
             <div class="col s12 m6 right-align">
-              <a [routerLink]="['/connection']"class="signIn">SIGN IN</a>
+              <a [routerLink]="['/']"class="signIn">SIGN IN</a>
             </div>
           </div>
         </div>
