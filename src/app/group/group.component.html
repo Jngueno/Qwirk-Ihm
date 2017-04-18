@@ -1,0 +1,42 @@
+
+  <div class="fixed-action-btn horizontal click-to-toggle left-align">
+    <a class="btn-floating btn-large grey">
+      <i class="material-icons">menu</i>
+    </a>
+  </div>
+
+  <h4 class="blue-grey-text center-align">Créer un groupe</h4>
+  <form (ngSumit) = "addGroupOrChannel()" class="parentContainer">
+    <div class="">
+      <div class="input-field ">
+        <input type="text" placeholder="Name" name="name"><br>
+      </div>
+    </div>
+
+    <div class="">
+      <div class="input-field  ">
+        <input type="text" placeholder="Description" name="description"><br>
+      </div>
+    </div>
+
+    <div class="">
+      <div class="input-field col s7 pull-s5">
+        <input id="search" type="search" required>
+        <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+        <i class="material-icons">close</i>
+      </div>
+      <button class="btn waves-effect waves-light red bigArrow col s5 push-s7" type="submit">→</button>
+    </div>
+  </form>
+  <!--<input type="text" placeholder="Search..." value="" name="search">-->
+
+
+  <form (ngSubmit)="getUsers()">
+  </form>
+
+  <div>
+    <div *ngFor = "let group of groups" (click) = "openConversation()"></div>
+    <div *ngFor = "let group of groups" (click) = "openConversation()"></div>
+  </div>
+
+

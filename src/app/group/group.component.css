@@ -1,0 +1,15 @@
+a {
+  text-decoration: none;
+}
+
+.parentContainer {
+  padding: 0px 10%;
+}
+
+.bigArrow {
+  font-size: 30px;
+}
+
+.centerInput {
+  paddind: 3%;
+}
