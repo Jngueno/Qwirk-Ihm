@@ -6,6 +6,8 @@ import {removeNgStyles, createNewHosts, createInputTransfer} from '@angularclass
 import {RouterModule, PreloadAllModules} from '@angular/router';
 import { MaterializeModule } from 'angular2-materialize';
 import {Angular2FontAwesomeModule} from 'angular2-font-awesome';
+//import {MdListModule} from "@angular2-material/list/list";
+
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -19,15 +21,18 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { AppState, InternalStateType } from './app.service';
 import { AboutComponent } from './about';
 import { NoContentComponent } from './no-content';
-import { ConnectionComponent } from './GIN/connection/connection.component';
-import { AvatarComponent } from './_avatar/avatar.component';
-import { AvatarOverlayComponent } from './_avatar/overlay/avatar-overlay.component';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
+//import {RegisterComponent} from './register/register.component';
+import {UserService} from './shared/services/index';
+import {MdListModule} from "@angular/material";
+import {SplitviewComponent} from "./shared/splitview/splitview.component";
+import { ConnectionComponent } from './GIN/connection/connection.component';
+import {ContactComponent} from "./contact/contact.component";
+import {ModalComponent} from "./shared/modal/modal.component";
 import { RegisterComponent } from './GIN/register/register.component';
-import { UserService } from './shared/services/index';
-import { WorkbenchComponent } from "./shared/splitpanel/workbench.component";
+import { WorkbenchComponent } from "./shared/workbench/workbench.component";
 import {ResetPasswordComponent} from "./GIN/resetPassword/resetPassword.component";
 import {AuthGuard} from "./_guards/auth.guard";
 import {AuthenticationService} from "./shared/services/authentication.service";
@@ -36,6 +41,8 @@ import {LogoutComponent} from "./GIN/logout/logout.component";
 import {ResetGuard} from "./_guards/reset.guard";
 import {StatusComponent} from "./GIN/status/status.component";
 import {StatusService} from "./shared/services/status.service";
+import {AvatarComponent} from "./_avatar/avatar.component";
+import {AvatarOverlayComponent} from "./_avatar/overlay/avatar-overlay.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -60,6 +67,11 @@ type StoreType = {
     ConnectionComponent,
     NoContentComponent,
     RegisterComponent,
+    WorkbenchComponent,
+    HomeComponent,
+    SplitviewComponent,
+    ContactComponent,
+    ModalComponent,
     AvatarComponent,
     AvatarOverlayComponent,
     HomeComponent,
@@ -75,7 +87,8 @@ type StoreType = {
     JsonpModule,
     MaterializeModule,
     Angular2FontAwesomeModule,
-    RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
+    MdListModule,
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

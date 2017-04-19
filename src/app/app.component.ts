@@ -30,6 +30,7 @@ import { AppState } from './app.service';
       </a>
       <logout></logout>
     </nav>
+    <!--<workbench></workbench>-->
     <main>
       <router-outlet></router-outlet>
     </main>
@@ -42,8 +43,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     public appState: AppState
-  ) {
-  }
+  ) {}
 
   public ngOnInit() {
     console.log('Initial App State', this.appState.state);

@@ -29,7 +29,7 @@ app.on('ready', function () {
   //   }));
   //Just for testing
   win.loadURL('http://localhost:3000');
-  win.webContents.openDevTools();
+    win.webContents.openDevTools();
 
   // Remove window once app is closed
   win.on('closed', function () {

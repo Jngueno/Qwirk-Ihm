@@ -1,0 +1,17 @@
+<div class="workbench" id="contact">
+  <div class="row">
+    <h5 class="col s8">Contact</h5>
+    <div class="col s4">
+      <a class="waves-effect waves-light btn modal-trigger" (click)="openContactPopin()">
+        <i class="fa fa-address-book"  aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
+  <md-list *ngFor="let contact of contacts">
+      <md-list-item>
+        <img md-list-avatar src="{{contact.profilePicture}}" alt="{{contact.username}}">
+        <p md-line>{{contact.firstName}} {{contact.lastName}} </p>
+        <p md-line>{{contact.description}}</p>
+      </md-list-item>
+  </md-list>
+</div>

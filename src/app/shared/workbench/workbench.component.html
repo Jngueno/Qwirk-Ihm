@@ -1,0 +1,59 @@
+<div id="left">
+  <ul class="side-nav fixed" style="background: #B3E5FC" [ngClass]="{'slide-in': isCollapse }">
+    <div class="workbench" id="avatar">Avatar</div>
+    <div class="workbench" id="group">
+      <h5>Group</h5>
+      <md-list>
+        <md-list-item> Todo </md-list-item>
+      <!--<md-list-item> Engineer </md-list-item>-->
+      <!--<md-list-item> Code activities </md-list-item>-->
+      </md-list>
+    </div>
+    <div class="workbench" id="channel">
+      <h5>Channel</h5>
+      <md-list>
+      <md-list-item> Todo </md-list-item>
+      <!--<md-list-item> Engineer </md-list-item>-->
+      <!--<md-list-item> Code activities </md-list-item>-->
+      </md-list>
+    </div>
+    <div class="workbench" id="contact">
+      <div class="row">
+        <h5 class="col s8">Contact</h5>
+        <div class="col s4">
+          <a class="waves-effect waves-light btn modal-trigger" (click)="openContactPopin()">
+            <i class="fa fa-address-book"  aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+      <md-list *ngFor="let contact of contacts">
+        <md-list-item>
+          <img md-list-avatar src="{{contact.profilePicture}}" alt="{{contact.username}}">
+          <p md-line>{{contact.firstName}} {{contact.lastName}} </p>
+          <p md-line>{{contact.description}}</p>
+        </md-list-item>
+      </md-list>
+    </div>
+    <!--<contact (modalActions1) = "onModalActionChanged($event)"></contact>-->
+  </ul>
+  <i class="material-icons burger-menu" [ngClass]="{'slide-out': !isCollapse }" (click)="onToggle()">menu</i>
+</div>
+<div id="right">
+  <!-- Modal Structure -->
+  <div id="modal" class="modal" [ngClass]="{'small-modal': isCollapse}" style="width: 100%; height: 100%" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions1">
+    <div class="modal-content">
+      <div class="chips chips-placeholder" materialize="material_chip"  [materializeParams]="[chipsPlaceholder]"  (chip.add)="add($event.detail)" (chip.delete)="delete($event.detail)" (chip.select)="select($event.detail)"></div>
+      <!--<div class="input-field col s12">-->
+      <!--<input type="text" id="autoComplete" materialize="autocomplete" [materializeParams]="[chipsAutoComplete]">-->
+      <!--</div>-->
+      <md-icon>home</md-icon>
+    </div>
+    <div class="modal-footer">
+      <a class="waves-effect waves-green btn-flat" (click)="addContact()">Agree</a>
+      <a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="closeContactopIn()">Close</a>
+    </div>
+  </div>
+</div>
+
+
+

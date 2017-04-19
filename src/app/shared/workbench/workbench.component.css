@@ -1,0 +1,69 @@
+@media screen and (min-width: 250px) {
+
+}
+#left .workbench {
+  /*background: azure;*/
+  margin-bottom: 10px;
+}
+
+#avatar {
+  display: flex;
+  height: 80px;
+}
+#group {
+  width: 100%;
+  height: 120px;
+}
+#channel{
+  width: 100%;
+  height: 120px;
+
+}
+
+.workbench {
+  /*background: azure;*/
+  margin-bottom: 10px;
+}
+#contact {
+  width: 100%;
+  height: 120px;
+}
+.burger-menu{
+  padding-left: 60px;
+}
+.slide-out {
+  padding-left: 310px;
+}
+.slide-in {
+  width: 50px;
+  background: dodgerblue;
+}
+#right {
+  height: 100%;
+  width: 100%;
+  padding-left: 300px;
+  position: relative;
+  background: #B3E5FC;
+}
+
+#modal {
+  max-height: 97% !important;
+  max-width: 75% !important;
+  margin-left: 300px !important;
+  margin-top: -71px !important;
+}
+
+#right large-modal {
+  max-width : 95% !important;
+  margin-left : 53px !important;
+}
+
+#right small-modal {
+  max-width : 78% !important;
+  margin-left : 300px !important;
+}
+
+
+
+
+

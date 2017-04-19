@@ -63,5 +63,20 @@ export class UserService {
         else { return this.url + 'user/' + userIdentifier; }
       })
   }
+   addContact(params) {
+    this.http.put(this.url + 'users/',params)
+      .map((response: Response) => response.json())
+      .subscribe(
+        data => {
+            console.log("New contact added");
+        },
+        error => {
+          console.log("invalid username ou email");
+        },
+        () => {
+          console.log("Completed with success");
+        }
+      );
+}
 }
 

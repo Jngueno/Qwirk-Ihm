@@ -6,3 +6,11 @@ html, body{
 a.active {
   background-color: gray;
 }
+nav{
+  left:50px;
+  margin-top: -40px;
+}
+nav a {
+  padding: 3px 16px;
+  vertical-align: bottom;
+}
