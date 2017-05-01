@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col s4">
             <div class="closeContainer left-align">
-              <button class="rounded red" (click)="deleteProfileModal()">
+              <button class="rounded red" (click)="deleteAccount()">
                 <a class="material-icons red-text">delete</a>
               </button>
             </div>
@@ -30,108 +30,104 @@
         </div>
       </div>
       <div class="modal-content">
-        <div class="userResume">
-          <status class="userStatus" [dropdownId]="status" data-size="" [profileImg]="profileImg"></status>
-          <div class="userAllNames">
-            <div>
-              <h3>{{user.firstName}} {{user.lastName}}</h3>
-            </div>
-            <div>
-              <h4>{{user.username}} | {{user.email}}</h4>
+        <div id="userProfile">
+        <div class="userResumeContainer user_header md-bottom teal lighten-5 {{resumeOpenClass}}">
+          <div class="userResume">
+            <status class="userStatus" [dropdownId]="status" data-size="" [profileImg]="profileImg"></status>
+            <div class="userAllNames">
+              <div>
+                <h3>{{user.firstName}} {{user.lastName}}</h3>
+              </div>
+              <div>
+                <h5 class="userIdentifier"><div class="icon-container valign-wrapper"><i class="material-icons red-text text-lighten-3">person_outline</i></div> {{user.username}}</h5>
+                <h5 class="userIdentifier"><div class="icon-container valign-wrapper"><i class="material-icons red-text text-lighten-3">mail_outline</i></div> {{user.email}}</h5>
+              </div>
             </div>
           </div>
+          <div class="divider"></div>
         </div>
+        <div class="userModifierContainer md-top user_header teal lighten-5 {{editOpenClass}}">
+          <form materialize class="col s12">
+            <div class="row">
+              <div class="input-field col s6">
+                <input [(ngModel)]="newUser.firstName" name="firstName" id="first_name" type="text" class="validate" [attr.disabled]="isDisabled?true:null" value="{{user.firstName}}">
+                <label class="active" for="first_name">First Name</label>
+              </div>
+              <div class="input-field col s6">
+                <input [(ngModel)]="newUser.lastName" name="lastName" id="last_name" type="text" class="validate" [attr.disabled]="isDisabled?true:null" value="{{user.lastName}}">
+                <label class="active" for="last_name">Last Name</label>
+              </div>
+              <div class="input-field col s6">
+                <input [(ngModel)]="newUser.username" name="username" id="username" type="text" class="validate" [attr.disabled]="isDisabled?true:null" value="{{user.username}}">
+                <label class="active" for="username">Username</label>
+              </div>
+              <div class="input-field col s6">
+                <input [(ngModel)]="newUser.email" name="email" id="email" type="email" class="validate" [attr.disabled]="isDisabled?true:null" value="{{user.email}}" disabled>
+                <label class="active teal-text" for="email">E-mail</label>
+              </div>
+              <div class="input-field col s6">
+                <input [(ngModel)]="newUser.password" name="password" id="password" type="password" class="validate" [attr.disabled]="isDisabled?true:null">
+                <label class="active" for="password">Password</label>
+              </div>
+              <div class="input-field col s6">
+                <input name="confirm_password" id="confirmPassword" type="password" class="validate" [attr.disabled]="isDisabled?true:null">
+                <label class="active" for="confirmPassword">Confirm Password</label>
+              </div>
+              <div class="form-actions col s12">
+                <div class="col s6 right-align">
+                  <a class="waves-effect waves-light btn green-text text-lighten-1 btn-flat" (click)="uploadUserProfile(newUser)"><i class="material-icons md-36">check_circle</i></a>
+                </div>
+                <div class="col s6">
+                  <a class="waves-effect waves-light btn red-text text-lighten-1 btn-flat" (click)="closeeditProfileModal()"><i class="material-icons md-36">cancel</i></a>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
         <div class="row">
           <div class="col s12">
             <ul class="tabs transparent" materialize="tabs">
-              <li class="tab col s6"><a href="#test1" class="valign-wrapper"><i class="material-icons md-36">person</i></a></li>
-              <li class="tab col s6"><a class="active valign-wrapper" href="#test2"><i class="material-icons md-36">people</i></a></li>
+              <li class="tab col s3"><a href="#contact-list" class="active"><i class="material-icons md-48">person</i></a></li>
+              <li class="tab col s3"><a href="#group-list"><i class="material-icons md-48">people</i></a></li>
             </ul>
           </div>
-          <div id="test1" class="col s12 teal lighten-3">
+          <div id="contact-list" class="col s12">
 
             <ul class="collection">
-              <li class="collection-item avatar">
-                <img src="images/yuna.jpg" alt="" class="circle">
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
+              <li class="collection-item avatar" *ngIf="user.contacts && user.contacts.length===0">
+                <i class="material-icons circle transparent orange-text md-36">block</i>
+                <span class="title">No contacts found</span>
+                <p>You don't have any contact yet <br>
+                  Think making you some
                 </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                <a href="#!" class="secondary-content btn rounded teal-text padding-rounded teal"><i class="material-icons">person_add</i></a>
               </li>
-              <li class="collection-item avatar">
-                <i class="material-icons circle">folder</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-              </li>
-              <li class="collection-item avatar">
-                <i class="material-icons circle green">insert_chart</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-              </li>
-              <li class="collection-item avatar">
-                <i class="material-icons circle red">play_arrow</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
+              <li class="collection-item avatar" *ngFor="let contact of user.contacts">
+                <img src="{{contact}}" alt="" class="circle">
+                <span class="title">contact</span>
+                <p>contact <br>
+                  contact
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
               </li>
             </ul>
           </div>
-          <div id="test2" class="col s12 blue lighten-3">
+          <div id="group-list" class="col s12">
             <ul class="collection">
-              <li class="collection-item avatar">
-                <img src="images/yuna.jpg" alt="" class="circle">
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
+              <li class="collection-item avatar" *ngIf="user.groups && user.groups.length===0">
+                <i class="material-icons circle transparent orange-text md-36">block</i>
+                <span class="title">No groups found</span>
+                <p>No groups own found<br>
+                  Think to create one
                 </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                <a href="#!" class="secondary-content btn rounded teal-text padding-rounded teal"><i class="material-icons">group_add</i></a>
               </li>
-              <li class="collection-item avatar">
-                <i class="material-icons circle">folder</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-              </li>
-              <li class="collection-item avatar">
-                <i class="material-icons circle green">insert_chart</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-              </li>
-              <li class="collection-item avatar">
-                <i class="material-icons circle red">play_arrow</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-              </li>
-              <li class="collection-item avatar">
-                <i class="material-icons circle green">insert_chart</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-              </li>
-              <li class="collection-item avatar">
-                <i class="material-icons circle red">play_arrow</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
+              <li class="collection-item avatar" *ngFor="let group of user.groups">
+                <img src="{{group}}" alt="" class="circle">
+                <span class="title">group</span>
+                <p>group <br>
+                  group
                 </p>
                 <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
               </li>

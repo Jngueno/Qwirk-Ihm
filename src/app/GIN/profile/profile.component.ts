@@ -6,7 +6,7 @@ import {
   Input
 } from '@angular/core';
 import {IUser} from "../../shared/models/user";
-import {MaterializeAction, MaterializeDirective} from "angular2-materialize";
+import {MaterializeAction, MaterializeDirective, MaterializeModule} from "angular2-materialize";
 import {triggerAnimation} from "@angular/compiler/src/compiler_util/render_util";
 import {AuthenticationService} from "../../shared/services/authentication.service";
 import {UserService} from "../../shared/services/user.service";
@@ -34,11 +34,13 @@ import {UserService} from "../../shared/services/user.service";
 export class ProfileComponent implements OnInit {
 
   profileModalActions = new EventEmitter<string|MaterializeAction>();
-  animatedClass : string;
+  editOpenClass : string;
+  resumeOpenClass = 'open edit';
   openProfileClass : string;
   public slideInLeftState: string;
   public slideOutRightState: string;
   user : any;
+  newUser : any;
   status = "profileStatus";
   profileImg = "../../assets/img/avatar.png";
   constructor(
@@ -47,6 +49,8 @@ export class ProfileComponent implements OnInit {
     private userService : UserService
   ) {
     this.user = {};
+    this.newUser = {};
+    this.editOpenClass = "";
   }
 
   ngOnInit() {
@@ -87,5 +91,43 @@ export class ProfileComponent implements OnInit {
         return;
       }
     )
+  }
+
+  deleteAccount() {
+    let self = this;
+    this.authService.deleteAccount().subscribe(
+      result => {
+        console.log(result);
+      },
+      err => {
+        console.log(err);
+      }
+    )
+  }
+
+  uploadUserProfile() {
+    let self = this;
+    this.authService.uploadUserProfile(self.newUser).subscribe(
+      result => {
+        self.user = result;
+        self.newUser = {};
+      }, err => {
+        console.log(err);
+      }
+    )
+  }
+
+  editProfileModal() {
+    if(this.editOpenClass.length === 0) {
+      this.editOpenClass = 'open edit';
+      this.resumeOpenClass = '';
+    } else {
+      this.editOpenClass = '';
+      this.resumeOpenClass = 'open edit';
+    }
+  }
+  closeeditProfileModal() {
+    this.editOpenClass = '';
+    this.resumeOpenClass = 'open edit';
   }
 }

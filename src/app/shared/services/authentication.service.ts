@@ -88,6 +88,24 @@ export class AuthenticationService {
       })
   }
 
+  uploadUserProfile(user : any) {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.put(this.appConfig.getUrlAPI() + "update", user, {headers : this.headers})
+      .map((response : Response) => {
+        return response.json();
+      })
+  }
+
+  deleteAccount() {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.get(this.appConfig.getUrlAPI() + 'delete', {headers : this.headers})
+      .map((response : Response) => {
+        return response.json();
+      })
+  }
+
   logout(): void {
     // clear token remove user from local storage to log user out
     this.token = null;

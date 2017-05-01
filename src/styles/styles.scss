@@ -31,7 +31,20 @@ nav a {
   &.teal {
     border-color: #009688;
   }
+  &.padding-rounded {
+    padding: 0 8.9px;
+  }
   a {
     line-height: inherit;
   }
+}
+
+
+
+.material-icons.md-36 {
+  font-size: 36px !important;
+}
+
+.material-icons.md-48 {
+  font-size: 48px !important;
 }

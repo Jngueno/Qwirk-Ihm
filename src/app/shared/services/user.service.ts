@@ -19,41 +19,21 @@ export class UserService {
     this.url = this.appConfig.urlAPI;
   }
 
-  getUser(params) {
-    return this.http.get(this.url + 'users/' + params.userId + '/' + params.password)
-                .map(this.extractData)
-                .subscribe(
-                    data => {
-                      console.log('data success Todo');
-                    },
-                  error => {
-                      console.log('error logged Todo')
-                  },
-                  () => {
-                      console.log('all fine Todo')
-                  }
-                );
-  }
-
-  private extractData(res: Response) {
-    let body = res.json();
-    return body.data || { };
-  }
   create(user: IUser){
-     this.http.post(this.url + 'users/', user)
-       .map((response: Response) => response.json())
-       .subscribe(
-         data => {
-           this.route.navigate(['./connection'])
-         },
-         error => {
-           console.log("Navigate to " +
-             "connection failed");
-         },
-         () => {
-           console.log("Completed with success");
-         }
-       );
+    this.http.post(this.url + 'users/', user)
+      .map((response: Response) => response.json())
+      .subscribe(
+        data => {
+          this.route.navigate(['./login'])
+        },
+        error => {
+          console.log("Navigate to " +
+            "connection failed");
+        },
+        () => {
+          console.log("Completed with success");
+        }
+      );
   }
 
   getUserProfile(userIdentifier : string) {
@@ -63,12 +43,13 @@ export class UserService {
         else { return this.url + 'user/' + userIdentifier; }
       })
   }
-   addContact(params) {
+
+  addContact(params) {
     this.http.put(this.url + 'users/',params)
       .map((response: Response) => response.json())
       .subscribe(
         data => {
-            console.log("New contact added");
+          console.log("New contact added");
         },
         error => {
           console.log("invalid username ou email");
@@ -77,6 +58,6 @@ export class UserService {
           console.log("Completed with success");
         }
       );
-}
+  }
 }
 
