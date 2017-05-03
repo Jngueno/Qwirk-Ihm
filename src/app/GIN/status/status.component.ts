@@ -5,6 +5,7 @@ import {Component, OnInit, Input} from '@angular/core';
 import {IStatus} from "../../shared/models/status";
 import {StatusService} from "../../shared/services/status.service";
 import {Http} from "@angular/http";
+import {UserService} from "../../shared/services/user.service";
 
 @Component({
   selector: 'status',
@@ -23,12 +24,15 @@ export class StatusComponent implements OnInit {
   private statuses : IStatus [];
   @Input('profileImg')
   profileImg = "";
-  constructor(private http : Http, private statusService : StatusService) {
+  constructor(private http : Http, private statusService : StatusService,
+              private userService : UserService) {
     this.status = new IStatus();
     this.statuses = [];
   }
 
   ngOnInit() {
+    let userIdentifier = JSON.parse(localStorage.getItem('currentUser')).userIdentifier;
+    this.getUserProfile(userIdentifier);
     this.getCurrentStatuses();
     this.getAllStatuses();
     if(window.screen.width < 749) {
@@ -70,5 +74,25 @@ export class StatusComponent implements OnInit {
       self.status = status;
       self.getAllStatuses();
     });
+  }
+
+  getUserProfile(userIdentifier) {
+    let self = this;
+    this.userService.getUserProfile(userIdentifier).subscribe(
+      result => {
+        if (!result) {
+          self.profileImg = "../../assets/img/avatar.png";
+          return;
+        }
+        else {
+          self.profileImg = result;
+          return result;
+        }
+      },
+      err => {
+        self.profileImg = "../../assets/img/avatar.png";
+        return;
+      }
+    )
   }
 }

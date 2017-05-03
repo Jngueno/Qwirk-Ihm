@@ -23,6 +23,11 @@
   height: 100px;
 }
 
+.tiny .rounded-image .circle {
+  width: 75px;
+  height: 75px;
+}
+
 @media screen and (max-width: 749px) {
   .rounded-image .circle {
     width: 100px;

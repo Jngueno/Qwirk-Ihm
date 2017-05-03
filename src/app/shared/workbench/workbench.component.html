@@ -1,20 +1,24 @@
+<!--
 <div id="left">
+
   <ul class="side-nav fixed" style="background: #B3E5FC" [ngClass]="{'slide-in': isCollapse }">
-    <div class="workbench" id="avatar">Avatar</div>
+    <div>
+      <status></status>
+    </div>
     <div class="workbench" id="group">
       <h5>Group</h5>
       <md-list>
         <md-list-item> Todo </md-list-item>
-      <!--<md-list-item> Engineer </md-list-item>-->
-      <!--<md-list-item> Code activities </md-list-item>-->
+      &lt;!&ndash;<md-list-item> Engineer </md-list-item>&ndash;&gt;
+      &lt;!&ndash;<md-list-item> Code activities </md-list-item>&ndash;&gt;
       </md-list>
     </div>
     <div class="workbench" id="channel">
       <h5>Channel</h5>
       <md-list>
       <md-list-item> Todo </md-list-item>
-      <!--<md-list-item> Engineer </md-list-item>-->
-      <!--<md-list-item> Code activities </md-list-item>-->
+      &lt;!&ndash;<md-list-item> Engineer </md-list-item>&ndash;&gt;
+      &lt;!&ndash;<md-list-item> Code activities </md-list-item>&ndash;&gt;
       </md-list>
     </div>
     <div class="workbench" id="contact">
@@ -34,18 +38,18 @@
         </md-list-item>
       </md-list>
     </div>
-    <!--<contact (modalActions1) = "onModalActionChanged($event)"></contact>-->
+    &lt;!&ndash;<contact (modalActions1) = "onModalActionChanged($event)"></contact>&ndash;&gt;
   </ul>
   <i class="material-icons burger-menu" [ngClass]="{'slide-out': !isCollapse }" (click)="onToggle()">menu</i>
 </div>
 <div id="right">
-  <!-- Modal Structure -->
+  &lt;!&ndash; Modal Structure &ndash;&gt;
   <div id="modal" class="modal" [ngClass]="{'small-modal': isCollapse}" style="width: 100%; height: 100%" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions1">
     <div class="modal-content">
       <div class="chips chips-placeholder" materialize="material_chip"  [materializeParams]="[chipsPlaceholder]"  (chip.add)="add($event.detail)" (chip.delete)="delete($event.detail)" (chip.select)="select($event.detail)"></div>
-      <!--<div class="input-field col s12">-->
-      <!--<input type="text" id="autoComplete" materialize="autocomplete" [materializeParams]="[chipsAutoComplete]">-->
-      <!--</div>-->
+      &lt;!&ndash;<div class="input-field col s12">&ndash;&gt;
+      &lt;!&ndash;<input type="text" id="autoComplete" materialize="autocomplete" [materializeParams]="[chipsAutoComplete]">&ndash;&gt;
+      &lt;!&ndash;</div>&ndash;&gt;
       <md-icon>home</md-icon>
     </div>
     <div class="modal-footer">
@@ -57,3 +61,107 @@
 
 
 
+-->
+
+<main class="row">
+  <section class="col qwirk_sidebar" [ngClass]="{'slide-in': isCollapse }">
+    <div class="statusSection">
+      <status data-size="tiny" (click)="bindModalToOpen()"></status>
+    </div>
+    <div class="qwirk_user_relations">
+      <ul class="collapsible popout" data-collapsible="accordion">
+        <li class="circle flat-text">
+          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><i class="material-icons md-36">contacts</i>Contact</div>
+          <div class="collapsible-body">
+
+            <ul class="collection">
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                <p>First Line <br>
+                  Second Line
+                </p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2n4OzaM" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                <p>First Line <br>
+                  Second Line
+                </p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2onErh0" alt="" class="circle">
+                <div class="hiddendiv secondary-part"><span class="title">Title</span>
+                <p>First Line <br>
+                  Second Line
+                </p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="circle">
+          <div class="collapsible-header circle rounded red red-text text-lighten-3"><i class="material-icons md-36">people_outline</i>Groups</div>
+          <div class="collapsible-body">
+
+            <ul class="collection">
+              <li class="collection-item avatar">
+                <img src="images/yuna.jpg" alt="" class="circle">
+                <span class="title">Title</span>
+                <p>First Line <br>
+                  Second Line
+                </p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+              </li>
+              <li class="collection-item avatar">
+                <i class="material-icons circle">folder</i>
+                <span class="title">Title</span>
+                <p>First Line <br>
+                  Second Line
+                </p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+              </li>
+              <li class="collection-item avatar">
+                <i class="material-icons circle green">insert_chart</i>
+                <span class="title">Title</span>
+                <p>First Line <br>
+                  Second Line
+                </p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+              </li>
+              <li class="collection-item avatar">
+                <i class="material-icons circle red">play_arrow</i>
+                <span class="title">Title</span>
+                <p>First Line <br>
+                  Second Line
+                </p>
+                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="circle">
+          <div class="collapsible-header circle rounded orange orange-text text-lighten-3"><i class="material-icons md-36">people</i>Channels</div>
+          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+        </li>
+      </ul>
+    </div>
+    <button class="btn btn-flat btn-small qwirk_sidebar_expand teal lighten-3"><i class="material-icons">chevron_right</i></button>
+  </section>
+  <section class="col qwirk_content">
+    <div class="message-history">
+
+    </div>
+    <div class="message-discussion valign-wrapper">
+      <form>
+        <div class="input-field">
+          <input id="editable_message" type="text" class="validate">
+          <label for="editable_message">Edit your message here</label>
+        </div>
+        <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3"><i class="material-icons">send</i></button>
+      </form>
+    </div>
+  </section>
+</main>

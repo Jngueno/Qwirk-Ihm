@@ -14,3 +14,7 @@ nav a {
   padding: 3px 16px;
   vertical-align: bottom;
 }
+
+main {
+  height: 100%;
+}

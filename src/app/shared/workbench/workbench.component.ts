@@ -97,4 +97,8 @@ export class WorkbenchComponent implements OnInit {
   select(chip) {
     console.log("Chip selected: " + chip.tag);
   }
+
+  bindModalToOpen() {
+    console.log('Workbench status');
+  }
 }

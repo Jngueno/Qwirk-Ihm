@@ -17,6 +17,7 @@
 .statusList li a {
   line-height: 37px;
   padding: 0;
+  margin: 0;
 }
 
 .statusState {
@@ -44,6 +45,12 @@
 .statusState {
   bottom: 5px;
   padding-left: 60px;
+}
+
+.user_status {
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-block !important;
 }
 
 @media screen and (min-width: 749px) {
@@ -85,4 +92,9 @@
     bottom: 5px;
     padding-left: 60px;
   }
+}
+
+.ddStatustiny.statusState {
+  bottom: 5px;
+  padding-left: 50px;
 }
