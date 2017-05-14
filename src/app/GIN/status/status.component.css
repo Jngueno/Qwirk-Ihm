@@ -98,3 +98,19 @@
   bottom: 5px;
   padding-left: 50px;
 }
+
+.ddStatusvery-tiny.statusState .btn-floating.btn-small {
+  height: 10.5px;
+  width: 10.5px;
+  line-height: 9px;
+}
+
+.ddStatusvery-tiny.statusState .btn-floating.btn-small i {
+  font-size: 9px;
+  line-height: 10px;
+}
+
+.ddStatusvery-tiny.statusState {
+  bottom: 2px;
+  padding-left: 33px;
+}

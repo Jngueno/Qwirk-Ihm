@@ -64,14 +64,25 @@
 -->
 
 <main class="row">
-  <section class="col qwirk_sidebar" [ngClass]="{'slide-in': isCollapse }">
-    <div class="statusSection">
-      <status data-size="tiny" (click)="bindModalToOpen()"></status>
+  <section class="col qwirk_sidebar" [ngClass]="{'open': !isCollapse }">
+    <div class="statusSection valign-wrapper">
+      <status [size]="sizeStatus"></status>
+      <div class="userInfos">
+        <div class="userAllNames">
+          <div>
+            <h3>{{user.firstName}} {{user.lastName}}</h3>
+          </div>
+          <div>
+            <h5 class="userIdentifier"><div class="icon-container valign-wrapper"><i class="material-icons red-text text-lighten-3">person_outline</i></div> {{user.username}}</h5>
+            <h5 class="userIdentifier"><div class="icon-container valign-wrapper"><i class="material-icons red-text text-lighten-3">mail_outline</i></div> {{user.email}}</h5>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="qwirk_user_relations">
-      <ul class="collapsible popout" data-collapsible="accordion">
+      <ul class="collapsible popout" data-collapsible="accordion"  materialize="collapsible">
         <li class="circle flat-text">
-          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><i class="material-icons md-36">contacts</i>Contact</div>
+          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">contacts</i></div>Contact</span></div>
           <div class="collapsible-body">
 
             <ul class="collection">
@@ -103,64 +114,110 @@
           </div>
         </li>
         <li class="circle">
-          <div class="collapsible-header circle rounded red red-text text-lighten-3"><i class="material-icons md-36">people_outline</i>Groups</div>
+          <div class="collapsible-header circle rounded red red-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people_outline</i></div>Groups</span></div>
           <div class="collapsible-body">
 
             <ul class="collection">
               <li class="collection-item avatar">
-                <img src="images/yuna.jpg" alt="" class="circle">
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
               </li>
               <li class="collection-item avatar">
-                <i class="material-icons circle">folder</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                <img src="http://bit.ly/2n4OzaM" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
               </li>
               <li class="collection-item avatar">
-                <i class="material-icons circle green">insert_chart</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-              </li>
-              <li class="collection-item avatar">
-                <i class="material-icons circle red">play_arrow</i>
-                <span class="title">Title</span>
-                <p>First Line <br>
-                  Second Line
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+                <img src="http://bit.ly/2onErh0" alt="" class="circle">
+                <div class="hiddendiv secondary-part"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
               </li>
             </ul>
           </div>
         </li>
         <li class="circle">
-          <div class="collapsible-header circle rounded orange orange-text text-lighten-3"><i class="material-icons md-36">people</i>Channels</div>
-          <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+          <div class="collapsible-header circle rounded orange orange-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people</i></div>Channels</span></div>
+          <div class="collapsible-body">
+
+
+            <ul class="collection">
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2n4OzaM" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2onErh0" alt="" class="circle">
+                <div class="hiddendiv secondary-part"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+            </ul>
+          </div>
         </li>
       </ul>
     </div>
-    <button class="btn btn-flat btn-small qwirk_sidebar_expand teal lighten-3"><i class="material-icons">chevron_right</i></button>
-  </section>
-  <section class="col qwirk_content">
-    <div class="message-history">
 
+    <button class="btn btn-flat btn-small qwirk_sidebar_expand teal lighten-3" (click)="expand_sidebar()"><i class="material-icons">chevron_right</i></button>
+  </section>
+  <section class="col qwirk_content" [ngClass]="{'side_open': !isCollapse }">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo">Qwirk</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="#!"><i class="material-icons">search</i></a></li>
+          <li><a href="#!"><i class="material-icons">view_module</i></a></li>
+          <li><a href="#!"><i class="material-icons">refresh</i></a></li>
+          <li><a href="#!"><i class="material-icons">more_vert</i></a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="message-history">
+      <div class="sender">
+        <h6 class="right-align teal-text text-darken-2">Jennyfer NGUENO</h6>
+        <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
+          <p>You're a dull</p>
+          <avatar data-size="very-tiny"></avatar>
+        </div>
+      </div>
+      <div class="receiver">
+        <h6 class="red-text text-darken-2">Jennyfer NGUENO</h6>
+        <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
+          <p>You're a dull</p>
+          <avatar data-size="very-tiny"></avatar>
+        </div>
+      </div>
     </div>
     <div class="message-discussion valign-wrapper">
-      <form>
+      <form #sendMessageForm="ngForm">
         <div class="input-field">
-          <input id="editable_message" type="text" class="validate">
+          <textarea id="editable_message" name="message_sender" class="validate materialize-textarea"></textarea>
           <label for="editable_message">Edit your message here</label>
         </div>
-        <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3"><i class="material-icons">send</i></button>
+        <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage(sendMessageForm.value.message_sender)"><i class="material-icons">send</i></button>
       </form>
     </div>
   </section>

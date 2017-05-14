@@ -4,6 +4,8 @@
 import {Component, OnInit, EventEmitter, ViewEncapsulation} from '@angular/core';
 import {MaterializeAction} from "angular2-materialize";
 import {UserService} from "../services/user.service";
+import {AuthenticationService} from "../services/authentication.service";
+import {IUser} from "../models/user";
 
 @Component({
   selector: 'workbench',
@@ -44,12 +46,18 @@ export class WorkbenchComponent implements OnInit {
       limit: Infinity,
       minLength: 2
   };
+
   params: string[] = [];
   modalActions1 = new EventEmitter<string|MaterializeAction>();
-  constructor(private userService: UserService) {
+  sizeStatus = "tiny";
+  user : any;
+  constructor(private userService: UserService,
+              private authService : AuthenticationService) {
+    this.user = {};
   }
 
   ngOnInit() {
+    this.getCurrentProfile();
   }
 
   addContact(){
@@ -100,5 +108,22 @@ export class WorkbenchComponent implements OnInit {
 
   bindModalToOpen() {
     console.log('Workbench status');
+  }
+
+  sendMessage(message) {
+
+  }
+
+  expand_sidebar() {
+    this.isCollapse = !this.isCollapse;
+    this.isCollapse ? this.sizeStatus = "very-tiny" : this.sizeStatus = "tiny";
+  }
+
+  getCurrentProfile() {
+    this.authService.getCurrentUserProfile().subscribe(result => {
+      console.log(result);
+      this.user = result;
+      return result;
+    })
   }
 }

@@ -3,7 +3,7 @@
  */
 import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
-import {Http, Response} from "@angular/http";
+import {Http, Response, Headers} from "@angular/http";
 
 import 'rxjs/add/operator/map'
 import {APPCONFIG} from "../../config/param";
@@ -13,6 +13,7 @@ import {IUser} from "../models/user";
 export class UserService {
   private url: string;
   private appConfig: APPCONFIG;
+  private headers: Headers;
   constructor(private http: Http,
               private route: Router) {
     this.appConfig = new APPCONFIG();
@@ -44,6 +45,15 @@ export class UserService {
       })
   }
 
+  getUserById(id : string) {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.get(this.url + 'id/' + id, {headers : this.headers})
+      .map(response => {
+        return response.json();
+      })
+  }
+
   addContact(params) {
     this.http.put(this.url + 'users/',params)
       .map((response: Response) => response.json())
@@ -58,6 +68,15 @@ export class UserService {
           console.log("Completed with success");
         }
       );
+  }
+
+  getAllContacts() {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.get(this.url + 'contacts', {headers : this.headers})
+      .map(response => {
+        return response.json();
+      })
   }
 }
 

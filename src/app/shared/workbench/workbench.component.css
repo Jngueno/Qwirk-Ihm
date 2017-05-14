@@ -69,6 +69,12 @@
 
 
 */
+
+:root {
+  --side-bar-size : 60px;
+  --side-bar-size-open: 250px;
+}
+
 main.row {
   margin: 0;
   height: 100%;
@@ -80,25 +86,127 @@ main.row section.col {
 
 .qwirk_sidebar {
   height: 100%;
-  width: 85px;
+  width: var(--side-bar-size);
   border: 1px solid #80cbc4;
+  -webkit-transition: width 1s;
+  -moz-transition: width 1s;
+  -ms-transition: width 1s;
+  -o-transition: width 1s;
+  transition: width 1s;
 }
+
+.qwirk_sidebar .userInfos {
+  width : 0;
+  height: 0;
+  opacity: 0;
+  display: none;
+  -webkit-transition: opacity 1s, width 1s;
+  -moz-transition: opacity 1s, width 1s;
+  -ms-transition: opacity 1s, width 1s;
+  -o-transition: opacity 1s, width 1s;
+  transition: opacity 1s, width 1s;
+}
+
 .qwirk_content {
-  width: calc(100% - 85px);
+  width: calc(100% - var(--side-bar-size));
   height: 100%;
   position: relative;
+  -webkit-transition: width 1s;
+  -moz-transition: width 1s;
+  -ms-transition: width 1s;
+  -o-transition: width 1s;
+  transition: width 1s;
 }
 
 .qwirk_sidebar_expand {
   position: absolute;
   top: 0;
-  left: 85px;
+  left: var(--side-bar-size);
   padding: 0;
   z-index: 999;
+  border-radius: 0 2px 2px 0;
+  -webkit-transition: 1s;
+  -moz-transition: left 1s;
+  -ms-transition: left 1s;
+  -o-transition: left 1s;
+  transition: left 1s;
 }
 
+.qwirk_sidebar.open{
+  width: var(--side-bar-size-open);
+}
+
+.qwirk_sidebar.open .qwirk_sidebar_expand {
+  left: var(--side-bar-size-open);
+}
+
+.qwirk_sidebar .qwirk_sidebar_expand i {
+  -webkit-transition: -webkit-transform 0.5s;
+  -moz-transition: -moz-transform 0.5s;
+  -ms-transition: -ms-transform 0.5s;
+  -o-transition: -o-transform 0.5s;
+  transition: transform 0.5s;
+}
+
+.qwirk_sidebar.open .qwirk_sidebar_expand i {
+  -webkit-transform: rotate(-180deg);
+  -moz-transform: rotate(-180deg);
+  -ms-transform: rotate(-180deg);
+  -o-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+}
+
+.qwirk_sidebar status {
+  display: block;
+  width: 100%;
+}
+
+.qwirk_sidebar.open status {
+  display: inline-block;
+  padding-left: 0.1rem;
+  width: auto;
+}
+
+.qwirk_sidebar.open .userInfos {
+  display: inline-block;
+  padding-top: 1rem;
+  padding-left: 0.1rem;
+  width : auto;
+  height: auto;
+  opacity: 1;
+}
+
+.qwirk_sidebar.open .userInfos .userAllNames h3  {
+  font-size: 90%;
+  margin: 0;
+  padding: 5px 0;
+}
+
+.qwirk_sidebar.open .userInfos .userAllNames h5  {
+  font-size: 70%;
+  margin: 0;
+  padding: 0;
+}
+
+.qwirk_sidebar.open .icon-container {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  padding-right: 0.2rem;
+}
+
+.qwirk_content.side_open {
+  width: calc(100% - var(--side-bar-size-open));
+}
+
+.qwirk_content nav {
+  padding-left: 30px;
+}
+
+
 .qwirk_user_relations ul.collapsible.popout {
-  width: 75px;
+  width: 100%;
+  padding: 0 10px;
   margin-right: auto;
   margin-left: auto;
 }
@@ -119,19 +227,51 @@ main.row section.col {
 
 .qwirk_user_relations ul.collapsible.popout .collapsible-header {
   text-align: center;
-  padding: 0.5rem 0rem 0;
-  height: 75px;
-  line-height: 0.5rem;
+  padding: 0;
+  min-height: 40px;
+  height: 40px;
+  line-height: 0.1rem;
+  font-size: 45%;
+  -webkit-transition: border 1s, border-radius 1s;
+  -moz-transition: border 1s, border-radius 1s;
+  -ms-transition: border 1s, border-radius 1s;
+  -o-transition: border 1s, border-radius 1s;
+  transition: border 1s, border-radius 1s;
 }
 
 .qwirk_user_relations ul.collapsible.popout i.material-icons {
   float: none;
   width: auto;
+  line-height: 2rem;
   margin-right: 0;
 }
 
+.qwirk_sidebar.open .qwirk_user_relations ul.collapsible.popout i.material-icons {
+  display: inline-block;
+}
+
+.qwirk_sidebar.open .qwirk_user_relations {
+
+}
+
+.qwirk_sidebar.open .qwirk_user_relations ul.collapsible.popout .collapsible-header {
+  line-height: 40px;
+  font-size: initial;
+  border: none;
+  border-bottom: 1px solid;
+  border-radius: 20%;
+}
+
+.qwirk_sidebar.open .qwirk_user_relations ul.collapsible.popout .collapsible-body, .qwirk_sidebar.open .qwirk_user_relations ul.collapsible.popout .collection .collection-item {;
+  border-radius: 20%;
+}
+
+
 .message-history {
-  height: calc(100% - 65px);
+  max-height: calc(100% - 130px);
+  height: calc(100% - 130px);
+  overflow: auto;
+  padding: 0 25px;
 }
 
 .message-discussion {
@@ -155,15 +295,24 @@ main.row section.col {
   padding-left: 5px;
 }
 
+.message-discussion form label.active {
+  -webkit-transform: translateY(-160%);
+  -moz-transform: translateY(-160%);
+  -ms-transform: translateY(-160%);
+  -o-transform: translateY(-160%);
+  transform: translateY(-160%);
+}
+
 #editable_message {
   margin: 0;
   border: 1px solid #9e9e9e;
   border-radius: 10px;
+  padding: 0;
 }
 
 .send_message_but {
   bottom: 15px;
-  right: 5px;
+  right: 3%;
   position: absolute;
 }
 
@@ -173,4 +322,76 @@ main.row section.col {
   -ms-transform: rotate(-30deg);
   -o-transform: rotate(-30deg);
   transform: rotate(-30deg);
+}
+
+.sender h6 {
+  padding-right: 55px;
+  font-size: 80%;
+}
+
+.receiver h6 {
+  padding-left: 55px;
+  font-size: 80%;
+}
+
+.message {
+  height: 40px;
+  /*border: 1px solid #aaa;*/
+  border-radius: 10px;
+  padding: 0 5px;
+  position: relative;
+}
+
+.sender .message::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  right: -8px;
+  height: 0;
+  width: 0;
+  border: 4px solid transparent;
+  border-left: 4px solid #e0f2f1;
+}
+
+.receiver .message::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: -8px;
+  height: 0;
+  width: 0;
+  border: 4px solid transparent;
+  border-right: 4px solid #FFEBEE;
+}
+
+.sender avatar img {
+  border-color: #e0f2f1 !important;
+}
+
+.receiver avatar img {
+  border-color: #FFEBEE !important;
+}
+
+.sender .message {
+  margin-right: 50px;
+}
+
+.receiver .message {
+  margin-left: 50px;
+}
+
+.sender .message p {
+  margin: auto 0;
+}
+
+.sender .message avatar {
+  position: absolute;
+  top: 0;
+  right: -45px;
+}
+
+.receiver .message avatar {
+  position: absolute;
+  top: 0;
+  left: -45px;
 }
