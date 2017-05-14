@@ -43,6 +43,7 @@ export class AuthenticationService {
   }
 
   register(user){
+    console.log("Mon token est : test");
     return this.http.post(this.appConfig.getUrlAPI() + 'register/', user)
       .map((response: Response) => {
         // login successful if there's a jwt token in the response
