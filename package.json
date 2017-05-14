@@ -93,8 +93,10 @@
     "jasmine-core": "^2.5.2",
     "jquery": "^2.2.4",
     "materialize-css": "^0.98.0",
+    "peerjs": "^0.3.14",
     "reflect-metadata": "^0.1.9",
     "rxjs": "5.0.2",
+    "simplewebrtc": "^2.2.3",
     "zone.js": "0.7.6"
   },
   "devDependencies": {
@@ -106,6 +108,7 @@
     "@types/source-map": "^0.5.0",
     "@types/uglify-js": "^2.0.27",
     "@types/webpack": "^2.0.0",
+    "adapterjs": "^0.14.1",
     "add-asset-html-webpack-plugin": "^1.0.2",
     "angular2-template-loader": "^0.6.0",
     "assets-webpack-plugin": "^3.5.1",
