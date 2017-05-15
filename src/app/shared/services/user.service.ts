@@ -70,12 +70,34 @@ export class UserService {
       );
   }
 
-  getAllContacts() {
+  getAllContacts(user) {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let fullContacts = [];
+    let self = this;
     this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
     return this.http.get(this.url + 'contacts', {headers : this.headers})
       .map(response => {
-        return response.json();
+        let contacts = response.json();
+        for (let contact of contacts) {
+          console.log("Is it the right thing : ", user.email, contact.email, user.email === contact.email)
+          if(user.email === contact.email) {
+            this.getUserById(contact.owner).subscribe(
+              c => {
+                contact.infoContact = c;
+                fullContacts.push(contact);
+              }
+            )
+          }
+          else {
+            this.getUserById(contact.contact).subscribe(
+              c => {
+                contact.infoContact = c;
+                fullContacts.push(contact);
+              }
+            )
+          }
+        }
+        return fullContacts;
       })
   }
 }

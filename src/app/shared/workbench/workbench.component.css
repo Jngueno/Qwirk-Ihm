@@ -148,6 +148,10 @@ main.row section.col {
   transition: transform 0.5s;
 }
 
+.qwirk_sidebar .collapsible-body p {
+  padding: 0;
+}
+
 .qwirk_sidebar.open .qwirk_sidebar_expand i {
   -webkit-transform: rotate(-180deg);
   -moz-transform: rotate(-180deg);

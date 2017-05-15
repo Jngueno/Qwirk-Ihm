@@ -1,26 +1,28 @@
 /**
  * Created by Housseini  Maiga on 3/13/2017.
  */
-import {Component, OnInit, EventEmitter, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, EventEmitter, ViewEncapsulation, OnDestroy} from '@angular/core';
 import {MaterializeAction} from "angular2-materialize";
 import {UserService} from "../services/user.service";
 import {AuthenticationService} from "../services/authentication.service";
+import { PrivateChatService } from './../services/private_chat.service';
 import {IUser} from "../models/user";
 
 @Component({
   selector: 'workbench',
   templateUrl: './workbench.component.html',
   styleUrls: ['./workbench.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [PrivateChatService]
 })
-export class WorkbenchComponent implements OnInit {
+export class WorkbenchComponent implements OnInit, OnDestroy {
   isCollapse: boolean = false;
   onChanged: string = 'slide-out';
-  contacts: Object[] = [
+  contacts: Object[]/* = [
     {"userId" : 0, "firstName": "Housseini", "lastName" : "Maiga", "description" : "Mess with the best.. Die with the rest.", "profilePicture" : "http://bit.ly/2n4OzaM", "username" : "fouss maiga"},
     {"userId" : 1, "firstName": "Jennyfer", "lastName" : "Ngueno", "description" : "Never give up settle", "profilePicture" : "http://bit.ly/2nJ25ln", "username" : "jngueno"},
     {"userId" : 2, "firstName": "Ervin", "lastName" : "Larry", "description" : "Autre est en Nous ..!", "profilePicture" : "http://bit.ly/2onErh0", "username" : "TBS"}
-  ];
+  ];*/
   chips : string[] = [];
   chipsInit = {
     data: [{
@@ -37,32 +39,92 @@ export class WorkbenchComponent implements OnInit {
     secondaryPlaceholder: 'Enter username or email',
   };
   chipsAutoComplete = {
-      'data': {
-        'Jennyfer Ngueno': null,
-        'Ervin Larry': null,
-        'Ario Maiga': null,
-        'Fouss Maiga': null
-      },
-      limit: Infinity,
-      minLength: 2
+    'data': {
+      'Jennyfer Ngueno': null,
+      'Ervin Larry': null,
+      'Ario Maiga': null,
+      'Fouss Maiga': null
+    },
+    limit: Infinity,
+    minLength: 2
   };
 
   params: string[] = [];
   modalActions1 = new EventEmitter<string|MaterializeAction>();
   sizeStatus = "tiny";
   user : any;
+  receiver = {
+    "_id": "58d722a3aa2cce3c7c9d785e",
+    "updatedAt": "2017-05-06T20:56:50.551Z",
+    "createdAt": "2017-03-26T02:08:35.724Z",
+    "status": "58d72244aa2cce3c7c9d785a",
+    "hash": "b4facdc12f3c70abc23e77c1ee9fa8972ebe5f90660f8ce50dc55d4022e01fc88d0d6afd6c50c634098047691495b396f9db26abc9c1ac83a0c7bb9cea22795b",
+    "salt": "efb412300f8f6c5698ebbd1ff371b5f0",
+    "username": "aFokam",
+    "email": "jennyferngueno@gmail.com",
+    "lastName": "FOKAM",
+    "firstName": "Ange",
+    "contacts": [],
+    "__v": 0,
+    "password": "aFokam",
+    "resetPasswordToken": "60cbc6bc267ca2c488fb7ebc97116ea59ddbe3ba",
+    "resetPasswordExpires": "2017-05-07T08:56:50.542Z",
+    "isActivated": true,
+    "isModerator": false,
+    "statusData": {
+      "name": "Hidden",
+      "color": "black"
+    },
+    "invitedGroups": [],
+    "groups": []
+  };
+  sender = {
+    "_id": "58ee7efe54d7d72e1c3d060a",
+    "updatedAt": "2017-05-02T22:00:12.533Z",
+    "createdAt": "2017-04-12T19:24:46.794Z",
+    "resetPasswordToken": null,
+    "resetPasswordExpires": null,
+    "status": "58d72244aa2cce3c7c9d785a",
+    "hash": "65a16d2d522584d3e968bf348c39d96c29df91d60bd18472c1e8ddb686f5520232684b011a6377b710ef6503bb7ca022d58d2d1e9916d83bbd179c855bf10ca1",
+    "salt": "cc17a2bdd44d52a2fe07191afc90c9a9",
+    "username": "toto",
+    "email": "toto@email.fr",
+    "lastName": "Totototo",
+    "firstName": "Toto",
+    "contacts": [],
+    "__v": 0,
+    "isActivated": true,
+    "isModerator": false,
+    "statusData": {
+      "name": "Hidden",
+      "color": "black"
+    }
+  }
+  messages = [];
+  receivedMessages = [];
+  connection;
+  message;
+  profileImg;
   constructor(private userService: UserService,
-              private authService : AuthenticationService) {
+              private authService : AuthenticationService,
+              private pcService:PrivateChatService) {
     this.user = {};
   }
 
   ngOnInit() {
-    this.getCurrentProfile();
+    let self = this;
+    self.getCurrentProfile(function () {
+      self.getAllUserContacts();
+    });
+  }
+
+  ngOnDestroy() {
+    this.connection.unsubscribe();
   }
 
   addContact(){
     if(this.contacts.length > 0)
-        //this.userService.addContact(this.contacts);
+    //this.userService.addContact(this.contacts);
       console.log("test");
     else
       console.log("Aucun contact n'a été ajouté");
@@ -110,8 +172,9 @@ export class WorkbenchComponent implements OnInit {
     console.log('Workbench status');
   }
 
-  sendMessage(message) {
-
+  sendMessage() {
+    this.pcService.sendMessage(this.sender, this.receiver, this.message);
+    this.message = '';
   }
 
   expand_sidebar() {
@@ -119,11 +182,51 @@ export class WorkbenchComponent implements OnInit {
     this.isCollapse ? this.sizeStatus = "very-tiny" : this.sizeStatus = "tiny";
   }
 
-  getCurrentProfile() {
+  getCurrentProfile(callback) {
     this.authService.getCurrentUserProfile().subscribe(result => {
       console.log(result);
       this.user = result;
+      callback();
       return result;
     })
+  }
+
+  getAllUserContacts() {
+    this.userService.getAllContacts(this.user).subscribe(contacts => {
+      console.log("Contacts : ", contacts);
+
+      this.contacts = contacts;
+      return contacts;
+    })
+  }
+
+
+  getUserProfile(userIdentifier) {
+    let profileImg = "";
+    this.userService.getUserProfile(userIdentifier).subscribe(
+      result => {
+        if (!result) {
+          profileImg = "../../assets/img/avatar.png";
+          return profileImg;
+        }
+        else {
+          profileImg = result;
+          return profileImg;
+        }
+      },
+      err => {
+        profileImg = "../../assets/img/avatar.png";
+        return profileImg;
+      }
+    )
+  }
+
+  bindCheckMessages(contact) {
+    let self = this;
+
+    self.connection = self.pcService.getMessages(self.user, contact.infoContact).subscribe(
+      message => {
+        self.receivedMessages.push(message.content);
+      });
   }
 }

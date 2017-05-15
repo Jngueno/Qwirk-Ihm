@@ -23,7 +23,8 @@ export class PrivateChatService {
     (receiver.username > sender.username) ?
       roomName = sender.username + receiver.username
       : roomName = receiver.username + sender.username;
-    this.socket.in.to(roomName).emit(roomName, message);
+    console.log(roomName, message);
+    this.socket.emit(roomName, message);
   }
 
   getMessages(sender, receiver) {
@@ -33,7 +34,9 @@ export class PrivateChatService {
       : roomName = receiver.username + sender.username;
     let observable = new Observable(
       observer => {
-        this.socket = io(this.url);
+        this.socket = io(this.url + '/privatePeer2Peer');
+        console.log(roomName);
+        this.socket.emit('room', roomName);
         this.socket.on(roomName, (data) => {
           observer.next(data);
         });
