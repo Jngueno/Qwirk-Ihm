@@ -24,7 +24,8 @@ export class AvatarComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.getUserProfile(JSON.parse(localStorage.getItem('currentUser')).userIdentifier);
+    //let userIdentifier = JSON.parse(localStorage.getItem('currentUser')).userIdentifier
+    //this.getUserProfile(userIdentifier);
   }
 
   getUserProfile(userIdentifier) {
@@ -32,7 +33,7 @@ export class AvatarComponent implements OnInit {
     this.userService.getUserProfile(userIdentifier).subscribe(
       result => {
         if (!result) {
-          self.urlImage = "../../assets/img/avatar.png";
+          self.urlImage = "../assets/img/avatar.png";
           return;
         }
         else {
@@ -41,7 +42,7 @@ export class AvatarComponent implements OnInit {
         }
       },
       err => {
-        self.urlImage = "../../assets/img/avatar.png";
+        self.urlImage = "../assets/img/avatar.png";
         return;
       }
     )
