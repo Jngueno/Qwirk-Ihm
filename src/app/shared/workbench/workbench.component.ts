@@ -7,6 +7,8 @@ import {UserService} from "../services/user.service";
 import {AuthenticationService} from "../services/authentication.service";
 import { PrivateChatService } from './../services/private_chat.service';
 import {IUser} from "../models/user";
+import {Subscription} from "rxjs";
+import {Message} from "../models/message";
 
 @Component({
   selector: 'workbench',
@@ -53,6 +55,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
   modalActions1 = new EventEmitter<string|MaterializeAction>();
   sizeStatus = "tiny";
   user : any;
+  contact : any;
   receiver = {
     "_id": "58d722a3aa2cce3c7c9d785e",
     "updatedAt": "2017-05-06T20:56:50.551Z",
@@ -104,7 +107,12 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
   receivedMessages = [];
   connection;
   message;
+  private imessage = new Message();
   profileImg;
+  typings: any;
+  private notifyTypings: any;
+  private notifyTypingsBlur: Subscription;
+  private fullContact: any;
   constructor(private userService: UserService,
               private authService : AuthenticationService,
               private pcService:PrivateChatService) {
@@ -115,11 +123,13 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
     let self = this;
     self.getCurrentProfile(function () {
       self.getAllUserContacts();
+      //self.fullTypings();
     });
   }
 
   ngOnDestroy() {
     this.connection.unsubscribe();
+    this.notifyTypings.unsubscribe();
   }
 
   addContact(){
@@ -173,7 +183,13 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
   }
 
   sendMessage() {
-    this.pcService.sendMessage(this.sender, this.receiver, this.message);
+    this.imessage.content = this.message;
+    this.imessage.receiverUser.push(this.contact);
+    this.imessage.sender = this.user;
+    this.imessage.sendTime = new Date();
+    this.imessage.contact = this.fullContact;
+    this.pcService.sendMessage(this.user, this.contact, this.imessage);
+    this.messages.push(this.message);
     this.message = '';
   }
 
@@ -223,10 +239,46 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
 
   bindCheckMessages(contact) {
     let self = this;
-
+    self.contact = contact.infoContact;
+    self.fullContact = contact;
+    if(self.connection) {
+      self.connection.unsubscribe();
+      self.notifyTypings.unsubscribe();
+      self.notifyTypingsBlur.unsubscribe()
+    }
+    self.notifyTypings = self.pcService.getNotificationWriting(self.user, self.contact).subscribe(
+      typ => {
+        self.typings = typ;
+      }
+    );
+    self.notifyTypingsBlur = self.pcService.getNotificationBlur(self.user, self.contact).subscribe(
+      typ => {
+        self.typings = typ;
+      }
+    );
     self.connection = self.pcService.getMessages(self.user, contact.infoContact).subscribe(
       message => {
+        console.log(message)
         self.receivedMessages.push(message.content);
       });
+  }
+
+  notifyContactWriting() {
+    let self = this;
+    self.pcService.sendNotificationWriting(self.user, self.contact);
+  }
+
+  fullTypings() {
+    let self = this;
+    self.pcService.getNotificationWriting(self.user, self.contact).subscribe(
+      typ => {
+        self.typings = typ;
+      }
+    );
+  }
+
+  blurTypings() {
+    this.typings = "";
+    this.pcService.sendNotificationBlur(this.user, this.contact);
   }
 }

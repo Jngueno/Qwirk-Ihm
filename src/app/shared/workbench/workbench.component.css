@@ -272,8 +272,8 @@ main.row section.col {
 
 
 .message-history {
-  max-height: calc(100% - 130px);
-  height: calc(100% - 130px);
+  max-height: calc(100% - 180px);
+  height: calc(100% - 180px);
   overflow: auto;
   padding: 0 25px;
 }

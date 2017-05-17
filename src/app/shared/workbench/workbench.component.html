@@ -89,10 +89,10 @@
               <li *ngFor="let contact of contacts" class="collection-item avatar" (click)="bindCheckMessages(contact)">
                 <img src="http://localhost:8000/user/{{contact.infoContact.username}}" alt="" class="circle">
                 <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{contact.nickname}}</span>
-                <p>{{contact.infoContact.firstName}} {{contact.infoContact.lastName}}<br>
-                  {{contact.infoContact.email}}
-                </p>
-                <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+                  <p>{{contact.infoContact.firstName}} {{contact.infoContact.lastName}}<br>
+                    {{contact.infoContact.email}}
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
               </li>
             </ul>
           </div>
@@ -179,26 +179,31 @@
         </ul>
       </div>
     </nav>
-    <div class="message-history">
-      <div class="sender" *ngFor="let mes of messages">
-        <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
-        <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
-          <p>{{mes}}</p>
-          <avatar data-size="very-tiny"></avatar>
+    <div>
+      <div class="message-history">
+        <div class="sender" *ngFor="let mes of messages">
+          <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
+          <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
+            <p>{{mes}}</p>
+            <avatar data-size="very-tiny"></avatar>
+          </div>
+        </div>
+        <div class="receiver" *ngFor="let recMes of receivedMessages">
+          <h6 class="red-text text-darken-2">{{receiver.firstName}} {{receiver.lastName}}</h6>
+          <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
+            <p>{{recMes}}</p>
+            <avatar data-size="very-tiny"></avatar>
+          </div>
         </div>
       </div>
-      <div class="receiver" *ngFor="let recMes of receivedMessages">
-        <h6 class="red-text text-darken-2">{{receiver.firstName}} {{receiver.lastName}}</h6>
-        <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
-          <p>{{recMes}}</p>
-          <avatar data-size="very-tiny"></avatar>
-        </div>
+      <div class="isTyping">
+        <p>{{typings}}</p>
       </div>
     </div>
     <div class="message-discussion valign-wrapper">
       <form #sendMessageForm="ngForm">
         <div class="input-field">
-          <textarea [(ngModel)]="message"  id="editable_message" name="message_sender" class="validate materialize-textarea"></textarea>
+          <textarea [(ngModel)]="message"  id="editable_message" name="message_sender" class="validate materialize-textarea" (input)="notifyContactWriting()" (blur)="blurTypings()"></textarea>
           <label for="editable_message">Edit your message here</label>
         </div>
         <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
