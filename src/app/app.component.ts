@@ -22,6 +22,7 @@ import { AppState } from './app.service';
     <main>
       <router-outlet></router-outlet>
     </main>
+    <qrecord></qrecord>
   `
 })
 export class AppComponent implements OnInit {
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    console.log('Initial App State', this.appState.state);
+    console.log('Qwirk : Initial App State', this.appState.state);
 
     // set token if saved in local storage
     var currentUser = JSON.parse(localStorage.getItem('currentUser'));
