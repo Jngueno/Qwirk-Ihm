@@ -11,6 +11,7 @@ import {RegisterComponent} from "./GIN/register/register.component";
 import {ResetGuard} from "./_guards/reset.guard";
 import {ResetPasswordComponent} from "./GIN/resetPassword/resetPassword.component";
 import {WorkbenchComponent} from "./shared/workbench/workbench.component";
+import {RecordComponent} from "./chattManager/record/record.component";
 
 export const ROUTES: Routes = [
   { path: 'login', component: ConnectionComponent},
@@ -20,6 +21,7 @@ export const ROUTES: Routes = [
   { path: 'barrel', loadChildren: './+barrel#BarrelModule'},
   { path: 'register', component: RegisterComponent},
   { path: 'workbench', component: WorkbenchComponent},
+  { path: 'record', component: RecordComponent},
   { path: 'home', component: HomeComponent},
   { path: '**',    component: NoContentComponent }
 ];

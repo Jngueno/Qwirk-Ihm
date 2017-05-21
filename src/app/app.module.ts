@@ -43,6 +43,8 @@ import {StatusComponent} from "./GIN/status/status.component";
 import {StatusService} from "./shared/services/status.service";
 import {AvatarComponent} from "./_avatar/avatar.component";
 import {AvatarOverlayComponent} from "./_avatar/overlay/avatar-overlay.component";
+import {RecordComponent} from "./chattManager/record/record.component";
+import {VideoComponent} from "./chattManager/video/video.component";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -78,7 +80,9 @@ type StoreType = {
     LogoutComponent,
     ResetPasswordComponent,
     StatusComponent,
-    WorkbenchComponent
+    WorkbenchComponent,
+    RecordComponent,
+    VideoComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,
