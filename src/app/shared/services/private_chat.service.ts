@@ -44,7 +44,7 @@ export class PrivateChatService {
         this.socket.on(roomName, (data) => {
           observer.next(data);
         });
-        return () => {g
+        return () => {
           this.socket.disconnect();
         };
       })
