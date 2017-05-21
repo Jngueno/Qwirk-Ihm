@@ -23,9 +23,8 @@ export class PrivateChatService {
     (receiver.username > sender.username) ?
       roomName = sender.username + receiver.username
       : roomName = receiver.username + sender.username;
-    console.log(roomName, message);
     message.roomName = roomName;
-    console.log("Send message : ", JSON.parse(JSON.stringify(message)));
+    console.log(JSON.parse(JSON.stringify(message)))
     this.socket.emit(roomName, JSON.parse(JSON.stringify(message)));
   }
 
@@ -41,12 +40,11 @@ export class PrivateChatService {
     let observable = new Observable(
       observer => {
         this.socket = io(this.url + '/privatePeer2Peer');
-        console.log(roomName);
         this.socket.emit('room', roomName);
         this.socket.on(roomName, (data) => {
           observer.next(data);
         });
-        return () => {
+        return () => {g
           this.socket.disconnect();
         };
       })
@@ -59,14 +57,16 @@ export class PrivateChatService {
 
   sendNotificationWriting(sender, receiver) {
     let message = sender.username + " is typing";
-    console.log("Is emit", sender.username);
     this.socket.emit('isTyping', message);
   }
 
   sendNotificationBlur(sender, receiver) {
     let message = "";
-    console.log("Is emit", sender.username);
     this.socket.emit('isTyping', message);
+  }
+
+  updateMessageStatus(sender, receiver, message) {
+    this.socket.emit('updateStatus', message);
   }
 
   getNotificationWriting(sender, receiver) {
@@ -99,11 +99,8 @@ export class PrivateChatService {
     let observable = new Observable(
       observer => {
         this.socket = io(this.url + '/privatePeer2Peer');
-        console.log('Receive message');
-        console.log(roomName);
         this.socket.emit('room', roomName);
         this.socket.on('isTyping', (data) => {
-          console.log('Receive message');
           observer.next(data);
         });
         return () => {

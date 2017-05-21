@@ -116,7 +116,7 @@
     "copy-webpack-plugin": "^4.0.0",
     "css-loader": "^0.26.0",
     "dotenv": "^4.0.0",
-    "electron": "^1.6.2",
+    "electron": "^1.6.8",
     "electron-reload": "^1.1.0",
     "exports-loader": "^0.6.3",
     "expose-loader": "^0.7.1",

@@ -9,6 +9,7 @@ import { PrivateChatService } from './../services/private_chat.service';
 import {IUser} from "../models/user";
 import {Subscription} from "rxjs";
 import {Message} from "../models/message";
+import {MessageStatus} from "../models/messageStatus";
 
 @Component({
   selector: 'workbench',
@@ -188,7 +189,9 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
     this.imessage.sender = this.user;
     this.imessage.sendTime = new Date();
     this.imessage.contact = this.fullContact;
+    this.imessage.messageStatus = new MessageStatus('pending');
     this.pcService.sendMessage(this.user, this.contact, this.imessage);
+    this.imessage = new Message();
     this.messages.push(this.message);
     this.message = '';
   }
@@ -200,7 +203,6 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
 
   getCurrentProfile(callback) {
     this.authService.getCurrentUserProfile().subscribe(result => {
-      console.log(result);
       this.user = result;
       callback();
       return result;
@@ -209,8 +211,6 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
 
   getAllUserContacts() {
     this.userService.getAllContacts(this.user).subscribe(contacts => {
-      console.log("Contacts : ", contacts);
-
       this.contacts = contacts;
       return contacts;
     })
@@ -258,8 +258,9 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
     );
     self.connection = self.pcService.getMessages(self.user, contact.infoContact).subscribe(
       message => {
-        console.log(message)
         self.receivedMessages.push(message.content);
+        message.messageStatus.status = 'delivered';
+        self.pcService.updateMessageStatus(self.user, self.contact, message);
       });
   }
 
