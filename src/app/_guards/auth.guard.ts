@@ -15,14 +15,14 @@ export class AuthGuard implements CanActivate {
     if (localStorage.getItem('currentUser')) {
       // logged in so return true
       return true;
-      this.authService.getCurrentUserProfile().subscribe(result => {
-          console.log(result);
-          return true;
-        },
-        err => {
-          this.authService.logout();
-          return false;
-        });
+      // this.authService.getCurrentUserProfile().subscribe(result => {
+      //     console.log(result);
+      //     return true;
+      //   },
+      //   err => {
+      //     this.authService.logout();
+      //     return false;
+      //   });
     }
       // not logged in so redirect to login page
       this.router.navigate(['/login']);

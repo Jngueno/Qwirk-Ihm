@@ -41,6 +41,9 @@ import {LogoutComponent} from "./GIN/logout/logout.component";
 import {ResetGuard} from "./_guards/reset.guard";
 import {StatusComponent} from "./GIN/status/status.component";
 import {StatusService} from "./shared/services/status.service";
+import {GroupComponent} from './group/group.component';
+import {GroupService} from './shared/services/group.service';
+import {Service} from './shared/services/service';
 import {ProfileComponent} from "./GIN/profile/profile.component";
 import {AvatarComponent} from "./_avatar/avatar.component";
 import {AvatarOverlayComponent} from "./_avatar/overlay/avatar-overlay.component";
@@ -84,6 +87,7 @@ type StoreType = {
     LogoutComponent,
     ResetPasswordComponent,
     StatusComponent,
+    GroupComponent,
     ProfileComponent,
     RecordComponent,
     VideoComponent
@@ -106,7 +110,9 @@ type StoreType = {
     AuthGuard,
     ResetGuard,
     AuthenticationService,
-    StatusService
+    StatusService,
+    GroupService,
+    Service
   ]
 })
 export class AppModule {

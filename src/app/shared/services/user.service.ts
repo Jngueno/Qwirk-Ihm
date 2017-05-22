@@ -8,6 +8,7 @@ import {Http, Response, Headers} from "@angular/http";
 import 'rxjs/add/operator/map'
 import {APPCONFIG} from "../../config/param";
 import {IUser} from "../models/user";
+let queryString = require('query-string');
 
 @Injectable()
 export class UserService {
@@ -20,6 +21,27 @@ export class UserService {
     this.url = this.appConfig.urlAPI;
   }
 
+  getUser(params) {
+    let query = params ? '?' + queryString.stringify({filter: JSON.stringify(params)}) : '';
+    return this.http.get(this.url + 'users' + query)
+                .map( res => res.json())
+                // .subscribe(
+                //     data => {
+                //       console.log('data success Todo');
+                //     },
+                //   error => {
+                //       console.log('error logged Todo')
+                //   },
+                //   () => {
+                //       console.log('all fine Todo')
+                //   }
+                // );
+  }
+
+  private extractData(res: Response) {
+    let body = res.json();
+    return body.data || { };
+  }
   create(user: IUser){
     this.http.post(this.url + 'users/', user)
       .map((response: Response) => response.json())
