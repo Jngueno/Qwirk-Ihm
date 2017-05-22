@@ -45,6 +45,8 @@ import {ProfileComponent} from "./GIN/profile/profile.component";
 import {AvatarComponent} from "./_avatar/avatar.component";
 import {AvatarOverlayComponent} from "./_avatar/overlay/avatar-overlay.component";
 
+import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -65,6 +67,8 @@ type StoreType = {
   declarations: [
     AppComponent,
     AboutComponent,
+    FileSelectDirective,
+    FileDropDirective,
     ConnectionComponent,
     NoContentComponent,
     RegisterComponent,

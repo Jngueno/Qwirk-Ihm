@@ -5,6 +5,8 @@ import {Component, OnInit} from '@angular/core';
 import {IUser} from "../../shared/models/user";
 import { AuthenticationService } from "../../shared/services/authentication.service";
 import { Router } from '@angular/router';
+import {FileUploader} from "ng2-file-upload";
+import * as fs from 'fs-extra';
 
 @Component({
   providers: [
@@ -20,6 +22,8 @@ export class RegisterComponent implements OnInit {
   error = '';
   profileImg = "../../assets/img/add_avatar.png";
   profilePic = null;
+  public uploader:FileUploader;
+  newUser : Object;
   constructor(
     private router: Router,
     private authService: AuthenticationService) {
@@ -38,7 +42,10 @@ export class RegisterComponent implements OnInit {
     this.authService.uploadUserProfilePic(form.value.username, formData).subscribe(res => {
       return res;
     });*/
-    this.authService.register(form.value).subscribe(
+    let user = form.value;
+    user.profilePicture = this.profileImg;
+    //user.profilePicture.contentType = this.profilePic;
+    this.authService.register(user).subscribe(
       result => {
         if (result === true) {
           // register successful
