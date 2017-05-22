@@ -1,0 +1,16 @@
+<div class="row">
+  <video id="" #localVideo width="180" style="margin-top:15px;"></video>
+  <div class="col-xs-6">
+    <video id="local" width="300" height="200" #local style="margin-top:15px;"> </video>
+  </div>
+  <div class="col-xs-6" id="remote">
+
+  </div>
+</div>
+<div class="col-xs-12">
+    <button (click)="call()"> Call </button>
+    <button (click) ="handUp()"> HandUp</button>
+    <button (click) ="hideVideo()"> Hide Video</button>
+    <button  (click)="stop()"> stop</button>
+</div>
+

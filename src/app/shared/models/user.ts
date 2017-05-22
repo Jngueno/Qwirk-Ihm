@@ -2,7 +2,7 @@
  * Created by Housseini  Maiga on 3/9/2017.
  */
 export interface IUser {
-   userId: number;
+   userId: string;
    firstName : string;
    lastName : string;
    email : string;
@@ -12,4 +12,5 @@ export interface IUser {
    confirmPassword : string;
    description : string;
    isModerator? : boolean;
+   peerId : string;
 }
