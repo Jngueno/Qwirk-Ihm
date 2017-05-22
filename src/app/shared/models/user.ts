@@ -10,5 +10,6 @@ export interface IUser {
    password : string;
    profilePicture : string;
    confirmPassword : string;
+   description : string;
    isModerator? : boolean;
 }

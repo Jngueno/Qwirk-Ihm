@@ -1,0 +1,17 @@
+@media screen and (min-width: 250px) {
+
+}
+#left .workbench {
+  /*background: azure;*/
+  margin-bottom: 10px;
+}
+.burger-menu{
+  padding-left: 60px;
+}
+.slide-out {
+  padding-left: 310px;
+}
+.slide-in {
+  width: 50px;
+  background: dodgerblue;
+}

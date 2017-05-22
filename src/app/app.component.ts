@@ -19,17 +19,6 @@ import { AppState } from './app.service';
     './app.component.css'
   ],
   template: `
-    <nav>
-      <a [routerLink]=" ['./login'] "
-        routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-        Sign In
-      </a>
-      <a [routerLink]=" ['./register'] "
-        routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">
-        Sign Up
-      </a>
-      <logout></logout>
-    </nav>
     <main>
       <router-outlet></router-outlet>
     </main>
@@ -42,8 +31,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     public appState: AppState
-  ) {
-  }
+  ) {}
 
   public ngOnInit() {
     console.log('Initial App State', this.appState.state);

@@ -3,7 +3,9 @@
 
 # TEAM
 
-  <name> -- <role> -- <twitter>
+  <Jennyfer Ngueno> -- <Developer> -- <twitter>
+  <Housseini Maiga> -- <Developer> -- <@ImHmaiga>
+  <Ervin Vildeman> -- <Developer> -- <twitter>
 
 # THANKS
 
@@ -14,4 +16,4 @@
 # TECHNOLOGY COLOPHON
 
   HTML5, CSS3
-  Angular2, TypeScript, Webpack
+  Angular2, TypeScript, Webpack, electron

@@ -1,0 +1,16 @@
+/**
+ * Created by Housseini  Maiga on 4/2/2017.
+ */
+import {Component, OnInit} from '@angular/core';
+
+@Component({
+  selector: 'modal',
+  templateUrl: 'modal.component.html'
+})
+export class ModalComponent implements OnInit {
+  constructor() {
+  }
+
+  ngOnInit() {
+  }
+}

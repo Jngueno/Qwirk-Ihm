@@ -1,10 +1,11 @@
 /**
  * Created by jngue on 25/03/2017.
  */
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import {IStatus} from "../../shared/models/status";
 import {StatusService} from "../../shared/services/status.service";
 import {Http} from "@angular/http";
+import {UserService} from "../../shared/services/user.service";
 
 @Component({
   selector: 'status',
@@ -13,21 +14,34 @@ import {Http} from "@angular/http";
   providers: [StatusService]
 })
 export class StatusComponent implements OnInit {
+  @Input('dropdownId')
+  dropdownId = "statusDropdown";
+
+  @Input('size')
+  avSize = "small";
+
   private status : IStatus;
   private statuses : IStatus [];
-  constructor(private http : Http, private statusService : StatusService) {
+  @Input('profileImg')
+  profileImg = "";
+  constructor(private http : Http, private statusService : StatusService,
+              private userService : UserService) {
     this.status = new IStatus();
     this.statuses = [];
   }
 
   ngOnInit() {
+    let userIdentifier = JSON.parse(localStorage.getItem('currentUser')).userIdentifier;
+    this.getUserProfile(userIdentifier);
     this.getCurrentStatuses();
     this.getAllStatuses();
+    if(window.screen.width < 749) {
+      this.avSize = "small";
+    }
   }
 
   getCurrentStatuses() {
     this.statusService.getCurrentStatus().subscribe(result => {
-      console.log(result);
       this.status.name = result.name;
       this.status.color = result.color;
       return result;
@@ -36,6 +50,7 @@ export class StatusComponent implements OnInit {
 
   getAllStatuses() {
     this.statusService.getAllStatuses().subscribe(result => {
+
       this.statuses = [];
       for(let s of result) {
         let status = new IStatus();
@@ -59,5 +74,25 @@ export class StatusComponent implements OnInit {
       self.status = status;
       self.getAllStatuses();
     });
+  }
+
+  getUserProfile(userIdentifier) {
+    let self = this;
+    this.userService.getUserProfile(userIdentifier).subscribe(
+      result => {
+        if (!result) {
+          self.profileImg = "../../assets/img/avatar.png";
+          return;
+        }
+        else {
+          self.profileImg = result;
+          return result;
+        }
+      },
+      err => {
+        self.profileImg = "../../assets/img/avatar.png";
+        return;
+      }
+    )
   }
 }
