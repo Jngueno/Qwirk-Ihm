@@ -53,14 +53,23 @@ export class VideoComponent implements OnInit {
     nav.msGetUserMedia);
 
     this.peer.on('call', function(call) {
-      let incomingSound = new Buzz.sound("../../assets/sound/games_of_thrones",{
-        formats: [ "mp3", "aac", "wav" ],
-        preload: true,
-        autoplay: false,
-        loop: true
-      });
-      console.log('incomingSound', incomingSound);
-      incomingSound.play();
+      let callRing;
+      let timer;
+      if (!Buzz.isMP3Supported()) {
+        alert("Your browser doesn't support MP3 Format.");
+      }
+      else {
+        callRing = new Buzz.sound("../../assets/sound/games_of_thrones",{
+          formats: [ "mp3", "aac", "wav" ],
+          preload: true,
+          autoplay: false,
+          loop: true
+        });
+
+        console.log('incomingSound', callRing);
+        callRing.play();
+      }
+
       nav.getUserMedia({video: true, audio: true}, function(stream) {
         console.log('Stream 2',  stream);
         lvideo.src = URL.createObjectURL( stream);
@@ -70,6 +79,8 @@ export class VideoComponent implements OnInit {
           console.log('remote on stream fired test 2: ',  remotestream);
           rvideo.src = URL.createObjectURL(remotestream);
           rvideo.play();
+          timer = Buzz.toTimer(callRing.getDuration());
+          console.log('Ringing duration : ', timer);
         })
       }, function(err) {
         console.log('Failed to get stream', err);
@@ -85,7 +96,8 @@ export class VideoComponent implements OnInit {
   }
 
   videoConnect(){
-    let video = this.localvideo.nativeElement;
+    let lvideo: HTMLVideoElement = this.localvideo.nativeElement;
+    let rvideo: HTMLVideoElement = this.remotevideo.nativeElement;
     let localvar = this.peer;
     let fname = this.joinerPeerId;
 
@@ -101,12 +113,12 @@ export class VideoComponent implements OnInit {
     nav.getUserMedia({video: true, audio: true}, function(stream) {
       console.log('Stream 1', stream);
       let call = localvar.call(fname, stream);
-      video.src = URL.createObjectURL(stream);
-      video.play();
+      lvideo.src = URL.createObjectURL( stream);
+      lvideo.play();
       call.on('stream', function(remotestream) {
         console.log('remote on stream fired test 1 : ', remotestream);
-        video.src = URL.createObjectURL(remotestream);
-        video.play();
+        rvideo.src = URL.createObjectURL(remotestream);
+        rvideo.play();
       })
     }, function(err){
       console.log('Failed to get stream', err);
