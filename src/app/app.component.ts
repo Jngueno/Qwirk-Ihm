@@ -22,7 +22,7 @@ import { AppState } from './app.service';
     <main>
       <router-outlet></router-outlet>
     </main>
-    <qrecord></qrecord>
+    <!--<qrecord></qrecord>-->
   `
 })
 export class AppComponent implements OnInit {

@@ -10,6 +10,7 @@ let Buzz = require('buzz');
   selector: 'qvideo',
   templateUrl: './video.component.html',
   styleUrls: ['./video.component.css'],
+  providers: [PeerConnectionService]
 })
 export class VideoComponent implements OnInit {
   @ViewChild('localvideo') localvideo: any;
