@@ -3,6 +3,7 @@
  */
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Alert} from "selenium-webdriver";
+import {PeerConnectionService} from "../../shared/services/peerConnection.service";
 let Peer = require('peerjs');
 let Buzz = require('buzz');
 @Component({
@@ -18,7 +19,7 @@ export class VideoComponent implements OnInit {
   initiatorPeerId;
   joinerPeerId;
 
-  constructor() {
+  constructor(private peerConnectionSercice: PeerConnectionService) {
   }
 
   ngOnInit() {
@@ -37,6 +38,7 @@ export class VideoComponent implements OnInit {
     console.log('Peer : ', this.peer);
     setTimeout(() => {
       this.initiatorPeerId = this.peer.id;
+      this.peerConnectionSercice.updateUserPerId(this.initiatorPeerId);
     },1000);
 
     this.peer.on('connection', function(conn) {
