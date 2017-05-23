@@ -4,7 +4,7 @@
 
 import {Injectable} from "@angular/core";
 import {APPCONFIG} from "../../config/param";
-import {Http} from "@angular/http";
+import {Http, Response} from "@angular/http";
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
@@ -108,6 +108,13 @@ export class PrivateChatService {
         };
       });
     return observable;
+  }
+
+  getAllHistoryContactMessages(contact, start, limit) {
+    return this.http.get(this.url + '/messages/' + contact + '/' + start + '/' + limit)
+      .map((response : Response) => {
+        return response.json();
+      })
   }
 
 }

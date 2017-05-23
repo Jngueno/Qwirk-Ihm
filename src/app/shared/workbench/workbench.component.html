@@ -180,8 +180,7 @@
         </ul>
       </div>
     </nav>
-    <div>
-      <div class="message-history">
+      <div #messageHistory class="message-history">
         <div class="sender" *ngFor="let mes of messages">
           <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
           <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
@@ -196,11 +195,11 @@
             <avatar data-size="very-tiny"></avatar>
           </div>
         </div>
+
+        <div class="isTyping">
+          <p>{{typings}}</p>
+        </div>
       </div>
-      <div class="isTyping">
-        <p>{{typings}}</p>
-      </div>
-    </div>
     <div class="message-discussion valign-wrapper">
       <form #sendMessageForm="ngForm">
         <div class="input-field">

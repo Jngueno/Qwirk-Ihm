@@ -1,7 +1,10 @@
 /**
  * Created by Housseini  Maiga on 3/13/2017.
  */
-import {Component, OnInit, EventEmitter, ViewEncapsulation, OnDestroy} from '@angular/core';
+import {
+  Component, OnInit, EventEmitter, ViewEncapsulation, OnDestroy, AfterViewChecked,
+  ElementRef, ViewChild, HostListener
+} from '@angular/core';
 import {MaterializeAction} from "angular2-materialize";
 import {UserService} from "../services/user.service";
 import {AuthenticationService} from "../services/authentication.service";
@@ -18,7 +21,7 @@ import {MessageStatus} from "../models/messageStatus";
   encapsulation: ViewEncapsulation.None,
   providers: [PrivateChatService]
 })
-export class WorkbenchComponent implements OnInit, OnDestroy {
+export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   isCollapse: boolean = false;
   onChanged: string = 'slide-out';
   contacts: Object[]/* = [
@@ -119,6 +122,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
               private pcService:PrivateChatService) {
     this.user = {};
   }
+  @ViewChild('messageHistory') private messageHistoryContainer: ElementRef;
 
   ngOnInit() {
     let self = this;
@@ -126,6 +130,16 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
       self.getAllUserContacts();
       //self.fullTypings();
     });
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.messageHistoryContainer.nativeElement.scrollTop = this.messageHistoryContainer.nativeElement.scrollHeight;
+    } catch(err) { }
   }
 
   ngOnDestroy() {
@@ -241,6 +255,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
     let self = this;
     self.contact = contact.infoContact;
     self.fullContact = contact;
+    self.getMessagesContact(contact._id);
     if(self.connection) {
       self.connection.unsubscribe();
       self.notifyTypings.unsubscribe();
@@ -281,5 +296,25 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
   blurTypings() {
     this.typings = "";
     this.pcService.sendNotificationBlur(this.user, this.contact);
+  }
+
+  getMessagesContact(contact) {
+    this.pcService.getAllHistoryContactMessages(contact, 0, 26).subscribe(
+      messages => {
+        for(let message of messages) {
+          if(message.sender === this.user._id) {
+            this.messages.push(message.content);
+          }
+          else {
+            this.receivedMessages.push(message.content);
+          }
+        }
+      }
+    )
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event) {
+    console.log(event);
   }
 }
