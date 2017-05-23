@@ -11,6 +11,22 @@
   padding: 0 5px;
   position: relative;
   word-wrap: break-word;
+  width: calc(100% - 100px);
+}
+
+.message-time {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: -45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.receiver {
+  text-align: left;
 }
 
 .receiver .message::before {
@@ -43,4 +59,5 @@
   margin: 0;
   display: block;
   width: 100%;
+  /*text-align: right;*/
 }

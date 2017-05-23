@@ -19,11 +19,10 @@ export class GroupService {
     this.appConfig = new APPCONFIG();
     this.url = this.appConfig.urlAPI;
   }
-  
-  getGroups(params) {
-    console.log(this.url)
-    let query = params ? '?' + queryString.stringify({filter: JSON.stringify(params)}) : '';
-    return this.http.get(this.url + 'groups' + query)
+
+  getGroups() {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    return this.http.get(this.url + 'groups/' + currentUser.user_id)
       .map( res => res.json())
   }
 

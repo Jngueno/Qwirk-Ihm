@@ -2,7 +2,55 @@
 <div class="sender">
   <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
   <div class="message valign-wrapper lighten-5 teal-text text-lighten-2 teal">
-    <p>{{message.content}}</p>
+    <div class="circle message-time grey lighten-3 grey-border text-darken-2 grey-text"><time>{{message.sendTime | amDateFormat: 'HH:mm'}}</time></div>
+    <p *ngIf="!message.media">{{message.content}}</p>
+
+    <div class="mediaContainer" *ngIf="message.media">
+      <div class="image-container" *ngIf="message.media.contentType.indexOf('image') >= 0">
+            <div class="card">
+              <div class="card-image">
+                <img class="responsive-img" src="{{file_url}}{{message.media.filename}}">
+              </div>
+            </div>
+      </div>
+      <div class="videos-container" *ngIf="message.media.contentType.indexOf('video') >= 0">
+        <!--<iframe width="853" height="480" [src]="trustSrcUrl(file_url + message.media.filename)" frameborder="0" allowfullscreen></iframe>-->
+        <vg-player>
+          <vg-overlay-play></vg-overlay-play>
+          <vg-buffering></vg-buffering>
+
+          <vg-scrub-bar>
+            <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+            <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+          </vg-scrub-bar>
+
+          <vg-controls>
+            <vg-play-pause></vg-play-pause>
+            <vg-playback-button></vg-playback-button>
+
+            <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+
+            <vg-scrub-bar style="pointer-events: none;"></vg-scrub-bar>
+
+            <vg-time-display vgProperty="left" vgFormat="mm:ss"></vg-time-display>
+            <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+
+            <vg-track-selector></vg-track-selector>
+            <vg-mute></vg-mute>
+            <vg-volume></vg-volume>
+
+            <vg-fullscreen></vg-fullscreen>
+          </vg-controls>
+          <video [vgMedia]="media" #media id="singleVideo" preload="auto" crossorigin>
+            <source [src]="trustSrcUrl(file_url + message.media.filename)"  type="{{message.media.contentType}}">
+          </video>
+        </vg-player>
+      </div>
+      <div class="other-container" *ngIf="message.media.contentType.indexOf('video') < 0 && message.media.contentType.indexOf('image') < 0">
+
+        <a class="waves-effect waves-light btn-large" href="{{file_url}}{{message.media.filename}}"><i class="material-icons right">download</i>Download</a>
+      </div>
+    </div>
     <avatar data-size="very-tiny" [urlImage]="appConfig.getUrlAPI() + url + user.username"></avatar>
     <div class="messageStatus">
       <i class="material-icons" *ngIf="message.messageStatus.status === 'pending'">query_builder</i>

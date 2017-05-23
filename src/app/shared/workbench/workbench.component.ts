@@ -14,6 +14,10 @@ import {Subscription} from "rxjs";
 import {Message} from "../models/message";
 import {MessageStatus} from "../models/messageStatus";
 import {PeerConnectionService} from "../services/peerConnection.service";
+import {APPCONFIG} from "../../config/param";
+import {GroupService} from "../services/group.service";
+import {GroupChatService} from "../services/group_chat.service";
+import * as moment from 'moment/moment';
 
 /*import * as wdtEmojiBundle from 'wdt-emoji-bundle';*/
 
@@ -22,11 +26,12 @@ import {PeerConnectionService} from "../services/peerConnection.service";
   templateUrl: './workbench.component.html',
   styleUrls: ['./workbench.component.css'],
   encapsulation: ViewEncapsulation.None,
-  providers: [PrivateChatService, PeerConnectionService]
+  providers: [PrivateChatService, PeerConnectionService, GroupChatService]
 })
 export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   isCollapse: boolean = false;
   onChanged: string = 'slide-out';
+  isSendFileOpen: boolean;
   contacts: Object[];/* = [
     {"userId" : 0, "firstName": "Housseini", "lastName" : "Maiga", "description" : "Mess with the best.. Die with the rest.", "profilePicture" : "http://bit.ly/2n4OzaM", "username" : "fouss maiga"},
     {"userId" : 1, "firstName": "Jennyfer", "lastName" : "Ngueno", "description" : "Never give up settle", "profilePicture" : "http://bit.ly/2nJ25ln", "username" : "jngueno"},
@@ -115,22 +120,39 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   connection;
   msg;
   private imessage = new Message();
+  public appConfig = new APPCONFIG();
   profileImg;
   typings: any;
   private notifyTypings: any;
   private notifyTypingsBlur: Subscription;
+
+  groupTypings: any;
+  private groupNotifyTypings: any;
+  private groupNotifyTypingsBlur: Subscription;
   private fullContact: any;
   //private renderer: Renderer;
+  private counterUnread : Object;
   onUpdateMessageStatus: Subscription;
   onNewMessagesPush: Subscription;
   unreadMessages: any;
+  fileMsg: any;
+  private groups: any;
+  private channels:any;
+  group: any;
   constructor(private userService: UserService,
               private authService : AuthenticationService,
               private renderer : Renderer,
               private pcService:PrivateChatService,
-              private peerConService : PeerConnectionService) {
+              private groupService : GroupService,
+              private peerConService : PeerConnectionService,
+              private gcService: GroupChatService) {
     this.user = {};
     this.unreadMessages = {};
+    this.counterUnread = {};
+    this.groups = [];
+    this.channels = [];
+    this.isSendFileOpen = false;
+    this.notifyTypings = null;
   }
   @ViewChild('messageHistory') private messageHistoryContainer: ElementRef;
 
@@ -138,14 +160,23 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     let self = this;
     self.getCurrentProfile(function () {
       self.getAllUserContacts();
+      self.getAllUserGroups(function (groups) {
+        for (let group of groups) {
+        }
+      });
+
+      self.scrollToBottom();
+      //self.gcService.joinAllGroups(self.user);
       self.onNewMessagesPush = self.pcService.getNewMessagesPush(self.user).subscribe(
         newMsg => {
-          for (let contact of newMsg.receiverUser) {
+          //console.log("WorkBench Component, New messages on qwirk app contacts", self.contacts[0].userObject._id);
+          for (let contact of newMsg["receiverUser"]) {
             if(!self.unreadMessages[contact]) {
               self.unreadMessages[contact] = [];
+              self.counterUnread[contact] = 0;
             }
             self.unreadMessages[contact].push(newMsg);
-
+            self.counterUnread[contact] += 1;
             console.log("WorkBench Component, New messages on qwirk app", self.unreadMessages[contact].length);
           }
         }
@@ -166,13 +197,14 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngAfterViewChecked() {
-    this.scrollToBottom();
   }
 
   scrollToBottom(): void {
-    try {
+    /*try {
       this.messageHistoryContainer.nativeElement.scrollTop = this.messageHistoryContainer.nativeElement.scrollHeight;
-    } catch(err) { }
+    } catch(err) { }*/
+    let objDiv = document.getElementById("messageHistory");
+    objDiv.scrollTop = objDiv.scrollHeight;
   }
 
   ngOnDestroy() {
@@ -232,13 +264,26 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   sendMessage() {
     this.imessage.content = this.msg;
-    this.imessage.receiverUser.push(this.contact);
     this.imessage.sender = this.user._id;
     this.imessage.sendTime = new Date();
-    this.imessage.contact = this.fullContact;
     this.imessage.messageStatus = new MessageStatus('pending');
-    this.pcService.sendMessage(this.user, this.contact, this.imessage);
+    console.log("Send message fullcontact", this.fullContact);
+    if(this.fullContact !== null && this.fullContact !== undefined) {
+      this.imessage.contact = this.fullContact;
+      this.imessage.receiverUser.push(this.contact);
+      console.log("Send message work user", this.imessage, this.group);
+      this.pcService.sendMessage(this.user, this.contact, this.imessage);
+    }
+    else if(this.group !== null && this.group !== undefined) {
+      this.imessage.receiverGroup = this.group;
+      console.log("Send message work well", this.imessage, this.group);
+      this.gcService.sendMessage(this.group, this.imessage);
+    }
+
+    console.log("Send message work", this.imessage, this.group);
     this.messages.push(JSON.parse(JSON.stringify(this.imessage)));
+
+    this.scrollToBottom();
     this.imessage = new Message();
     this.msg = '';
   }
@@ -266,12 +311,35 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.unreadMessages[c.userObject._id] = [];
         }
       }
-      //console.log("Get all contacts", newContacts);
+      console.log("Get all contacts", newContacts);
       this.contacts = newContacts;
       return contacts;
     })
   }
 
+  getAllUserGroups(callback) {
+    this.groupService.getGroups().subscribe(groups => {
+      //console.log(contacts);/
+      /*
+      let newContacts = [];
+      for(let c of contacts) {
+        if(c.userObject) {
+          newContacts.push(c);
+          this.unreadMessages[c.userObject._id] = [];
+        }
+      }*/
+      //console.log("Get all contacts", newContacts);
+      for(let group of groups) {
+        if(group.isPublic) {
+          this.channels.push(group);
+        }
+        else {
+          this.groups.push(group);
+        }
+      }
+      callback(groups);
+    })
+  }
 
   getUserProfile(userIdentifier) {
     let profileImg = "";
@@ -296,10 +364,10 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   bindCheckMessages(contact) {
     let self = this;
     self.contact = contact.userObject;
+    self.group = null;
     self.fullContact = contact;
     self.getMessagesContact(self.fullContact._id);
-    if(self.connection) {
-      self.connection.unsubscribe();
+    if(self.notifyTypings) {
       self.notifyTypings.unsubscribe();
       self.notifyTypingsBlur.unsubscribe();
       self.onUpdateMessageStatus.unsubscribe();
@@ -307,7 +375,10 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     self.connection = self.pcService.getMessages(self.user, contact.userObject).subscribe(
       message => {
         self.messages.push(message);
-        message.messageStatus.status = 'delivered';
+        if(message["messageStatus"]) {
+          message["messageStatus"].status = 'delivered';
+        }
+        console.log("New message for me : ", message);
         self.receivedMessages.push(message);
         self.pcService.updateMessageStatus(self.user, self.contact, message);
       });
@@ -325,7 +396,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
       newMsg => {
         let newMessages = [];
         for(let msg of self.messages) {
-          if (msg._id === newMsg._id) {
+          if (msg._id === newMsg["_id"]) {
             newMessages.push(newMsg);
           }
           else {
@@ -333,12 +404,70 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
           }
         }
       }
-    );/*
+    );
+    /*
     self.onNewMessagesPush = self.pcService.getNewMessagesPush(self.user).subscribe(
       newMsg => {
         console.log("WorkBench Component, New messages on qwirk app", newMsg);
       }
     );*/
+  }
+
+  bindCheckGroupMessages(group) {
+    let self = this;
+    self.group = group;
+    self.contact = null;
+    self.fullContact = null;
+    self.gcService.bindToRoom(self.group);
+    self.getMessagesGroup(self.group);
+    if(self.notifyTypings) {
+      self.notifyTypings.unsubscribe();
+      self.notifyTypingsBlur.unsubscribe();
+      self.onUpdateMessageStatus.unsubscribe();
+    }
+    self.connection = self.gcService.getMessages(group).subscribe(
+      message => {
+        self.messages.push(message);
+        if(message["messageStatus"]) {
+          message["messageStatus"].status = 'delivered';
+        }
+        self.receivedMessages.push(message);
+        self.gcService.updateMessageStatus(message);
+      });
+    self.notifyTypings = self.gcService.getNotificationWriting(group).subscribe(
+      typ => {
+        self.typings = typ;
+      }
+    );
+    self.notifyTypingsBlur = self.gcService.getNotificationBlur(group).subscribe(
+      typ => {
+        self.typings = typ;
+      }
+    );
+    self.onUpdateMessageStatus = self.gcService.getMessageWhenMsgStatus(group).subscribe(
+      newMsg => {
+        let newMessages = [];
+        for(let msg of self.messages) {
+          if (msg._id === newMsg["_id"]) {
+            newMessages.push(newMsg);
+          }
+          else {
+            newMessages.push(msg);
+          }
+        }
+      }
+    );
+  }
+
+  notifyWriting() {
+
+    if(this.fullContact !== null && this.fullContact !== undefined) {
+      this.notifyContactWriting();
+    }
+    else if(this.group !== null && this.group !== undefined) {
+      this.notifyGroupWriting();
+    }
+
   }
 
   notifyContactWriting() {
@@ -356,15 +485,44 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   blurTypings() {
+    if(this.fullContact !== null && this.fullContact !== undefined) {
+
+      this.typings = "";
+      this.pcService.sendNotificationBlur(this.user, this.contact);
+    }
+    else if(this.group !== null && this.group !== undefined) {
+
+      this.typings = "";
+      this.gcService.sendNotificationBlur();
+    }
+  }
+
+  notifyGroupWriting() {
+    let self = this;
+    self.gcService.sendNotificationWriting(self.user);
+  }
+
+  fullGroupTypings() {
+    let self = this;/*
+    self.gcService.getNotificationWriting().subscribe(
+      typ => {
+        self.typings = typ;
+      }
+    );*/
+  }
+
+  blurGroupTypings() {
     this.typings = "";
-    this.pcService.sendNotificationBlur(this.user, this.contact);
+    this.gcService.sendNotificationBlur();
   }
 
   getMessagesContact(contact) {
-    this.pcService.getAllHistoryContactMessages(contact, 0, 15).subscribe(
+    let self = this;
+    this.pcService.getAllHistoryContactMessages(contact, 0, 1000).subscribe(
       messages => {
         this.messages = messages.reverse();
-        //console.info("Get messages in workbench", this.messages);
+        self.scrollToBottom();
+        console.info("Get messages in contact", this.messages[0].sendTime);
         for (let msg of this.messages) {
           if (msg.sender !== this.user._id) {
             msg.messageStatus.status = "seen";
@@ -376,6 +534,23 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     )
   }
 
+  getMessagesGroup(group) {
+    this.gcService.getAllHistoryGroupMessages(group, 0, 1000).subscribe(
+      messages => {
+        this.messages = messages.reverse();
+        console.info("Get messages in group", this.messages);
+        for (let msg of this.messages) {
+          if (msg.sender !== this.user._id) {
+            msg.messageStatus.status = "seen";
+            this.receivedMessages.push(msg);
+          }
+          this.gcService.updateMessageStatus(msg);
+        }
+        this.scrollToBottom();
+      }
+    )
+  }
+
   updateUnreadStatus() {
     for(let receivedMsg of this.receivedMessages) {
       //console.log("Update Unread Status :", receivedMsg.messageStatus.status !== "seen")
@@ -383,11 +558,64 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
         //console.log("Update Unread Status : ", this.receivedMessages);
         receivedMsg.messageStatus._id = "";
         receivedMsg.messageStatus.status = "seen";
-        this.pcService.updateMessageStatus(this.user, this.contact, receivedMsg);
+        if(this.fullContact !== null && this.fullContact !== undefined) {
+          this.pcService.updateMessageStatus(this.user, this.contact, receivedMsg);
+        }
+        else if(this.group !== null && this.group !== undefined) {
+          this.gcService.updateMessageStatus(receivedMsg);
+        }
+      }
+    }
+
+  }
+
+  updateGroupUnreadStatus() {
+    for(let receivedMsg of this.receivedMessages) {
+      //console.log("Update Unread Status :", receivedMsg.messageStatus.status !== "seen")
+      if (receivedMsg.messageStatus.status !== "seen") {
+        //console.log("Update Unread Status : ", this.receivedMessages);
+        receivedMsg.messageStatus._id = "";
+        receivedMsg.messageStatus.status = "seen";
+        this.gcService.updateMessageStatus(receivedMsg);
       }
     }
   }
 
+  toggleIsSendFile() {
+    this.isSendFileOpen = !this.isSendFileOpen;
+  }
+
+  changeFileMessage(fileInput: any) {
+    let self = this;
+    if (fileInput.target.files && fileInput.target.files[0]) {
+      self.fileMsg = fileInput.target.files;
+      let reader = new FileReader();
+
+      reader.onload = function (e : any) {
+        self.profileImg = e.target.result;
+      };
+    }
+
+    this.imessage.content = "File uploaded";
+    this.imessage.sender = this.user._id;
+    this.imessage.sendTime = new Date();
+    this.imessage.messageStatus = new MessageStatus('pending');
+    console.log("Group file", this.group);
+    if (this.fullContact) {
+      this.imessage.contact = this.fullContact;
+      this.imessage.receiverUser.push(this.contact);
+      console.log("User file", this.fullContact, this.contact);
+    }
+
+    else if (this.group){
+      this.imessage.receiverGroup = this.group;
+      console.log("Group file", this.group);
+    }
+    let mes = JSON.parse(JSON.stringify(this.imessage));
+    this.pcService.makeFileRequest(mes, this.fileMsg);
+    this.messages.push(JSON.parse(JSON.stringify(this.imessage)));
+    this.imessage = new Message();
+  }
   //@HostBinding('class.message-history')
   /*@HostListener('class.message-history:scroll', ['$event'])
   onScroll(event) {

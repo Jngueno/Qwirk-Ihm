@@ -18,6 +18,9 @@ export class MessageComponent implements OnInit {
   @Input("contact")
   contact:any;
 
+  @Input("group")
+  group:any;
+
   @Input("message")
   message:any;
 
@@ -28,6 +31,6 @@ export class MessageComponent implements OnInit {
 
   public ngOnInit() {
     this.connectedUser = JSON.parse(localStorage.getItem('currentUser')).userIdentifier;
-    //console.log(this.message.messageStatus);
+    //console.log(this.message.owner);
   }
 }

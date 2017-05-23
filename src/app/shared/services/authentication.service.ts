@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Rx';
 import { APPCONFIG } from '../../config/param';
 import { IUser } from '../models/index';
 import 'rxjs/add/operator/map'
+import {Router} from "@angular/router";
 
 @Injectable()
 export class AuthenticationService {
@@ -21,7 +22,8 @@ export class AuthenticationService {
   handleError: any;
 
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+  private router: Router) {
     // set token if saved in local storage
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.token = currentUser && currentUser.token;
@@ -122,6 +124,7 @@ export class AuthenticationService {
     // clear token remove user from local storage to log user out
     this.token = null;
     localStorage.removeItem('currentUser');
+    this.router.navigate(['/login']);
   }
 
   makeFileRequest (postData: any, files: File[]) {

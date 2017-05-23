@@ -1,7 +1,10 @@
 
-<div *ngIf="user._id === message.sender">
+<div *ngIf="user._id === message.sender || user._id === message.sender._id">
   <sender [user]="user" [message]="message"></sender>
 </div>
-<div *ngIf="user._id !== message.sender">
+<div *ngIf="user._id !== message.sender && !group">
   <receiver [user]="contact" [message]="message"></receiver>
+</div>
+<div *ngIf="(user._id !== message.sender && user._id !== message.sender._id) && group">
+  <receiver [user]="message.sender" [message]="message"></receiver>
 </div>

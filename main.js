@@ -22,13 +22,13 @@ app.on('ready', function () {
   win = new BrowserWindow({width: 1000, height: 600});
 
   // Specify entry point
-  //   win.loadURL(url.format({
-  //     pathname: path.join(__dirname, 'dist/index.html'),
-  //     protocol: 'file:',
-  //     slashes: true
-  //   }));
+     win.loadURL(url.format({
+       pathname: path.join(__dirname, 'dist/index.html'),
+       protocol: 'file:',
+       slashes: true
+     }));
   //Just for testing
-  win.loadURL('http://localhost:3000');
+  //win.loadURL('http://localhost:3000');
     win.webContents.openDevTools();
 
   // Remove window once app is closed
