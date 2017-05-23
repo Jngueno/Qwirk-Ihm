@@ -61,6 +61,13 @@ import {MessagerieComponent} from "./messageHistory/messagerie.component";
 import {CreateGroupComponent} from './group/createGroup.component';
 import {SearchGroupComponent} from './group/searchGroup.component';
 import {CreateChannelComponent} from './channel/createChannel.component';
+import {StoreModule} from "@ngrx/store";
+import {VideoContentReducer} from "./shared/reducers/video.reducer";
+import {VideoSettingReducer} from "./shared/reducers/video.settings.reducer";
+import {PeerReducer} from "./shared/reducers/peer.reducer";
+import {ContactReducer} from "./shared/reducers/contact.reducer";
+import {Ng2EmojiModule} from "ng2-emoji";
+import {FormatText} from "./+message/formatText.pipe";
 
 
 import {VgCoreModule} from 'videogular2/core';
@@ -114,7 +121,8 @@ type StoreType = {
     VideoComponent,
     CreateGroupComponent,
     SearchGroupComponent,
-    CreateChannelComponent
+    CreateChannelComponent,
+    FormatText
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -131,6 +139,16 @@ type StoreType = {
     VgOverlayPlayModule,
     VgBufferingModule,
     MomentModule,
+    //MdListModule,
+    CommonModule,
+    EmojiModule,
+    Ng2EmojiModule,
+    StoreModule.provideStore({
+      videoState : VideoContentReducer,
+      videoSetting : VideoSettingReducer,
+      peerObject : PeerReducer,
+      contact : ContactReducer
+    }),
     //MdListModule,
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],

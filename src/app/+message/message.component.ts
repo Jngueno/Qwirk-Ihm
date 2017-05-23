@@ -31,6 +31,5 @@ export class MessageComponent implements OnInit {
 
   public ngOnInit() {
     this.connectedUser = JSON.parse(localStorage.getItem('currentUser')).userIdentifier;
-    //console.log(this.message.owner);
   }
 }

@@ -5,6 +5,7 @@ import {
   Component,
   OnInit, Input
 } from '@angular/core';
+import {Ng2EmojiService} from "ng2-emoji";
 import {APPCONFIG} from "../../config/param";
 import {DomSanitizer} from "@angular/platform-browser";
 
@@ -16,10 +17,12 @@ import {DomSanitizer} from "@angular/platform-browser";
 export class ReceiverComponent implements OnInit {
   @Input("user")
   user : any;
+  public emojiList = [];
 
   @Input("group")
   group : any;
 
+  // public msg: string = "";
   @Input("message")
   message : any;
 

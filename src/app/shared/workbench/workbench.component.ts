@@ -3,7 +3,7 @@
  */
 import {
   Component, OnInit, EventEmitter, ViewEncapsulation, OnDestroy, AfterViewChecked,
-  ElementRef, ViewChild, HostListener, HostBinding, Renderer
+  ElementRef, ViewChild, HostListener, HostBinding, Renderer, Output, OnChanges
 } from '@angular/core';
 import {MaterializeAction} from "angular2-materialize";
 import {UserService} from "../services/user.service";
@@ -20,6 +20,10 @@ import {GroupChatService} from "../services/group_chat.service";
 import * as moment from 'moment/moment';
 
 /*import * as wdtEmojiBundle from 'wdt-emoji-bundle';*/
+import {Store} from "@ngrx/store";
+import {IVideoContent} from "../reducers/video.reducer";
+import {Ng2EmojiService} from "ng2-emoji";
+/*import * as wdtEmojiBundle from 'wdt-emoji-bundle';*/
 
 @Component({
   selector: 'workbench',
@@ -28,10 +32,12 @@ import * as moment from 'moment/moment';
   encapsulation: ViewEncapsulation.None,
   providers: [PrivateChatService, PeerConnectionService, GroupChatService]
 })
-export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked, OnChanges {
   isCollapse: boolean = false;
   onChanged: string = 'slide-out';
   isSendFileOpen: boolean;
+  peer : any;
+  media : any;
   contacts: Object[];/* = [
     {"userId" : 0, "firstName": "Housseini", "lastName" : "Maiga", "description" : "Mess with the best.. Die with the rest.", "profilePicture" : "http://bit.ly/2n4OzaM", "username" : "fouss maiga"},
     {"userId" : 1, "firstName": "Jennyfer", "lastName" : "Ngueno", "description" : "Never give up settle", "profilePicture" : "http://bit.ly/2nJ25ln", "username" : "jngueno"},
@@ -47,7 +53,11 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
       tag: 'Google',
     }],
   };
-
+  emojiList = [];
+  profileImg = "../assets/img/avatar.png";
+  userToCall : string;
+  isEmojis : boolean = false;
+  isInComingCall : boolean = false;
   chipsPlaceholder = {
     placeholder: '+Username/Email',
     secondaryPlaceholder: 'Enter username or email',
@@ -120,9 +130,14 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   connection;
   msg;
   invitations;
+
+
+  message;
+ isVideo = false;
   private imessage = new Message();
   public appConfig = new APPCONFIG();
-  profileImg;
+  // profileImg;
+  // profileImg;
   typings: any;
   private notifyTypings: any;
   private notifyTypingsBlur: Subscription;
@@ -146,8 +161,9 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
               private renderer : Renderer,
               private pcService:PrivateChatService,
               private groupService : GroupService,
-              private peerConService : PeerConnectionService,
-              private gcService: GroupChatService) {
+              private gcService: GroupChatService,
+              private peerService: PeerConnectionService,
+              private store : Store<any>) {
     this.user = {};
     this.openModalClass = '';
     this.unreadMessages = {};
@@ -156,12 +172,15 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.channels = [];
     this.isSendFileOpen = false;
     this.notifyTypings = null;
+    this.emojiList = Ng2EmojiService.emojis;
+
   }
   @ViewChild('messageHistory') private messageHistoryContainer: ElementRef;
 
   ngOnInit() {
     let self = this;
     self.getCurrentProfile(function () {
+      console.log('getCurrentProfile inner');
       self.getAllUserContacts();
       self.getAllUserGroups(function (groups) {
         for (let group of groups) {
@@ -195,8 +214,22 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
         console.log(event);
       };*/
       //wdtEmojiBundle.init('.wdt-emoji-bundle-enabled');
+        // self.peer.destroy();
+        self.peer = self.peerService.initPeer();
+      if(self.peer) {
+        console.error(' self.peer > ',  self.peer);
+        console.error('self.peer id >>> ', self.peer.id);
+        self.peerService.callReceiveEvent();
+      }
+      //wdtEmojiBundle.init('.wdt-emoji-bundle-enabled');
       //self.fullTypings();
     });
+
+    this.store.select<IVideoContent>('videoState').subscribe( (videosStream : IVideoContent) => {
+      console.log('ngOnInit STORE isvideo > ', videosStream);
+      console.log('before ', videosStream.isVideo);
+      this.isVideo = videosStream.isVideo;
+    })
   }
 
   ngAfterViewChecked() {
@@ -213,6 +246,15 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   ngOnDestroy() {
     this.connection.unsubscribe();
     this.notifyTypings.unsubscribe();
+  }
+
+  onCallStart() {
+      if(this.contact) {
+        this.isInComingCall = !this.isInComingCall;
+        this.userToCall = this.contact.username;
+        this.isVideo = !this.isVideo;
+      }
+      console.log('On audio/ video call start : ', this.isVideo);
   }
 
   createGroup() {
@@ -372,6 +414,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   bindCheckMessages(contact) {
+      console.log('Click on contact : ', contact);
     let self = this;
     self.contact = contact.userObject;
     self.group = null;
@@ -625,6 +668,22 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.pcService.makeFileRequest(mes, this.fileMsg);
     this.messages.push(JSON.parse(JSON.stringify(this.imessage)));
     this.imessage = new Message();
+  }
+
+  addEmoji(emoji : string) :void {
+    console.error('test emoji > ', emoji);
+    this.isEmojis = !this.isEmojis;
+    this.message += ':' + emoji + ': ';
+    console.log(this.message);
+  }
+
+  showEmojis() {
+    this.isEmojis = !this.isEmojis;
+    console.log('showEmojis > ', this.isEmojis)
+  }
+
+  addCodeStyle(){
+    console.log('addCodeStyle > ')
   }
   //@HostBinding('class.message-history')
   /*@HostListener('class.message-history:scroll', ['$event'])

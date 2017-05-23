@@ -1,7 +1,7 @@
 
 <div class="sender">
   <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
-  <div class="message valign-wrapper lighten-5 teal-text text-lighten-2 teal">
+  <div class="message valign-wrapper lighten-5 teal-text text-lighten-2 teal"  [innerHTML]="message.content | emojis">
     <div class="circle message-time grey lighten-3 grey-border text-darken-2 grey-text"><time>{{message.sendTime | amDateFormat: 'HH:mm'}}</time></div>
     <p *ngIf="!message.media">{{message.content}}</p>
 

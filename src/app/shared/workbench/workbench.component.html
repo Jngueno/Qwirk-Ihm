@@ -1,68 +1,3 @@
-<!--
-<div id="left">
-
-  <ul class="side-nav fixed" style="background: #B3E5FC" [ngClass]="{'slide-in': isCollapse }">
-    <div>
-      <status></status>
-    </div>
-    <div class="workbench" id="group">
-      <h5>Group</h5>
-      <md-list>
-        <md-list-item> Todo </md-list-item>
-      &lt;!&ndash;<md-list-item> Engineer </md-list-item>&ndash;&gt;
-      &lt;!&ndash;<md-list-item> Code activities </md-list-item>&ndash;&gt;
-      </md-list>
-    </div>
-    <div class="workbench" id="channel">
-      <h5>Channel</h5>
-      <md-list>
-      <md-list-item> Todo </md-list-item>
-      &lt;!&ndash;<md-list-item> Engineer </md-list-item>&ndash;&gt;
-      &lt;!&ndash;<md-list-item> Code activities </md-list-item>&ndash;&gt;
-      </md-list>
-    </div>
-    <div class="workbench" id="contact">
-      <div class="row">
-        <h5 class="col s8">Contact</h5>
-        <div class="col s4">
-          <a class="waves-effect waves-light btn modal-trigger" (click)="openContactPopin()">
-            <i class="fa fa-address-book"  aria-hidden="true"></i>
-          </a>
-        </div>
-      </div>
-      <md-list *ngFor="let contact of contacts">
-        <md-list-item>
-          <img md-list-avatar src="{{contact.profilePicture}}" alt="{{contact.username}}">
-          <p md-line>{{contact.firstName}} {{contact.lastName}} </p>
-          <p md-line>{{contact.description}}</p>
-        </md-list-item>
-      </md-list>
-    </div>
-    &lt;!&ndash;<contact (modalActions1) = "onModalActionChanged($event)"></contact>&ndash;&gt;
-  </ul>
-  <i class="material-icons burger-menu" [ngClass]="{'slide-out': !isCollapse }" (click)="onToggle()">menu</i>
-</div>
-<div id="right">
-  &lt;!&ndash; Modal Structure &ndash;&gt;
-  <div id="modal" class="modal" [ngClass]="{'small-modal': isCollapse}" style="width: 100%; height: 100%" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions1">
-    <div class="modal-content">
-      <div class="chips chips-placeholder" materialize="material_chip"  [materializeParams]="[chipsPlaceholder]"  (chip.add)="add($event.detail)" (chip.delete)="delete($event.detail)" (chip.select)="select($event.detail)"></div>
-      &lt;!&ndash;<div class="input-field col s12">&ndash;&gt;
-      &lt;!&ndash;<input type="text" id="autoComplete" materialize="autocomplete" [materializeParams]="[chipsAutoComplete]">&ndash;&gt;
-      &lt;!&ndash;</div>&ndash;&gt;
-      <md-icon>home</md-icon>
-    </div>
-    <div class="modal-footer">
-      <a class="waves-effect waves-green btn-flat" (click)="addContact()">Agree</a>
-      <a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="closeContactopIn()">Close</a>
-    </div>
-  </div>
-</div>
-
-
-
--->
-
 <main class="row">
   <section class="col qwirk_sidebar" [ngClass]="{'open': !isCollapse }">
     <div class="statusSection valign-wrapper">
@@ -137,11 +72,14 @@
     </div>
   </section>
   <section class="col qwirk_content" [ngClass]="{'side_open': !isCollapse }">
+    <nav *ngIf="!isVideo">
     <modal [modalIdentifier]="modalIdentifier" [modalActions1] = "modalActions1" [openModalClass]="openModalClass"></modal>
     <nav>
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo">Qwirk</a>
         <ul class="right hide-on-med-and-down">
+          <li><a href="#!"><i class="material-icons" (click)="onCallStart()">videocam</i></a></li>
+          <li><a href="#!"><i class="material-icons" (click)="onCallStart()">phone</i></a></li>
           <li><a href="#!"><i class="material-icons">search</i></a></li>
           <li><a href="#!"><i class="material-icons">view_module</i></a></li>
           <li><a href="#!"><i class="material-icons">refresh</i></a></li>
@@ -149,7 +87,8 @@
         </ul>
       </div>
     </nav>
-    <div #messageHistory id="messageHistory" class="message-history">
+      <div class="message-content" *ngIf="!isVideo">
+        <div #messageHistory id="messageHistory" class="message-history">
       <!--<div class="sender">
         <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
         <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
@@ -170,6 +109,9 @@
           <span class="white teal lighten-5 teal-border border-lighten-3 teal-text text-lighten-3"><time>{{mes.sendTime | amDateFormat:'LL'}}</time></span>
         </div>
         <message [user]="user" [contact]="contact" [group]="group" [message]="mes"></message>
+        <div class="emoji_container" *ngIf="isEmojis">
+          <span class="emoji-hover" *ngFor="let emoji of emojiList" [innerHTML]="(':'+emoji+':') | emojis"  (click)="addEmoji(emoji)"></span>
+        </div>
       </div>
 
     </div>
@@ -244,9 +186,15 @@
             </div>
           </div>
         </div>-->
+        <button class="btn btn-flat circle btn-floating add_emoji_btn teal lighten-3" (click)="showEmojis()"><i class="material-icons">stars</i></button>
+        <button class="btn btn-flat circle btn-floating add_code_btn teal lighten-3" (click)="addCodeStyle()"><i class="material-icons">code</i></button>
         <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
       </form>
     </div>
+    </div>
     <!--<messagerie [messages]="messages" [user]="user" [contact]="contact"></messagerie>-->
+      <div class="video-content" *ngIf="isVideo">
+        <qvideo [contact] = "contact" [peer]="peer" [media]="media"></qvideo>
+      </div>
   </section>
 </main>

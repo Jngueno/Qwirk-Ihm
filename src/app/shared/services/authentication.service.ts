@@ -22,6 +22,7 @@ export class AuthenticationService {
   handleError: any;
 
 
+
   constructor(private http: Http,
   private router: Router) {
     // set token if saved in local storage
