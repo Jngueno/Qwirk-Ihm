@@ -113,6 +113,7 @@ export class PrivateChatService {
   getAllHistoryContactMessages(contact, start, limit) {
     return this.http.get(this.url + '/messages/' + contact + '/' + start + '/' + limit)
       .map((response : Response) => {
+        console.log(response.json());
         return response.json();
       })
   }
