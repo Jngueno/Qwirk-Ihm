@@ -112,7 +112,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   messages = [];
   receivedMessages = [];
   connection;
-  message;
+  msg;
   private imessage = new Message();
   profileImg;
   typings: any;
@@ -201,7 +201,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   sendMessage() {
-    this.imessage.content = this.message;
+    this.imessage.content = this.msg;
     this.imessage.receiverUser.push(this.contact);
     this.imessage.sender = this.user;
     this.imessage.sendTime = new Date();
@@ -210,7 +210,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.pcService.sendMessage(this.user, this.contact, this.imessage);
     this.messages.push(JSON.parse(JSON.stringify(this.imessage)));
     this.imessage = new Message();
-    this.message = '';
+    this.msg = '';
   }
 
   expand_sidebar() {
@@ -277,7 +277,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     );
     self.connection = self.pcService.getMessages(self.user, contact.userObject).subscribe(
       message => {
-        self.messages.push(message.content);
+        self.messages.push(message);
         message.messageStatus.status = 'delivered';
         self.pcService.updateMessageStatus(self.user, self.contact, message);
       });

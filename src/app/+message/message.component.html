@@ -2,6 +2,6 @@
 <div *ngIf="user._id === message.sender">
   <sender [user]="user" [message]="message.content"></sender>
 </div>
-<div *ngIf="user._id !== message.sender">
+<div *ngIf="user._id !== message.receiver">
   <receiver [user]="contact" [message]="message.content"></receiver>
 </div>
