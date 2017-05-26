@@ -1,11 +1,11 @@
 <div class="statusContent">
-  <avatar data-size="small"></avatar>
+  <avatar [size]="avSize"  [urlImage]="profileImg" ></avatar>
   <div class="statusContainer">
-    <div class="statusState">
-      <a materialize="dropdown" class="dropdown-button btn btn-floating btn-small {{status.color}}" data-activates="dropdown1">
+    <div class="statusState ddStatus{{avSize}}">
+      <a materialize="dropdown" class="user_status dropdown-button btn btn-floating btn-small {{status.color}}" [attr.data-activates]="dropdownId">
         <i class="small material-icons">arrow_drop_down</i>
       </a>
-      <ul id="dropdown1" class="dropdown-content statusList">
+      <ul id="{{dropdownId}}" class="dropdown-content statusList">
         <li *ngFor="let status of statuses" (click)="updateUserStatus(status)"><a class="btn-floating {{status.color}} btn-small"></a></li>
       </ul>
     </div>

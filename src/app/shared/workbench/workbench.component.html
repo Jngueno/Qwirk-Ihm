@@ -1,20 +1,24 @@
+<!--
 <div id="left">
+
   <ul class="side-nav fixed" style="background: #B3E5FC" [ngClass]="{'slide-in': isCollapse }">
-    <div class="workbench" id="avatar">Avatar</div>
+    <div>
+      <status></status>
+    </div>
     <div class="workbench" id="group">
       <h5>Group</h5>
       <md-list>
         <md-list-item> Todo </md-list-item>
-      <!--<md-list-item> Engineer </md-list-item>-->
-      <!--<md-list-item> Code activities </md-list-item>-->
+      &lt;!&ndash;<md-list-item> Engineer </md-list-item>&ndash;&gt;
+      &lt;!&ndash;<md-list-item> Code activities </md-list-item>&ndash;&gt;
       </md-list>
     </div>
     <div class="workbench" id="channel">
       <h5>Channel</h5>
       <md-list>
       <md-list-item> Todo </md-list-item>
-      <!--<md-list-item> Engineer </md-list-item>-->
-      <!--<md-list-item> Code activities </md-list-item>-->
+      &lt;!&ndash;<md-list-item> Engineer </md-list-item>&ndash;&gt;
+      &lt;!&ndash;<md-list-item> Code activities </md-list-item>&ndash;&gt;
       </md-list>
     </div>
     <div class="workbench" id="contact">
@@ -34,18 +38,18 @@
         </md-list-item>
       </md-list>
     </div>
-    <!--<contact (modalActions1) = "onModalActionChanged($event)"></contact>-->
+    &lt;!&ndash;<contact (modalActions1) = "onModalActionChanged($event)"></contact>&ndash;&gt;
   </ul>
   <i class="material-icons burger-menu" [ngClass]="{'slide-out': !isCollapse }" (click)="onToggle()">menu</i>
 </div>
 <div id="right">
-  <!-- Modal Structure -->
+  &lt;!&ndash; Modal Structure &ndash;&gt;
   <div id="modal" class="modal" [ngClass]="{'small-modal': isCollapse}" style="width: 100%; height: 100%" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions1">
     <div class="modal-content">
       <div class="chips chips-placeholder" materialize="material_chip"  [materializeParams]="[chipsPlaceholder]"  (chip.add)="add($event.detail)" (chip.delete)="delete($event.detail)" (chip.select)="select($event.detail)"></div>
-      <!--<div class="input-field col s12">-->
-      <!--<input type="text" id="autoComplete" materialize="autocomplete" [materializeParams]="[chipsAutoComplete]">-->
-      <!--</div>-->
+      &lt;!&ndash;<div class="input-field col s12">&ndash;&gt;
+      &lt;!&ndash;<input type="text" id="autoComplete" materialize="autocomplete" [materializeParams]="[chipsAutoComplete]">&ndash;&gt;
+      &lt;!&ndash;</div>&ndash;&gt;
       <md-icon>home</md-icon>
     </div>
     <div class="modal-footer">
@@ -57,3 +61,154 @@
 
 
 
+-->
+
+<main class="row">
+  <section class="col qwirk_sidebar" [ngClass]="{'open': !isCollapse }">
+    <div class="statusSection valign-wrapper">
+      <status [size]="sizeStatus"></status>
+      <div class="userInfos">
+        <div class="userAllNames">
+          <div>
+            <h3>{{user.firstName}} {{user.lastName}}</h3>
+          </div>
+          <div>
+            <h5 class="userIdentifier"><div class="icon-container valign-wrapper"><i class="material-icons red-text text-lighten-3">person_outline</i></div> {{user.username}}</h5>
+            <h5 class="userIdentifier"><div class="icon-container valign-wrapper"><i class="material-icons red-text text-lighten-3">mail_outline</i></div> {{user.email}}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="qwirk_user_relations">
+      <ul class="collapsible popout" data-collapsible="accordion"  materialize="collapsible">
+        <li class="circle flat-text">
+          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">contacts</i></div>Contact</span></div>
+          <div class="collapsible-body">
+
+            <ul class="collection">
+              <li *ngFor="let contact of contacts" class="collection-item avatar" (click)="bindCheckMessages(contact)">
+                <img src="http://localhost:8000/user/{{contact.infoContact.username}}" alt="" class="circle">
+                <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{contact.nickname}}</span>
+                  <p>{{contact.infoContact.firstName}} {{contact.infoContact.lastName}}<br>
+                    {{contact.infoContact.email}}
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="circle">
+          <div class="collapsible-header circle rounded red red-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people_outline</i></div>Groups</span></div>
+          <div class="collapsible-body">
+
+            <ul class="collection">
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2n4OzaM" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2onErh0" alt="" class="circle">
+                <div class="hiddendiv secondary-part"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="circle">
+          <div class="collapsible-header circle rounded orange orange-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people</i></div>Channels</span></div>
+          <div class="collapsible-body">
+
+
+            <ul class="collection">
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2n4OzaM" alt="" class="circle">
+                <div class="secondary-part hiddendiv"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+              <li class="collection-item avatar">
+                <img src="http://bit.ly/2onErh0" alt="" class="circle">
+                <div class="hiddendiv secondary-part"><span class="title">Title</span>
+                  <p>First Line <br>
+                    Second Line
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <button class="btn btn-flat btn-small qwirk_sidebar_expand teal lighten-3" (click)="expand_sidebar()"><i class="material-icons">chevron_right</i></button>
+    <logout></logout>
+  </section>
+  <section class="col qwirk_content" [ngClass]="{'side_open': !isCollapse }">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo">Qwirk</a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="#!"><i class="material-icons">search</i></a></li>
+          <li><a href="#!"><i class="material-icons">view_module</i></a></li>
+          <li><a href="#!"><i class="material-icons">refresh</i></a></li>
+          <li><a href="#!"><i class="material-icons">more_vert</i></a></li>
+        </ul>
+      </div>
+    </nav>
+    <div>
+      <div class="message-history">
+        <div class="sender" *ngFor="let mes of messages">
+          <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
+          <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
+            <p>{{mes}}</p>
+            <avatar data-size="very-tiny"></avatar>
+          </div>
+        </div>
+        <div class="receiver" *ngFor="let recMes of receivedMessages">
+          <h6 class="red-text text-darken-2">{{receiver.firstName}} {{receiver.lastName}}</h6>
+          <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
+            <p>{{recMes}}</p>
+            <avatar data-size="very-tiny"></avatar>
+          </div>
+        </div>
+      </div>
+      <div class="isTyping">
+        <p>{{typings}}</p>
+      </div>
+    </div>
+    <div class="message-discussion valign-wrapper">
+      <form #sendMessageForm="ngForm">
+        <div class="input-field">
+          <textarea [(ngModel)]="message"  id="editable_message" name="message_sender" class="validate materialize-textarea" (input)="notifyContactWriting()" (blur)="blurTypings()"></textarea>
+          <label for="editable_message">Edit your message here</label>
+        </div>
+        <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
+      </form>
+    </div>
+  </section>
+</main>

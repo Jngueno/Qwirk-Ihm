@@ -16,7 +16,7 @@ import {RecordComponent} from "./chattManager/record/record.component";
 export const ROUTES: Routes = [
   { path: 'login', component: ConnectionComponent},
   { path: 'reset', component: ResetPasswordComponent, canActivate: [ResetGuard]},
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: '', component: WorkbenchComponent, canActivate: [AuthGuard] },
   { path: 'about', component: AboutComponent },
   { path: 'barrel', loadChildren: './+barrel#BarrelModule'},
   { path: 'register', component: RegisterComponent},

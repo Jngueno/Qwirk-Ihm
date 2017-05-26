@@ -11,6 +11,7 @@ import {Http} from "@angular/http";
   encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent implements OnInit {
+  status = "homeStatus";
   constructor(http: Http) {
   }
 

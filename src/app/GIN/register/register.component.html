@@ -31,15 +31,15 @@
               <label for="lastname" data-error="lastname is not valid">Last Name</label>
             </div>
             <div class="input-field col s12">
-              <input id="email" type="text" name="email" class="validate" ngModel required="" aria-required="true">
+              <input id="email" type="email" name="email" class="validate" ngModel required="" aria-required="true">
               <label for="email" data-error="E-mail not valid">E-mail</label>
             </div>
             <div class="input-field col s12">
-              <input materialize="characterCounter" length="4" id="password" type="password" name="password" class="validate" ngModel required="" aria-required="true">
+              <input materialize="characterCounter" minlength="8" id="password" type="password" name="password" class="validate" ngModel required="" aria-required="true">
               <label for="password" data-error="Password too weak ">Password</label>
             </div>
             <div class="input-field col s12">
-              <input materialize="characterCounter" length="4" id="confirm-password" type="password" name="confirm-password" class="validate" ngModel required="" aria-required="true">
+              <input materialize="characterCounter" pattern="{{signupForm.form.value.password}}" id="confirm-password" type="password" name="confirm-password" class="validate" ngModel required="" aria-required="true">
               <label for="confirm-password" data-error="Confirm password is not valid ">Confirm-Password</label>
             </div>
           </div>

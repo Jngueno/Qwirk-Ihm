@@ -19,21 +19,9 @@ import { AppState } from './app.service';
     './app.component.css'
   ],
   template: `
-    <!--<nav>-->
-      <!--<a [routerLink]=" ['./login'] "-->
-        <!--routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-->
-        <!--Sign In-->
-      <!--</a>-->
-      <!--<a [routerLink]=" ['./register'] "-->
-        <!--routerLinkActive="active" [routerLinkActiveOptions]= "{exact: true}">-->
-        <!--Sign Up-->
-      <!--</a>-->
-      <!--<logout></logout>-->
-    <!--</nav>-->
-    <!--&lt;!&ndash;<workbench></workbench>&ndash;&gt;-->
-    <!--<main>-->
-      <!--<router-outlet></router-outlet>-->
-    <!--</main>-->
+    <main>
+      <router-outlet></router-outlet>
+    </main>
     <qrecord></qrecord>
   `
 })

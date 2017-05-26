@@ -41,10 +41,13 @@ import {LogoutComponent} from "./GIN/logout/logout.component";
 import {ResetGuard} from "./_guards/reset.guard";
 import {StatusComponent} from "./GIN/status/status.component";
 import {StatusService} from "./shared/services/status.service";
+import {ProfileComponent} from "./GIN/profile/profile.component";
 import {AvatarComponent} from "./_avatar/avatar.component";
 import {AvatarOverlayComponent} from "./_avatar/overlay/avatar-overlay.component";
 import {RecordComponent} from "./chattManager/record/record.component";
 import {VideoComponent} from "./chattManager/video/video.component";
+
+import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -66,6 +69,8 @@ type StoreType = {
   declarations: [
     AppComponent,
     AboutComponent,
+    FileSelectDirective,
+    FileDropDirective,
     ConnectionComponent,
     NoContentComponent,
     RegisterComponent,
@@ -76,11 +81,10 @@ type StoreType = {
     ModalComponent,
     AvatarComponent,
     AvatarOverlayComponent,
-    HomeComponent,
     LogoutComponent,
     ResetPasswordComponent,
     StatusComponent,
-    WorkbenchComponent,
+    ProfileComponent,
     RecordComponent,
     VideoComponent
   ],
@@ -92,7 +96,7 @@ type StoreType = {
     MaterializeModule,
     Angular2FontAwesomeModule,
     MdListModule,
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

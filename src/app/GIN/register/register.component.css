@@ -69,3 +69,18 @@ avatar {
 .signUpContent {
   padding-top: 90px;
 }
+
+@media screen and (max-width: 749px){
+  .header {
+    font-size: 300%;
+    margin: 0;
+    padding-bottom: 5px;
+  }
+  .signUpContent {
+    padding-top: 55px;
+  }
+  avatar {
+    top: -52.5px;
+  }
+}
+
