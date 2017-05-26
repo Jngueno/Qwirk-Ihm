@@ -14,6 +14,8 @@ import {Subscription} from "rxjs";
 import {Message} from "../models/message";
 import {MessageStatus} from "../models/messageStatus";
 
+/*import * as wdtEmojiBundle from 'wdt-emoji-bundle';*/
+
 @Component({
   selector: 'workbench',
   templateUrl: './workbench.component.html',
@@ -24,7 +26,7 @@ import {MessageStatus} from "../models/messageStatus";
 export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   isCollapse: boolean = false;
   onChanged: string = 'slide-out';
-  contacts: Object[]/* = [
+  contacts: Object[];/* = [
     {"userId" : 0, "firstName": "Housseini", "lastName" : "Maiga", "description" : "Mess with the best.. Die with the rest.", "profilePicture" : "http://bit.ly/2n4OzaM", "username" : "fouss maiga"},
     {"userId" : 1, "firstName": "Jennyfer", "lastName" : "Ngueno", "description" : "Never give up settle", "profilePicture" : "http://bit.ly/2nJ25ln", "username" : "jngueno"},
     {"userId" : 2, "firstName": "Ervin", "lastName" : "Larry", "description" : "Autre est en Nous ..!", "profilePicture" : "http://bit.ly/2onErh0", "username" : "TBS"}
@@ -59,7 +61,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   modalActions1 = new EventEmitter<string|MaterializeAction>();
   sizeStatus = "tiny";
   user : any;
-  contact : any;
+  contact : any;/*
   receiver = {
     "_id": "58d722a3aa2cce3c7c9d785e",
     "updatedAt": "2017-05-06T20:56:50.551Z",
@@ -106,7 +108,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
       "name": "Hidden",
       "color": "black"
     }
-  }
+  }*/
   messages = [];
   receivedMessages = [];
   connection;
@@ -128,6 +130,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     let self = this;
     self.getCurrentProfile(function () {
       self.getAllUserContacts();
+      //wdtEmojiBundle.init('.wdt-emoji-bundle-enabled');
       //self.fullTypings();
     });
   }
@@ -205,8 +208,8 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.imessage.contact = this.fullContact;
     this.imessage.messageStatus = new MessageStatus('pending');
     this.pcService.sendMessage(this.user, this.contact, this.imessage);
+    this.messages.push(JSON.parse(JSON.stringify(this.imessage)));
     this.imessage = new Message();
-    this.messages.push(this.message);
     this.message = '';
   }
 
@@ -225,6 +228,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   getAllUserContacts() {
     this.userService.getAllContacts(this.user).subscribe(contacts => {
+      console.log(contacts);
       this.contacts = contacts;
       return contacts;
     })
@@ -253,9 +257,9 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   bindCheckMessages(contact) {
     let self = this;
-    self.contact = contact.infoContact;
+    self.contact = contact.userObject;
     self.fullContact = contact;
-    self.getMessagesContact(contact._id);
+    self.getMessagesContact(self.fullContact._id);
     if(self.connection) {
       self.connection.unsubscribe();
       self.notifyTypings.unsubscribe();
@@ -271,9 +275,9 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
         self.typings = typ;
       }
     );
-    self.connection = self.pcService.getMessages(self.user, contact.infoContact).subscribe(
+    self.connection = self.pcService.getMessages(self.user, contact.userObject).subscribe(
       message => {
-        self.receivedMessages.push(message.content);
+        self.messages.push(message.content);
         message.messageStatus.status = 'delivered';
         self.pcService.updateMessageStatus(self.user, self.contact, message);
       });
@@ -299,22 +303,15 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   getMessagesContact(contact) {
-    this.pcService.getAllHistoryContactMessages(contact, 0, 26).subscribe(
+    this.pcService.getAllHistoryContactMessages(contact, 0, 15).subscribe(
       messages => {
-        for(let message of messages) {
-          if(message.sender === this.user._id) {
-            this.messages.push(message.content);
-          }
-          else {
-            this.receivedMessages.push(message.content);
-          }
-        }
+        this.messages = messages.reverse();
       }
     )
   }
-
+/*
   @HostListener('window:scroll', ['$event'])
   onScroll(event) {
     console.log(event);
-  }
+  }*/
 }

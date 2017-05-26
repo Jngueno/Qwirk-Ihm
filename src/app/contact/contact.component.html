@@ -7,11 +7,21 @@
       </a>
     </div>
   </div>
-  <md-list *ngFor="let contact of contacts">
+  <!--<md-list *ngFor="let contact of contacts">
       <md-list-item>
         <img md-list-avatar src="{{contact.profilePicture}}" alt="{{contact.username}}">
         <p md-line>{{contact.firstName}} {{contact.lastName}} </p>
         <p md-line>{{contact.description}}</p>
       </md-list-item>
-  </md-list>
+  </md-list>-->
+  <ul class="collection">
+    <li *ngFor="let contact of contacts" class="collection-item avatar" (click)="bindCheckMessages(contact)">
+      <img src="http://localhost:8000/user/{{contact.infoContact.username}}" alt="{{contact.username}}" class="circle">
+      <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{contact.nickname}}</span>
+        <p>{{contact.infoContact.firstName}} {{contact.infoContact.lastName}}<br>
+          {{contact.infoContact.email}}
+        </p>
+        <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+    </li>
+  </ul>
 </div>

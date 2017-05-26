@@ -43,12 +43,13 @@ export class RegisterComponent implements OnInit {
       return res;
     });*/
     let user = form.value;
-    user.profilePicture = this.profileImg;
+    //user.profilePicture = this.profileImg;
     //user.profilePicture.contentType = this.profilePic;
     this.authService.register(user).subscribe(
       result => {
         if (result === true) {
           // register successful
+          this.authService.makeFileRequest(null, this.profilePic);
           this.router.navigate(['/']);
         } else {
           // register failed
@@ -68,7 +69,7 @@ export class RegisterComponent implements OnInit {
   fileChangeEvent(fileInput: any){
     let self = this;
     if (fileInput.target.files && fileInput.target.files[0]) {
-      self.profilePic = fileInput.target.files[0];
+      self.profilePic = fileInput.target.files;
       let reader = new FileReader();
 
       reader.onload = function (e : any) {

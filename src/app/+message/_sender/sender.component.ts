@@ -5,13 +5,14 @@ import {
   Component,
   OnInit, Input
 } from '@angular/core';
+import {MessageComponent} from "../message.component";
 
 @Component({
   selector: 'sender',
   styleUrls: ['sender.component.css'],
   templateUrl: 'sender.component.html'
 })
-export class SenderComponent implements OnInit {
+export class SenderComponent extends MessageComponent implements OnInit {
   @Input("user")
   user:any;
 
@@ -19,7 +20,8 @@ export class SenderComponent implements OnInit {
   message:string;
 
   constructor(
-  ) {}
+  ) {
+    super();}
 
   public ngOnInit() {
   }

@@ -3,6 +3,7 @@
  */
 import {Component, OnInit} from '@angular/core';
 import {AuthenticationService} from "../../shared/services/authentication.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'logout',
@@ -12,6 +13,7 @@ import {AuthenticationService} from "../../shared/services/authentication.servic
 })
 export class LogoutComponent implements OnInit {
   constructor(
+    private router: Router,
     private authService : AuthenticationService
   ) {
   }
@@ -21,5 +23,6 @@ export class LogoutComponent implements OnInit {
 
   logoutEvent() {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }
