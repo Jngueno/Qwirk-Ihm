@@ -41,3 +41,33 @@
   color: #f5f5f5;
   width: 100%;
 }
+
+.small .rounded-image .circle {
+  width: 100px;
+  height: 100px;
+}
+
+.small .overlay {
+  width: 100px;
+  height: 100px;
+}
+
+.tiny .rounded-image .circle {
+  width: 75px;
+  height: 75px;
+}
+
+.tiny .overlay {
+  width: 75px;
+  height: 75px;
+}
+
+.very-tiny .rounded-image .circle {
+  width: 40px;
+  height: 40px;
+}
+
+.very-tiny .overlay {
+  width: 40px;
+  height: 40px;
+}
