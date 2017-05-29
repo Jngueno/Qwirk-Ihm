@@ -76,10 +76,10 @@ export class PrivateChatService {
       : roomName = receiver.username + sender.username;
     let observable = new Observable(
       observer => {
-        this.socket = io(this.url + '/privatePeer2Peer');
+        //this.socket = io(this.url + '/privatePeer2Peer');
         console.log('Receive message');
         console.log(roomName);
-        this.socket.emit('room', roomName);
+        //this.socket.emit('room', roomName);
         this.socket.on('isTyping', (data) => {
           console.log('Receive message');
           observer.next(data);
@@ -98,9 +98,26 @@ export class PrivateChatService {
       : roomName = receiver.username + sender.username;
     let observable = new Observable(
       observer => {
-        this.socket = io(this.url + '/privatePeer2Peer');
-        this.socket.emit('room', roomName);
+        //this.socket = io(this.url + '/privatePeer2Peer');
+        //this.socket.emit('room', roomName);
         this.socket.on('isTyping', (data) => {
+          observer.next(data);
+        });
+        return () => {
+          this.socket.disconnect();
+        };
+      });
+    return observable;
+  }
+
+  getMessageWhenMsgStatus(sender, receiver) {
+    let roomName = "";
+    (receiver.username > sender.username) ?
+      roomName = sender.username + receiver.username
+      : roomName = receiver.username + sender.username;
+    let observable = new Observable(
+      observer => {
+        this.socket.on('updateStatus', (data) => {
           observer.next(data);
         });
         return () => {

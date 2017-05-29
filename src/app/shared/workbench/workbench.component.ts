@@ -119,6 +119,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   private notifyTypings: any;
   private notifyTypingsBlur: Subscription;
   private fullContact: any;
+  onUpdateMessageStatus: Subscription;
   constructor(private userService: UserService,
               private authService : AuthenticationService,
               private pcService:PrivateChatService) {
@@ -203,7 +204,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   sendMessage() {
     this.imessage.content = this.msg;
     this.imessage.receiverUser.push(this.contact);
-    this.imessage.sender = this.user;
+    this.imessage.sender = this.user._id;
     this.imessage.sendTime = new Date();
     this.imessage.contact = this.fullContact;
     this.imessage.messageStatus = new MessageStatus('pending');
@@ -263,8 +264,15 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     if(self.connection) {
       self.connection.unsubscribe();
       self.notifyTypings.unsubscribe();
-      self.notifyTypingsBlur.unsubscribe()
+      self.notifyTypingsBlur.unsubscribe();
+      self.onUpdateMessageStatus.unsubscribe();
     }
+    self.connection = self.pcService.getMessages(self.user, contact.userObject).subscribe(
+      message => {
+        self.messages.push(message);
+        message.messageStatus.status = 'delivered';
+        self.pcService.updateMessageStatus(self.user, self.contact, message);
+      });
     self.notifyTypings = self.pcService.getNotificationWriting(self.user, self.contact).subscribe(
       typ => {
         self.typings = typ;
@@ -275,12 +283,19 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
         self.typings = typ;
       }
     );
-    self.connection = self.pcService.getMessages(self.user, contact.userObject).subscribe(
-      message => {
-        self.messages.push(message);
-        message.messageStatus.status = 'delivered';
-        self.pcService.updateMessageStatus(self.user, self.contact, message);
-      });
+    self.onUpdateMessageStatus = self.pcService.getMessageWhenMsgStatus(self.user, self.contact).subscribe(
+      newMsg => {
+        let newMessages = [];
+        for(let msg of self.messages) {
+          if (msg._id === newMsg._id) {
+            newMessages.push(newMsg);
+          }
+          else {
+            newMessages.push(msg);
+          }
+        }
+      }
+    );
   }
 
   notifyContactWriting() {
@@ -306,6 +321,14 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.pcService.getAllHistoryContactMessages(contact, 0, 15).subscribe(
       messages => {
         this.messages = messages.reverse();
+        console.info("Get messages in workbench", this.messages);
+        for (let msg of this.messages) {
+          if (msg.sender !== this.user._id) {
+            msg.messageStatus.status = "seen";
+            this.receivedMessages.push(msg);
+          }
+          this.pcService.updateMessageStatus(this.user, this.contact, msg);
+        }
       }
     )
   }

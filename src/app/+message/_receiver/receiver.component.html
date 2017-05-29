@@ -1,8 +1,10 @@
 
 <div class="receiver">
   <h6 class="red-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
-  <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
-    <p>{{message}}</p>
+  <div class="message valign-wrapper lighten-5 red-text text-lighten-2" [ngClass]="{red: (message.messageStatus.status === 'sent'),
+                                                                                    yellow: (message.messageStatus.status === 'delivered'),
+                                                                                    brown: (message.messageStatus.status === 'seen')}">
+    <p>{{message.content}}</p>
     <avatar data-size="very-tiny"></avatar>
   </div>
 </div>
