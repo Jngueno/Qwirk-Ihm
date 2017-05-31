@@ -16,6 +16,7 @@ export class PrivateChatService {
   reset : any;
   private url = 'http://localhost:8000';
   private socket;
+  private globalSocket;
   constructor(private http: Http) {}
 
   sendMessage(sender, receiver, message){
@@ -24,7 +25,7 @@ export class PrivateChatService {
       roomName = sender.username + receiver.username
       : roomName = receiver.username + sender.username;
     message.roomName = roomName;
-    console.log(JSON.parse(JSON.stringify(message)))
+    //console.log(JSON.parse(JSON.stringify(message)))
     this.socket.emit(roomName, JSON.parse(JSON.stringify(message)));
   }
 
@@ -77,11 +78,11 @@ export class PrivateChatService {
     let observable = new Observable(
       observer => {
         //this.socket = io(this.url + '/privatePeer2Peer');
-        console.log('Receive message');
-        console.log(roomName);
+        //console.log('Receive message');
+        //console.log(roomName);
         //this.socket.emit('room', roomName);
         this.socket.on('isTyping', (data) => {
-          console.log('Receive message');
+          //console.log('Receive message');
           observer.next(data);
         });
         return () => {
@@ -130,9 +131,26 @@ export class PrivateChatService {
   getAllHistoryContactMessages(contact, start, limit) {
     return this.http.get(this.url + '/messages/' + contact + '/' + start + '/' + limit)
       .map((response : Response) => {
-        console.log(response.json());
+        //console.log(response.json());
         return response.json();
       })
   }
 
+
+  getNewMessagesPush(sender) {
+    let observable = new Observable(
+      observer => {
+        this.socket = io(this.url);
+        this.socket.on('newMessage', (data) => {
+          console.log("Get new messages from qwirk platform", data);
+          if(data.receiverUser.indexOf(sender._id) !== -1) {
+            observer.next(data);
+          }
+        });
+        return () => {
+          this.socket.disconnect();
+        };
+      });
+    return observable;
+  }
 }

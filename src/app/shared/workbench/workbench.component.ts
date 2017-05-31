@@ -3,7 +3,7 @@
  */
 import {
   Component, OnInit, EventEmitter, ViewEncapsulation, OnDestroy, AfterViewChecked,
-  ElementRef, ViewChild, HostListener
+  ElementRef, ViewChild, HostListener, HostBinding, Renderer
 } from '@angular/core';
 import {MaterializeAction} from "angular2-materialize";
 import {UserService} from "../services/user.service";
@@ -13,6 +13,7 @@ import {IUser} from "../models/user";
 import {Subscription} from "rxjs";
 import {Message} from "../models/message";
 import {MessageStatus} from "../models/messageStatus";
+import {PeerConnectionService} from "../services/peerConnection.service";
 
 /*import * as wdtEmojiBundle from 'wdt-emoji-bundle';*/
 
@@ -21,7 +22,7 @@ import {MessageStatus} from "../models/messageStatus";
   templateUrl: './workbench.component.html',
   styleUrls: ['./workbench.component.css'],
   encapsulation: ViewEncapsulation.None,
-  providers: [PrivateChatService]
+  providers: [PrivateChatService, PeerConnectionService]
 })
 export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   isCollapse: boolean = false;
@@ -119,11 +120,17 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   private notifyTypings: any;
   private notifyTypingsBlur: Subscription;
   private fullContact: any;
+  //private renderer: Renderer;
   onUpdateMessageStatus: Subscription;
+  onNewMessagesPush: Subscription;
+  unreadMessages: any;
   constructor(private userService: UserService,
               private authService : AuthenticationService,
-              private pcService:PrivateChatService) {
+              private renderer : Renderer,
+              private pcService:PrivateChatService,
+              private peerConService : PeerConnectionService) {
     this.user = {};
+    this.unreadMessages = {};
   }
   @ViewChild('messageHistory') private messageHistoryContainer: ElementRef;
 
@@ -131,6 +138,28 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     let self = this;
     self.getCurrentProfile(function () {
       self.getAllUserContacts();
+      self.onNewMessagesPush = self.pcService.getNewMessagesPush(self.user).subscribe(
+        newMsg => {
+          for (let contact of newMsg.receiverUser) {
+            if(!self.unreadMessages[contact]) {
+              self.unreadMessages[contact] = [];
+            }
+            self.unreadMessages[contact].push(newMsg);
+
+            console.log("WorkBench Component, New messages on qwirk app", self.unreadMessages[contact].length);
+          }
+        }
+      );
+
+      /*
+      self.renderer.listen(self.messageHistoryContainer.nativeElement, "scroll", (event: Event) => {
+        console.log(event);
+      });*/
+      //console.log(self.messageHistoryContainer.nativeElement);
+      /*
+      this.messageHistoryContainer.nativeElement. = (event: Event) => {
+        console.log(event);
+      };*/
       //wdtEmojiBundle.init('.wdt-emoji-bundle-enabled');
       //self.fullTypings();
     });
@@ -229,8 +258,16 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   getAllUserContacts() {
     this.userService.getAllContacts(this.user).subscribe(contacts => {
-      console.log(contacts);
-      this.contacts = contacts;
+      //console.log(contacts);
+      let newContacts = [];
+      for(let c of contacts) {
+        if(c.userObject) {
+          newContacts.push(c);
+          this.unreadMessages[c.userObject._id] = [];
+        }
+      }
+      //console.log("Get all contacts", newContacts);
+      this.contacts = newContacts;
       return contacts;
     })
   }
@@ -271,6 +308,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
       message => {
         self.messages.push(message);
         message.messageStatus.status = 'delivered';
+        self.receivedMessages.push(message);
         self.pcService.updateMessageStatus(self.user, self.contact, message);
       });
     self.notifyTypings = self.pcService.getNotificationWriting(self.user, self.contact).subscribe(
@@ -295,7 +333,12 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
           }
         }
       }
-    );
+    );/*
+    self.onNewMessagesPush = self.pcService.getNewMessagesPush(self.user).subscribe(
+      newMsg => {
+        console.log("WorkBench Component, New messages on qwirk app", newMsg);
+      }
+    );*/
   }
 
   notifyContactWriting() {
@@ -321,7 +364,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.pcService.getAllHistoryContactMessages(contact, 0, 15).subscribe(
       messages => {
         this.messages = messages.reverse();
-        console.info("Get messages in workbench", this.messages);
+        //console.info("Get messages in workbench", this.messages);
         for (let msg of this.messages) {
           if (msg.sender !== this.user._id) {
             msg.messageStatus.status = "seen";
@@ -332,8 +375,21 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
       }
     )
   }
-/*
-  @HostListener('window:scroll', ['$event'])
+
+  updateUnreadStatus() {
+    for(let receivedMsg of this.receivedMessages) {
+      //console.log("Update Unread Status :", receivedMsg.messageStatus.status !== "seen")
+      if (receivedMsg.messageStatus.status !== "seen") {
+        //console.log("Update Unread Status : ", this.receivedMessages);
+        receivedMsg.messageStatus._id = "";
+        receivedMsg.messageStatus.status = "seen";
+        this.pcService.updateMessageStatus(this.user, this.contact, receivedMsg);
+      }
+    }
+  }
+
+  //@HostBinding('class.message-history')
+  /*@HostListener('class.message-history:scroll', ['$event'])
   onScroll(event) {
     console.log(event);
   }*/

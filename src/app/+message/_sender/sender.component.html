@@ -1,11 +1,13 @@
 
 <div class="sender">
   <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
-  <div class="message valign-wrapper lighten-5 teal-text text-lighten-2" [ngClass]="{gray: (message.messageStatus.status === 'pending'),
-                                                                                         teal: (message.messageStatus.status === 'sent'),
-                                                                                         orange: (message.messageStatus.status === 'delivered'),
-                                                                                         blue: (message.messageStatus.status === 'seen')}">
+  <div class="message valign-wrapper lighten-5 teal-text text-lighten-2 teal">
     <p>{{message.content}}</p>
-    <avatar data-size="very-tiny"></avatar>
+    <avatar data-size="very-tiny" [urlImage]="appConfig.getUrlAPI() + url + user.username"></avatar>
+    <div class="messageStatus">
+      <i class="material-icons" *ngIf="message.messageStatus.status === 'pending'">query_builder</i>
+      <i class="material-icons" *ngIf="message.messageStatus.status === 'sent'">done</i>
+      <i class="material-icons" *ngIf="message.messageStatus.status === 'delivered' || message.messageStatus.status === 'seen'" [ngClass]="{'teal-text text-darken-5': message.messageStatus.status === 'seen'}">done_all</i>
+    </div>
   </div>
 </div>

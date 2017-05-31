@@ -6,6 +6,7 @@ import {
   OnInit, Input
 } from '@angular/core';
 import {MessageComponent} from "../message.component";
+import {APPCONFIG} from "../../config/param";
 
 @Component({
   selector: 'sender',
@@ -19,10 +20,16 @@ export class SenderComponent extends MessageComponent implements OnInit {
   @Input("message")
   message:string;
 
+  appConfig = new APPCONFIG();
+  url : string;
+
   constructor(
   ) {
-    super();}
+    super()
+    //this.url = this.appConfig.getUrlAPI() + this.user.username;
+  }
 
   public ngOnInit() {
+    this.url = "user/";
   }
 }

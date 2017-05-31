@@ -335,6 +335,15 @@ h6 {
   -o-transform: rotate(-30deg);
   transform: rotate(-30deg);
 }
+
+.messageStatus {
+  position: relative;
+  bottom: -10px;
+}
+
+.messageStatus i.material-icons {
+  font-size: 80%;
+}
 /*
 .sender h6 {
   padding-right: 55px;
