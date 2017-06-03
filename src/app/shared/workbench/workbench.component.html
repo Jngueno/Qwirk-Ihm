@@ -173,6 +173,8 @@
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo">Qwirk</a>
         <ul class="right hide-on-med-and-down">
+          <li><a href="#!"><i class="material-icons" (click)="onCallStart()">videocam</i></a></li>
+          <li><a href="#!"><i class="material-icons" (click)="onCallStart()">phone</i></a></li>
           <li><a href="#!"><i class="material-icons">search</i></a></li>
           <li><a href="#!"><i class="material-icons">view_module</i></a></li>
           <li><a href="#!"><i class="material-icons">refresh</i></a></li>
@@ -180,33 +182,34 @@
         </ul>
       </div>
     </nav>
-      <div #messageHistory class="message-history">
-        <!--<div class="sender">
-          <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
-          <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
-            <p>{{mes}}</p>
-            <avatar data-size="very-tiny"></avatar>
-          </div>
-        </div>
-        <div class="receiver" *ngFor="let recMes of receivedMessages">
-          <h6 class="red-text text-darken-2">{{receiver.firstName}} {{receiver.lastName}}</h6>
-          <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
-            <p>{{recMes}}</p>
-            <avatar data-size="very-tiny"></avatar>
-          </div>
-        </div>-->
-        <message [user]="user" [contact]="contact" *ngFor="let mes of messages" [message]="mes"></message>
+      <div class="message-content" *ngIf="!isVideo">
+          <div #messageHistory class="message-history">
+              <!--<div class="sender">
+                <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
+                <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
+                  <p>{{mes}}</p>
+                  <avatar data-size="very-tiny"></avatar>
+                </div>
+              </div>
+              <div class="receiver" *ngFor="let recMes of receivedMessages">
+                <h6 class="red-text text-darken-2">{{receiver.firstName}} {{receiver.lastName}}</h6>
+                <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
+                  <p>{{recMes}}</p>
+                  <avatar data-size="very-tiny"></avatar>
+                </div>
+              </div>-->
+              <message [user]="user" [contact]="contact" *ngFor="let mes of messages" [message]="mes"></message>
 
-        <div class="isTyping">
-          <p>{{typings}}</p>
-        </div>
-      </div>
-    <div class="message-discussion valign-wrapper">
-      <form #sendMessageForm="ngForm">
-        <div class="input-field">
-          <textarea [(ngModel)]="message"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (input)="notifyContactWriting()" (blur)="blurTypings()"></textarea>
-          <label for="editable_message">Edit your message here</label>
-        </div><!--
+              <div class="isTyping">
+                  <p>{{typings}}</p>
+              </div>
+          </div>
+          <div class="message-discussion valign-wrapper">
+              <form #sendMessageForm="ngForm">
+                  <div class="input-field">
+                      <textarea [(ngModel)]="message"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (input)="notifyContactWriting()" (blur)="blurTypings()"></textarea>
+                      <label for="editable_message">Edit your message here</label>
+                  </div><!--
         <div class="wdt-emoji-popup">
           <a href="#" class="wdt-emoji-popup-mobile-closer"> × </a>
           <div class="wdt-emoji-menu-content">
@@ -244,8 +247,12 @@
             </div>
           </div>
         </div>-->
-        <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
-      </form>
-    </div>
+                  <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
+              </form>
+          </div>
+      </div>
+      <div class="video-content" *ngIf="isVideo">
+        <qvideo [contact] = "contact" [peer]="peer" [media]="media"></qvideo>
+      </div>
   </section>
 </main>

@@ -1,21 +1,9 @@
-<h1>My id - {{initiatorPeerId}}</h1>
-<h1>ather peer id - {{joinerPeerId}}</h1>
+<video class="local-video" #localvideo></video>
+<video class="local-video" #remotevideo></video>
+<p>My id - {{initiatorPeerId}}</p>
+<p>ather peer id - {{joinerPeerId}}</p>
 <input type="text" [(ngModel)]="joinerPeerId">
 <button (click)="connect()">Connect</button>
-<button (click)="videoConnect()">start video call</button>
-<button (click)="audioConnect()">start audio call</button>
-<video #localvideo></video>
-<video #remotevideo></video>
-<!-- Modal Trigger -->
-<a class="waves-effect waves-light btn" href="#modal1">Modal</a>
-
-<!-- Modal Structure -->
-<div id="modal1" class="modal">
-  <div class="modal-content">
-    <h4>Modal Header</h4>
-    <p>A bunch of text</p>
-  </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-  </div>
-</div>
+<button (click)="startCall()">start video call</button>
+<button (click)="startCall()">start audio call</button>
+<p>Copyright Qwirk  - 2017</p>

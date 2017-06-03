@@ -2,8 +2,8 @@
  * Created by Housseini  Maiga on 3/13/2017.
  */
 import {
-  Component, OnInit, EventEmitter, ViewEncapsulation, OnDestroy, AfterViewChecked,
-  ElementRef, ViewChild, HostListener
+    Component, OnInit, EventEmitter, ViewEncapsulation, OnDestroy, AfterViewChecked,
+    ElementRef, ViewChild, HostListener, Output
 } from '@angular/core';
 import {MaterializeAction} from "angular2-materialize";
 import {UserService} from "../services/user.service";
@@ -13,6 +13,7 @@ import {IUser} from "../models/user";
 import {Subscription} from "rxjs";
 import {Message} from "../models/message";
 import {MessageStatus} from "../models/messageStatus";
+import {PeerConnectionService} from "../services/peerConnection.service";
 
 /*import * as wdtEmojiBundle from 'wdt-emoji-bundle';*/
 
@@ -21,11 +22,13 @@ import {MessageStatus} from "../models/messageStatus";
   templateUrl: './workbench.component.html',
   styleUrls: ['./workbench.component.css'],
   encapsulation: ViewEncapsulation.None,
-  providers: [PrivateChatService]
+  providers: [PrivateChatService, PeerConnectionService]
 })
 export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   isCollapse: boolean = false;
   onChanged: string = 'slide-out';
+  peer : any;
+  media : any;
   contacts: Object[];/* = [
     {"userId" : 0, "firstName": "Housseini", "lastName" : "Maiga", "description" : "Mess with the best.. Die with the rest.", "profilePicture" : "http://bit.ly/2n4OzaM", "username" : "fouss maiga"},
     {"userId" : 1, "firstName": "Jennyfer", "lastName" : "Ngueno", "description" : "Never give up settle", "profilePicture" : "http://bit.ly/2nJ25ln", "username" : "jngueno"},
@@ -113,6 +116,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   receivedMessages = [];
   connection;
   message;
+isVideo = true;
   private imessage = new Message();
   profileImg;
   typings: any;
@@ -121,7 +125,8 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   private fullContact: any;
   constructor(private userService: UserService,
               private authService : AuthenticationService,
-              private pcService:PrivateChatService) {
+              private pcService:PrivateChatService,
+              private peerService: PeerConnectionService) {
     this.user = {};
   }
   @ViewChild('messageHistory') private messageHistoryContainer: ElementRef;
@@ -129,7 +134,14 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   ngOnInit() {
     let self = this;
     self.getCurrentProfile(function () {
+      console.log('getCurrentProfile inner');
       self.getAllUserContacts();
+      self.peer = self.peerService.initPeer();
+      if(self.peer) {
+        console.log(' self.peer > ',  self.peer);
+        self.media = self.peerService.callReceiveEvent();
+        console.log('self.media > ', self.media);
+      }
       //wdtEmojiBundle.init('.wdt-emoji-bundle-enabled');
       //self.fullTypings();
     });
@@ -148,6 +160,11 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   ngOnDestroy() {
     this.connection.unsubscribe();
     this.notifyTypings.unsubscribe();
+  }
+
+  onCallStart() {
+      this.isVideo = !this.isVideo;
+      console.log('On audio/ video call start : ', this.isVideo);
   }
 
   addContact(){
@@ -256,6 +273,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   bindCheckMessages(contact) {
+      console.log('Click on contact : ', contact);
     let self = this;
     self.contact = contact.userObject;
     self.fullContact = contact;

@@ -278,7 +278,12 @@ h6 {
   border-radius: 20%;
 }
 
-
+.message-content {
+  max-height: 100%;
+  height: calc(100% - 80px) ;
+  /*background-color: #80cbc4;*/
+  overflow: auto;
+}
 .message-history {
   max-height: calc(100% - 180px);
   height: calc(100% - 180px);
@@ -334,6 +339,13 @@ h6 {
   -ms-transform: rotate(-30deg);
   -o-transform: rotate(-30deg);
   transform: rotate(-30deg);
+}
+
+.video-content {
+  max-height: 100%;
+  height: calc(100% - 80px) ;
+  /*background-color: #80cbc4;*/
+  overflow: auto;
 }
 /*
 .sender h6 {
