@@ -1,0 +1,65 @@
+<div id="profileModalContainer" class="">
+  <div id="profileModal" class="modal modal-fixed-footer teal lighten-5" materialize="modal" [materializeParams]="[{dismissible: true}]" [materializeActions]="modalActions1">
+    <div class="">
+      <div class="actionButs">
+        <div class="row">
+          <div class="col s4">
+            <!--<div class="closeContainer left-align">-->
+            <!--<button class="rounded red" (click)="deleteAccount()">-->
+            <!--<a class="material-icons red-text">delete</a>-->
+            <!--</button>-->
+            <!--</div>-->
+          </div>
+          <div class="col s4">
+            <!--<div class="closeContainer center-align">-->
+            <!--<button class="rounded teal" (click)="editProfileModal()">-->
+            <!--<a class="material-icons teal-text text-lighten-3">edit</a>-->
+            <!--</button>-->
+            <!--</div>-->
+          </div>
+          <div class="col s4">
+            <div class="closeContainer right-align">
+              <button class="rounded closeModal" (click)="closeModal()" >
+                <a class="material-icons orange-text text-lighten-3" style="color: rgba(255, 127, 39, 1) !important">close</a>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="padding: 0px 30px">
+        <h1 style="text-align: center; color: rgba(241, 138, 65, 0.82) !important;"><br>Create a Channel</h1>
+        <form class="col s12" (ngSubmit)="createChannel()">
+          <div class="row">
+            <div class="input-field col s6">
+              <input id="name" type="text" class="validate">
+              <label for="name">Channel Name</label>
+            </div>
+            <div class="input-field col s6">
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="description" type="text" class="validate">
+              <label for="description">Description</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <label for="contact">Enter a Member</label>
+              <input id="contact" type="text" class="validate" onclick="Materialize.showStaggeredList('#ulListTransitionHidden')">
+            </div>
+            <button class="btn" type="submit">Add</button>
+          </div>
+          <div class="row">
+            <ul  id="ulListTransitionHidden" class="collection" >
+              <li id="" *ngFor="let group of groups" class="collection-item avatar">
+                <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
+                <div class="secondary-part " [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{group.name}}</span>
+                  <p *ngFor="let member of group.members">{{member.firstName}} ({{member.username}})<br>
+                  </p>
+                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+              </li>
+            </ul>
+
+          </div>

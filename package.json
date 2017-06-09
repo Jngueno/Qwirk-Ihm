@@ -108,6 +108,7 @@
     "rxjs": "5.0.2",
     "simplewebrtc": "^2.2.3",
     "videogular2": "^5.4.6",
+    "socket.io-client": "^2.0.2",
     "zone.js": "0.7.6"
   },
   "devDependencies": {
