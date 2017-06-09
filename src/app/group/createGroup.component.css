@@ -2,9 +2,8 @@
   position: fixed;
   top: 0;
   bottom: 0;
-  width: 100%;
-  padding-left: 10%;
-  display: none;
+  width: calc(100% - var(--side-bar-size-open));
+  display: inherit;
   z-index: 1002;
 }
 
@@ -15,6 +14,7 @@
   max-height: 100%;
   max-width: 100%;
   position: relative;
+  background-color: rgb(253, 229, 233) !important
 }
 
 
@@ -142,4 +142,36 @@
   animation: 1s md-tab-content-hide;
   opacity: 1;
   position: relative;
+}
+
+#ulListTransitionHidden {
+  opacity: 0;
+  width: 97.5%;
+  border: 1px solid #f18a41;
+  padding-left: 33px;
+  margin-left: 12px;
+  top: -40px;
+  background-color: #ffbe83
+}
+
+#ulListTransitionDisplay {
+  opacity: 1;
+  width: 97.5%;
+  border: 1px solid #f18a41;
+  padding-left: 33px;
+  margin-left: 12px;
+  top: -40px;
+  background-color: #ffbe83
+}
+
+#transitionList {
+  opacity: 1 !important;
+  animation-name: listappear;
+  animation-duration: 3s;
+  animation-delay: -0.5s
+}
+
+@keyframes listappear {
+  0%   { left:-250px; top:0px;}
+  25%  { left:0px; top:0px;}
 }

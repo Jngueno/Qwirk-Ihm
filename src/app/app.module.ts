@@ -51,6 +51,9 @@ import {RecordComponent} from "./chattManager/record/record.component";
 import {VideoComponent} from "./chattManager/video/video.component";
 
 import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
+import {CreateGroupComponent} from './group/createGroup.component';
+import {SearchGroupComponent} from './group/searchGroup.component';
+import {CreateChannelComponent} from './channel/createChannel.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -90,7 +93,10 @@ type StoreType = {
     GroupComponent,
     ProfileComponent,
     RecordComponent,
-    VideoComponent
+    VideoComponent,
+    CreateGroupComponent,
+    SearchGroupComponent,
+    CreateChannelComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,

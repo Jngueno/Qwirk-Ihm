@@ -66,7 +66,7 @@
 <main class="row">
   <section class="col qwirk_sidebar" [ngClass]="{'open': !isCollapse }">
     <div class="statusSection valign-wrapper">
-      <status [size]="sizeStatus"></status>
+      <status [size]="sizeStatus" (click)="openContactPopin()"></status>
       <div class="userInfos">
         <div class="userAllNames">
           <div>
@@ -82,7 +82,7 @@
     <div class="qwirk_user_relations">
       <ul class="collapsible popout" data-collapsible="accordion"  materialize="collapsible">
         <li class="circle flat-text">
-          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">contacts</i></div>Contact</span></div>
+          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">contacts</i></div>Contact  <i class="material-icons" style="font-size: 17px">add</i></span></div>
           <div class="collapsible-body">
 
             <ul class="collection">
@@ -98,31 +98,14 @@
           </div>
         </li>
         <li class="circle">
-          <div class="collapsible-header circle rounded red red-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people_outline</i></div>Groups</span></div>
+          <div class="collapsible-header circle rounded red red-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people_outline</i></div>Groups  <a (click)="openContactPopin('createGroup')"><i class="material-icons" style="font-size: 17px; color: red">add</i> </a> </span></div>
           <div class="collapsible-body">
 
             <ul class="collection">
-              <li class="collection-item avatar">
+              <li *ngFor="let group of groups" class="collection-item avatar">
                 <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
-                <div class="secondary-part hiddendiv"><span class="title">Title</span>
-                  <p>First Line <br>
-                    Second Line
-                  </p>
-                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
-              </li>
-              <li class="collection-item avatar">
-                <img src="http://bit.ly/2n4OzaM" alt="" class="circle">
-                <div class="secondary-part hiddendiv"><span class="title">Title</span>
-                  <p>First Line <br>
-                    Second Line
-                  </p>
-                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
-              </li>
-              <li class="collection-item avatar">
-                <img src="http://bit.ly/2onErh0" alt="" class="circle">
-                <div class="hiddendiv secondary-part"><span class="title">Title</span>
-                  <p>First Line <br>
-                    Second Line
+                <div class="secondary-part " [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{group.name}}</span>
+                  <p *ngFor="let member of group.members">{{member.firstName}} ({{member.username}})<br>
                   </p>
                   <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
               </li>
@@ -130,7 +113,7 @@
           </div>
         </li>
         <li class="circle">
-          <div class="collapsible-header circle rounded orange orange-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people</i></div>Channels</span></div>
+          <div class="collapsible-header circle rounded orange orange-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people</i></div>Channels  <i class="material-icons" style="font-size: 17px" (click)="openContactPopin('createChannel')">add</i></span></div>
           <div class="collapsible-body">
 
 
@@ -168,7 +151,10 @@
     <button class="btn btn-flat btn-small qwirk_sidebar_expand teal lighten-3" (click)="expand_sidebar()"><i class="material-icons">chevron_right</i></button>
     <logout></logout>
   </section>
+  <modal [modalIdentifier]="modalIdentifier" [modalActions1] = "modalActions1" [openModalClass]="openModalClass" [groups]="groups" [contacts]="contacts" ></modal>
+
   <section class="col qwirk_content" [ngClass]="{'side_open': !isCollapse }">
+    <modal [modalIdentifier]="modalIdentifier" [modalActions1] = "modalActions1" [openModalClass]="openModalClass"></modal>
     <nav>
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo">Qwirk</a>

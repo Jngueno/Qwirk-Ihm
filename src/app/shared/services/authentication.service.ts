@@ -26,12 +26,13 @@ export class AuthenticationService {
       .map((response: Response) => {
         // login successful if there's a jwt token in the response
         let token = response.json() && response.json().token;
+        let user_id = response.json() && response.json().user_id;
         if (token) {
           // set token property
           this.token = token;
 
           // store username and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify({ userIdentifier: userIdentifier, token: token }));
+          localStorage.setItem('currentUser', JSON.stringify({ userIdentifier: userIdentifier, token: token, user_id : user_id }));
 
           // return true to indicate successful login
           return true;
@@ -48,12 +49,13 @@ export class AuthenticationService {
       .map((response: Response) => {
         // login successful if there's a jwt token in the response
         let token = response.json() && response.json().token;
+        let user_id = response.json() && response.json().user_id;
         if (token) {
           // set token property
           this.token = token;
 
           // store username and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify({ userIdentifier: user.username, token: token }));
+          localStorage.setItem('currentUser', JSON.stringify({ userIdentifier: user.username, token: token, user_id : user_id }));
           return true;
         } else {
           // return false to indicate failed login

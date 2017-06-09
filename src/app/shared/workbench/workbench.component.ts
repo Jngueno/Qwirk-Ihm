@@ -10,6 +10,7 @@ import {IUser} from "../models/user";
 import {Subscription} from "rxjs";
 import {Message} from "../models/message";
 import {MessageStatus} from "../models/messageStatus";
+import {GroupService} from "../services/group.service";
 
 @Component({
   selector: 'workbench',
@@ -51,9 +52,10 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
     limit: Infinity,
     minLength: 2
   };
-
+  groups;
   params: string[] = [];
   modalActions1 = new EventEmitter<string|MaterializeAction>();
+  modalIdentifier;
   sizeStatus = "tiny";
   user : any;
   contact : any;
@@ -107,6 +109,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
   messages = [];
   receivedMessages = [];
   connection;
+  invitations;
   message;
   private imessage = new Message();
   profileImg;
@@ -114,23 +117,40 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
   private notifyTypings: any;
   private notifyTypingsBlur: Subscription;
   private fullContact: any;
+  private openModalClass;
   constructor(private userService: UserService,
               private authService : AuthenticationService,
+              private groupService: GroupService,
               private pcService:PrivateChatService) {
     this.user = {};
+    this.openModalClass = '';
   }
 
   ngOnInit() {
     let self = this;
     self.getCurrentProfile(function () {
       self.getAllUserContacts();
+      self.getAllUserGroups();
+      self.groupService.triggerGetInvitation();
+      self.groupService.getInvitations().subscribe( invitations => {
+        self.invitations = invitations;
+        console.log(this.invitations)
+        return invitations
+      });
+
+      // console.log('GROUPS', self.groups)
       //self.fullTypings();
     });
+
   }
 
   ngOnDestroy() {
     this.connection.unsubscribe();
     this.notifyTypings.unsubscribe();
+  }
+
+  createGroup() {
+    this.groupService.createGroup(this.group)
   }
 
   addContact(){
@@ -141,12 +161,15 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
       console.log("Aucun contact n'a été ajouté");
   }
 
-  openContactPopin() {
+  openContactPopin(id) {
+    this.modalIdentifier = id
     this.modalActions1.emit({action:"modal",params:['open']});
+    this.openModalClass = 'open';
   }
 
   closeContactopIn() {
     this.modalActions1.emit({action:"modal",params:['close']});
+    this.openModalClass = 'close';
     console.log();
   }
 
@@ -213,6 +236,14 @@ export class WorkbenchComponent implements OnInit, OnDestroy {
     this.userService.getAllContacts(this.user).subscribe(contacts => {
       this.contacts = contacts;
       return contacts;
+    })
+  }
+
+  getAllUserGroups() {
+    this.groupService.getGroups().subscribe(groups => {
+      this.groups = groups
+      console.log('GROUPS RESPONSE : ', groups)
+      return groups;
     })
   }
 
