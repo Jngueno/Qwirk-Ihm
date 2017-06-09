@@ -1,0 +1,93 @@
+
+<div #messageHistory class="message-history">
+  <!--<div class="sender">
+    <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
+    <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
+      <p>{{mes}}</p>
+      <avatar data-size="very-tiny"></avatar>
+    </div>
+  </div>
+  <div class="receiver" *ngFor="let recMes of receivedMessages">
+    <h6 class="red-text text-darken-2">{{receiver.firstName}} {{receiver.lastName}}</h6>
+    <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
+      <p>{{recMes}}</p>
+      <avatar data-size="very-tiny"></avatar>
+    </div>
+  </div>-->
+  <message [user]="user" [contact]="contact" *ngFor="let mes of messages" [message]="mes"></message>
+
+  <div class="isTyping">
+    <p>{{typings}}</p>
+  </div>
+</div>
+<div class="message-discussion valign-wrapper">
+  <form #sendMessageForm="ngForm">
+    <div class="fullscreen red lighten-3" (click)="toggleIsSendFile()" [ngClass]="{overlay: isSendFileOpen}"></div>
+    <div class="sendFile radial teal lighten-3 file-field input-field" [ngClass]="{open: isSendFileOpen}">
+      <input type="file" name="file_user" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/pdf, text/*, image/*, video/*" (change)="changeFileMessage($event)" ngModel>
+      <button class="fa fa-file-o fa-2x file-field input-field" id="fa-1">
+        <input type="file" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, text/csv, .csv" name="file_user" (change)="changeFileMessage($event)" ngModel>
+      </button>
+      <button class="fa fa-picture-o fa-2x file-field input-field" id="fa-2">
+        <input type="file" accept="image/*" name="file_user" ngModel (change)="changeFileMessage($event)">
+      </button>
+      <button class="fa fa-file-video-o fa-2x file-field input-field" id="fa-3">
+        <input  type="file" accept="video/*" name="file_user" ngMode (change)="changeFileMessage($event)"l>
+      </button>
+      <button class="red lighten-3 fab file-field input-field" (click)="toggleIsSendFile()">
+        <i class="fa fa-paperclip" id="plus"></i>
+      </button>
+    </div>
+    <div id="files_to_send" class="modal bottom-sheet">
+      <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
+    <div class="input-field message-field">
+      <textarea [(ngModel)]="msg"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (keydown.enter)="sendMessage()" (keydown.control.Enter)="sendMessage()" (input)="notifyContactWriting()" (blur)="blurTypings()" (focus)="updateUnreadStatus()"></textarea>
+      <label for="editable_message">Edit your message here</label>
+    </div><!--
+        <div class="wdt-emoji-popup">
+          <a href="#" class="wdt-emoji-popup-mobile-closer"> × </a>
+          <div class="wdt-emoji-menu-content">
+            <div id="wdt-emoji-menu-header">
+              <a class="wdt-emoji-tab active" data-group-name="Recent"></a>
+              <a class="wdt-emoji-tab" data-group-name="People"></a>
+              <a class="wdt-emoji-tab" data-group-name="Nature"></a>
+              <a class="wdt-emoji-tab" data-group-name="Foods"></a>
+              <a class="wdt-emoji-tab" data-group-name="Activity"></a>
+              <a class="wdt-emoji-tab" data-group-name="Places"></a>
+              <a class="wdt-emoji-tab" data-group-name="Objects"></a>
+              <a class="wdt-emoji-tab" data-group-name="Symbols"></a>
+              <a class="wdt-emoji-tab" data-group-name="Flags"></a>
+              <a class="wdt-emoji-tab" data-group-name="Custom"></a>
+            </div>
+            <div class="wdt-emoji-scroll-wrapper">
+              <div id="wdt-emoji-menu-items">
+                <input id="wdt-emoji-search" type="text" placeholder="Search">
+                <h3 id="wdt-emoji-search-result-title">Search Results</h3>
+                <div class="wdt-emoji-sections"></div>
+                <div id="wdt-emoji-no-result">No emoji found</div>
+              </div>
+            </div>
+            <div id="wdt-emoji-footer">
+              <div id="wdt-emoji-preview">
+                <span id="wdt-emoji-preview-img"></span>
+                <div id="wdt-emoji-preview-text">
+                  <span id="wdt-emoji-preview-name"></span><br>
+                  <span id="wdt-emoji-preview-aliases"></span>
+                </div>
+              </div>
+              <div id="wdt-emoji-preview-bundle">
+                <span>WDT Emoji Bundle</span>
+              </div>
+            </div>
+          </div>
+        </div>-->
+    <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
+  </form>
+</div>

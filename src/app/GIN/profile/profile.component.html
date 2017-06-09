@@ -1,8 +1,7 @@
-<a class="waves-effect waves-light btn modal-trigger" (click)="openProfileModal()">toto</a>
-<button data-target="profileModal" class="btn">toto</button>
+<a class="waves-effect waves-light btn modal-trigger btn-floating teal lighten-3 edit_me" (click)="openProfileModal()"><i class="material-icons">person</i></a>
 <!-- Modal Structure -->
 <div id="profileModalContainer" class="{{openProfileClass}}">
-  <div id="profileModal" class="modal modal-fixed-footer teal lighten-5" materialize="modal" [materializeParams]="[{dismissible: true}]" [materializeActions]="profileModalActions">
+  <div id="profileModal" class="modal modal-fixed-footer" materialize="modal" [materializeParams]="[{dismissible: true}]" [materializeActions]="profileModalActions">
     <div class="">
       <div class="actionButs">
         <div class="row">
@@ -31,7 +30,7 @@
       </div>
       <div class="modal-content">
         <div id="userProfile">
-        <div class="userResumeContainer user_header md-bottom teal lighten-5 {{resumeOpenClass}}">
+        <div class="userResumeContainer user_header md-bottom grey lighten-5 {{resumeOpenClass}}">
           <div class="userResume">
             <status class="userStatus" [dropdownId]="status" data-size="" [profileImg]="profileImg"></status>
             <div class="userAllNames">
@@ -46,7 +45,7 @@
           </div>
           <div class="divider"></div>
         </div>
-        <div class="userModifierContainer md-top user_header teal lighten-5 {{editOpenClass}}">
+        <div class="userModifierContainer md-top user_header grey lighten-5 {{editOpenClass}}">
           <form materialize class="col s12">
             <div class="row">
               <div class="input-field col s6">

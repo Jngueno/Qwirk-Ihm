@@ -15,7 +15,7 @@ let Peer = require('peerjs');
 export class PeerConnectionService {
   private url: string;
   private appConfig: APPCONFIG;
-  private peer: PeerJs.Peer;
+  private peer: any;
   constructor(private http: Http,
               private route: Router) {
     this.appConfig = new APPCONFIG();

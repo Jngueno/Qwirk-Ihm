@@ -17,6 +17,9 @@ import { IUser } from '../../shared/models/user';
 import { UserService } from '../../shared/services/user.service';
 import { Router } from '@angular/router';
 import {ResetPassService} from "../../shared/services/resetPass.service";
+import {Headers, Response, Http} from "@angular/http";
+import {APPCONFIG} from "../../config/param";
+import {StatusService} from "../../shared/services/status.service";
 
 
 @Component({
@@ -58,8 +61,10 @@ export class ConnectionComponent implements OnInit {
     private authService : AuthenticationService,
     private resetService : ResetPassService,
     private router: Router,
-    private userService: UserService
-  ) {}
+    private userService: UserService,
+    private statusService: StatusService
+  ) {
+  }
 
   public ngOnInit() {
     console.log('hello `Connection` component');
@@ -80,10 +85,14 @@ export class ConnectionComponent implements OnInit {
       result => {
         if (result === true) {
           this.toastText = "Success";
-          // login successful
-          this.router.navigate(['/']);
+          let status = {"name" : "Online"};
+          this.statusService.updateStatusCurrentUser(status).subscribe(
+            result => {
+              // login successful
+              this.router.navigate(['/']);
 
-          this.connectionStateAction.emit('toast');
+              this.connectionStateAction.emit('toast');
+            })
         } else {
           // login failed
           this.error = 'Username or password is incorrect';

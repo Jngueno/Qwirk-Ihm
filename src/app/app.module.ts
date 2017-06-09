@@ -56,7 +56,15 @@ import {SenderComponent} from "./+message/_sender/sender.component";
 import {ReceiverComponent} from "./+message/_receiver/receiver.component";
 import {MessageComponent} from "./+message/message.component";
 import {CommonModule} from "@angular/common";
+import {SafePipe} from "./shared/pipe/safe.pipe";
+import {MessagerieComponent} from "./messageHistory/messagerie.component";
 
+
+import {VgCoreModule} from 'videogular2/core';
+import {VgControlsModule} from 'videogular2/controls';
+import {VgOverlayPlayModule} from 'videogular2/overlay-play';
+import {VgBufferingModule} from 'videogular2/buffering';
+import {MomentModule} from "angular2-moment";
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -75,6 +83,7 @@ type StoreType = {
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
+    SafePipe,
     AppComponent,
     AboutComponent,
     FileSelectDirective,
@@ -98,7 +107,8 @@ type StoreType = {
     VideoComponent,
     SenderComponent,
     ReceiverComponent,
-    MessageComponent
+    MessageComponent,
+    MessagerieComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -109,6 +119,12 @@ type StoreType = {
     Angular2FontAwesomeModule,
     CommonModule,
     EmojiModule,
+    BrowserModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule,
+    MomentModule,
     //MdListModule,
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],

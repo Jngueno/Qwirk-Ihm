@@ -1,6 +1,9 @@
+
 /**
- * Created by jngue on 14/05/2017.
+ * Created by jngue on 08/06/2017.
  */
+
+
 
 import {Injectable} from "@angular/core";
 import {APPCONFIG} from "../../config/param";
@@ -10,7 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 
 @Injectable()
-export class PrivateChatService {
+export class GroupChatService {
   public appConfig = new APPCONFIG();
   response : any;
   reset : any;
@@ -20,11 +23,8 @@ export class PrivateChatService {
   private responseData: any;
   constructor(private http: Http) {}
 
-  sendMessage(sender, receiver, message){
-    let roomName = "";
-    (receiver.username > sender.username) ?
-      roomName = sender.username + receiver.username
-      : roomName = receiver.username + sender.username;
+  sendMessage(group, message){
+    let roomName = group._id;
     message.roomName = roomName;
     console.log("Send Message RoomName : ", roomName);
     this.socket.emit(roomName, JSON.parse(JSON.stringify(message)));
@@ -34,17 +34,20 @@ export class PrivateChatService {
 
   }
 
-  getMessages(sender, receiver) {
-    let roomName = "";
-    (receiver.username > sender.username) ?
-      roomName = sender.username + receiver.username
-      : roomName = receiver.username + sender.username;
+  joinAllGroups (user) {
+    this.socket = io(this.appConfig.getUrlAPI() + 'groupSocket');
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    this.socket.emit('joinAllGroups', currentUser.user_id);
+  }
+
+  getMessages(group) {
+    let roomName = group._id;
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let userRoom = {"user" : currentUser.user_id, "room" : roomName};
+    console.log("Hey is me", userRoom);
     let observable = new Observable(
       observer => {
-        this.socket = io(this.appConfig.getUrlAPI() + 'privatePeer2Peer');
-
-        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        let userRoom = {"user" : currentUser.user_id, "room" : roomName};
+        this.socket = io(this.appConfig.getUrlAPI() + 'groupSocket');
         this.socket.emit('room', userRoom);
         this.socket.on(roomName, (data) => {
           observer.next(data);
@@ -60,28 +63,25 @@ export class PrivateChatService {
     this.socket.disconnect();
   }
 
-  sendNotificationWriting(sender, receiver) {
+  sendNotificationWriting(sender) {
     let message = sender.username + " is typing";
     this.socket.emit('isTyping', message);
   }
 
-  sendNotificationBlur(sender, receiver) {
+  sendNotificationBlur() {
     let message = "";
     this.socket.emit('isTyping', message);
   }
 
-  updateMessageStatus(sender, receiver, message) {
+  updateMessageStatus(message) {
     this.socket.emit('updateStatus', message);
   }
 
-  getNotificationWriting(sender, receiver) {
-    let roomName = "";
-    (receiver.username > sender.username) ?
-      roomName = sender.username + receiver.username
-      : roomName = receiver.username + sender.username;
+  getNotificationWriting(group) {
+    let roomName = group._id;
     let observable = new Observable(
       observer => {
-        //this.socket = io(this.url + '/privatePeer2Peer');
+        //this.socket = io(this.appConfig.getUrlAPI() + 'groupSocket');
         //console.log('Receive message');
         //console.log(roomName);
         //this.socket.emit('room', roomName);
@@ -96,14 +96,11 @@ export class PrivateChatService {
     return observable;
   }
 
-  getNotificationBlur(sender, receiver) {
-    let roomName = "";
-    (receiver.username > sender.username) ?
-      roomName = sender.username + receiver.username
-      : roomName = receiver.username + sender.username;
+  getNotificationBlur(group) {
     let observable = new Observable(
       observer => {
-        //this.socket = io(this.url + '/privatePeer2Peer');
+        //let roomName = group._id;
+        //this.socket = io(this.appConfig.getUrlAPI() + 'groupSocket');
         //this.socket.emit('room', roomName);
         this.socket.on('isTyping', (data) => {
           observer.next(data);
@@ -115,13 +112,11 @@ export class PrivateChatService {
     return observable;
   }
 
-  getMessageWhenMsgStatus(sender, receiver) {
-    let roomName = "";
-    (receiver.username > sender.username) ?
-      roomName = sender.username + receiver.username
-      : roomName = receiver.username + sender.username;
+  getMessageWhenMsgStatus(group) {
     let observable = new Observable(
       observer => {
+        //let roomName = group._id;
+        //this.socket.emit('room', roomName);
         this.socket.on('updateStatus', (data) => {
           observer.next(data);
         });
@@ -132,8 +127,8 @@ export class PrivateChatService {
     return observable;
   }
 
-  getAllHistoryContactMessages(contact, start, limit) {
-    return this.http.get(this.appConfig.getUrlAPI() + 'messages/' + contact + '/' + start + '/' + limit)
+  getAllHistoryGroupMessages(group, start, limit) {
+    return this.http.get(this.appConfig.getUrlAPI() + 'groupmessages/' + group._id + '/' + start + '/' + limit)
       .map((response : Response) => {
         //console.log(response.json());
         return response.json();
@@ -141,11 +136,13 @@ export class PrivateChatService {
   }
 
 
-  getNewMessagesPush(sender) {
+  getNewMessagesPush(sender, group) {
+    let roomName = group._id;
     let observable = new Observable(
       observer => {
         this.socket = io(this.appConfig.getUrlAPI());
-        this.socket.on('newMessage', (data) => {
+        //this.socket.emit('room', roomName);
+        this.socket.on('newGroupMessage', (data) => {
           //console.log("Get new messages from qwirk platform",sender, data.receiverUser);
           if(data.receiverUser.indexOf(sender._id) !== -1) {
             observer.next(data);
@@ -158,19 +155,25 @@ export class PrivateChatService {
     return observable;
   }
 
+  bindToRoom(group) {
+    let roomName = group._id;
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let userRoom = {"user" : currentUser.user_id, "room" : roomName};
+    console.log("Hey is me", userRoom);
+  }
+
   makeFileRequest (postData: any, files: File[]) {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
     let headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
     let formData:FormData = new FormData();
     formData.append('files', files[0], files[0].name);
-    console.log(postData);
     // For multiple files
     // for (let i = 0; i < files.length; i++) {
     //     formData.append(`files[]`, files[i], files[i].name);
     // }
 
     if(postData !=="" && postData !== undefined && postData !==null){
-      for (var property in postData) {
+      for (let property in postData) {
         if (postData.hasOwnProperty(property)) {
           formData.append(property, JSON.stringify(postData[property]));
         }
@@ -181,7 +184,6 @@ export class PrivateChatService {
         headers: headers
       }).subscribe(
         res => {
-          console.log("Upload message", res);
           this.responseData = res.json();
           resolve(this.responseData);
         },

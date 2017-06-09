@@ -86,13 +86,13 @@
           <div class="collapsible-body">
 
             <ul class="collection">
-              <li *ngFor="let contact of contacts" class="collection-item avatar" (click)="bindCheckMessages(contact)">
-                <img src="http://localhost:8000/user/{{contact.userObject.username}}" alt="" class="circle">
-                <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{contact.contactObject.nickname}}</span>
-                  <p>{{contact.userObject.firstName}} {{contact.userObject.lastName}}<br>
-                    {{contact.userObject.email}}
+              <li *ngFor="let c of contacts" class="collection-item avatar" (click)="bindCheckMessages(c)">
+                <img src="{{appConfig.getUrlAPI()}}user/{{c.userObject.username}}" alt="" class="circle {{c.userObject.statusData.color}}-border">
+                <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{c.contactObject.nickname}}</span>
+                  <p>{{c.userObject.firstName}} {{c.userObject.lastName}}<br>
+                    {{c.userObject.email}}
                   </p>
-                  <a href="#!" class="secondary-content"><span class="new badge">{{unreadMessages[contact.userObject._id].length}}</span></a></div>
+                  <a href="#!" class="secondary-content"><span class="badge">{{counterUnread[c.contactObject.user]}}</span></a></div>
               </li>
             </ul>
           </div>
@@ -102,27 +102,10 @@
           <div class="collapsible-body">
 
             <ul class="collection">
-              <li class="collection-item avatar">
+              <li *ngFor="let group of groups" class="collection-item avatar" (click)="bindCheckGroupMessages(group)">
                 <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
-                <div class="secondary-part hiddendiv"><span class="title">Title</span>
-                  <p>First Line <br>
-                    Second Line
-                  </p>
-                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
-              </li>
-              <li class="collection-item avatar">
-                <img src="http://bit.ly/2n4OzaM" alt="" class="circle">
-                <div class="secondary-part hiddendiv"><span class="title">Title</span>
-                  <p>First Line <br>
-                    Second Line
-                  </p>
-                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
-              </li>
-              <li class="collection-item avatar">
-                <img src="http://bit.ly/2onErh0" alt="" class="circle">
-                <div class="hiddendiv secondary-part"><span class="title">Title</span>
-                  <p>First Line <br>
-                    Second Line
+                <div class="secondary-part " [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{group.name}}</span>
+                  <p *ngFor="let member of group.members">{{member.firstName}} ({{member.username}})<br>
                   </p>
                   <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
               </li>
@@ -133,29 +116,11 @@
           <div class="collapsible-header circle rounded orange orange-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people</i></div>Channels</span></div>
           <div class="collapsible-body">
 
-
             <ul class="collection">
-              <li class="collection-item avatar">
+              <li *ngFor="let channel of channels" class="collection-item avatar" (click)="bindCheckGroupMessages(channel)">
                 <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
-                <div class="secondary-part hiddendiv"><span class="title">Title</span>
-                  <p>First Line <br>
-                    Second Line
-                  </p>
-                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
-              </li>
-              <li class="collection-item avatar">
-                <img src="http://bit.ly/2n4OzaM" alt="" class="circle">
-                <div class="secondary-part hiddendiv"><span class="title">Title</span>
-                  <p>First Line <br>
-                    Second Line
-                  </p>
-                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
-              </li>
-              <li class="collection-item avatar">
-                <img src="http://bit.ly/2onErh0" alt="" class="circle">
-                <div class="hiddendiv secondary-part"><span class="title">Title</span>
-                  <p>First Line <br>
-                    Second Line
+                <div class="secondary-part " [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{channel.name}}</span>
+                  <p *ngFor="let member of channel.members">{{member.firstName}} ({{member.username}})<br>
                   </p>
                   <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
               </li>
@@ -166,15 +131,16 @@
     </div>
 
     <button class="btn btn-flat btn-small qwirk_sidebar_expand teal lighten-3" (click)="expand_sidebar()"><i class="material-icons">chevron_right</i></button>
+    <div class="user_action_but">
     <logout></logout>
+    <profile></profile>
+    </div>
   </section>
   <section class="col qwirk_content" [ngClass]="{'side_open': !isCollapse }">
     <nav>
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo">Qwirk</a>
         <ul class="right hide-on-med-and-down">
-          <li><a href="#!"><i class="material-icons" (click)="openCalModall()">videocam</i></a></li>
-          <li><a href="#!"><i class="material-icons" (click)="openCalModall()" >phone</i></a></li>
           <li><a href="#!"><i class="material-icons">search</i></a></li>
           <li><a href="#!"><i class="material-icons">view_module</i></a></li>
           <li><a href="#!"><i class="material-icons">refresh</i></a></li>
@@ -182,31 +148,62 @@
         </ul>
       </div>
     </nav>
-      <div #messageHistory class="message-history">
-        <!--<div class="sender">
-          <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
-          <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
-            <p>{{mes}}</p>
-            <avatar data-size="very-tiny"></avatar>
-          </div>
-        </div>
-        <div class="receiver" *ngFor="let recMes of receivedMessages">
-          <h6 class="red-text text-darken-2">{{receiver.firstName}} {{receiver.lastName}}</h6>
-          <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
-            <p>{{recMes}}</p>
-            <avatar data-size="very-tiny"></avatar>
-          </div>
-        </div>-->
-        <message [user]="user" [contact]="contact" *ngFor="let mes of messages" [message]="mes"></message>
-
-        <div class="isTyping">
-          <p>{{typings}}</p>
+    <div #messageHistory id="messageHistory" class="message-history">
+      <!--<div class="sender">
+        <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
+        <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
+          <p>{{mes}}</p>
+          <avatar data-size="very-tiny"></avatar>
         </div>
       </div>
+      <div class="receiver" *ngFor="let recMes of receivedMessages">
+        <h6 class="red-text text-darken-2">{{receiver.firstName}} {{receiver.lastName}}</h6>
+        <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
+          <p>{{recMes}}</p>
+          <avatar data-size="very-tiny"></avatar>
+        </div>
+      </div>-->
+      <div class="message_container" *ngFor="let mes of messages; let i = index">
+        <div class="send_message_date" *ngIf="i === 0 || (messages[i].sendTime | amDateFormat: 'YYYY-MM-DD') !== (messages[i-1].sendTime | amDateFormat: 'YYYY-MM-DD')">
+          <div class="divider teal lighten-3"></div>
+          <span class="white teal lighten-5 teal-border border-lighten-3 teal-text text-lighten-3"><time>{{mes.sendTime | amDateFormat:'LL'}}</time></span>
+        </div>
+        <message [user]="user" [contact]="contact" [group]="group" [message]="mes"></message>
+      </div>
+
+    </div>
+    <div class="isTyping center-align">
+      <p>{{typings}}</p>
+    </div>
     <div class="message-discussion valign-wrapper">
       <form #sendMessageForm="ngForm">
-        <div class="input-field">
-          <textarea [(ngModel)]="msg"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (keydown.enter)="sendMessage()" (keydown.control.Enter)="sendMessage()" (input)="notifyContactWriting()" (blur)="blurTypings()" (focus)="updateUnreadStatus()"></textarea>
+        <div class="fullscreen red lighten-3" (click)="toggleIsSendFile()" [ngClass]="{overlay: isSendFileOpen}"></div>
+            <div class="sendFile radial teal lighten-3 file-field input-field" [ngClass]="{open: isSendFileOpen}">
+              <input type="file" name="file_user" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/pdf, text/*, image/*, video/*" (change)="changeFileMessage($event)" ngModel>
+              <button class="fa fa-file-o fa-2x file-field input-field" id="fa-1">
+                <input type="file" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, text/csv, .csv" name="file_user" (change)="changeFileMessage($event)" ngModel>
+              </button>
+              <button class="fa fa-picture-o fa-2x file-field input-field" id="fa-2">
+                <input type="file" accept="image/*" name="file_user" ngModel (change)="changeFileMessage($event)">
+              </button>
+              <button class="fa fa-file-video-o fa-2x file-field input-field" id="fa-3">
+                <input  type="file" accept="video/*" name="file_user" ngModel (change)="changeFileMessage($event)"l>
+              </button>
+              <button class="red lighten-3 fab file-field input-field" (click)="toggleIsSendFile()">
+                <i class="fa fa-paperclip" id="plus"></i>
+              </button>
+            </div>
+        <div id="files_to_send" class="modal bottom-sheet">
+          <div class="modal-content">
+            <h4>Modal Header</h4>
+            <p>A bunch of text</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+          </div>
+        </div>
+        <div class="input-field message-field">
+          <textarea [(ngModel)]="msg"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (keydown.enter)="sendMessage()" (keydown.control.Enter)="sendMessage()" (input)="notifyWriting()" (blur)="blurTypings()" (focus)="updateUnreadStatus()"></textarea>
           <label for="editable_message">Edit your message here</label>
         </div><!--
         <div class="wdt-emoji-popup">
@@ -249,5 +246,6 @@
         <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
       </form>
     </div>
+    <!--<messagerie [messages]="messages" [user]="user" [contact]="contact"></messagerie>-->
   </section>
 </main>
