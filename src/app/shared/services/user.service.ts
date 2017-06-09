@@ -66,11 +66,11 @@ export class UserService {
         else { return this.url + 'user/' + userIdentifier; }
       })
   }
-
-  getUserById(id : string) {
+  getUserByEmail(email : string) {
     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('Hello is getUserByEmail', currentUser);
     this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
-    return this.http.get(this.url + 'id/' + id, {headers : this.headers})
+    return this.http.get(this.url + 'userContact/' + email, {headers : this.headers})
       .map(response => {
         return response.json();
       })
@@ -99,27 +99,22 @@ export class UserService {
     this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
     return this.http.get(this.url + 'contacts', {headers : this.headers})
       .map(response => {
-        let contacts = response.json();
+        console.log(response);
+        let contacts = response.json();/*
+
         for (let contact of contacts) {
           console.log("Is it the right thing : ", user.email, contact.email, user.email === contact.email)
-          if(user.email === contact.email) {
-            this.getUserById(contact.owner).subscribe(
+            this.getUserByEmail(contact.contactEmail).subscribe(
               c => {
+                console.log("Console contact : ", contact, c);
                 contact.infoContact = c;
                 fullContacts.push(contact);
               }
             )
+          contact.infoContact = contact.userObject;
           }
-          else {
-            this.getUserById(contact.contact).subscribe(
-              c => {
-                contact.infoContact = c;
-                fullContacts.push(contact);
-              }
-            )
-          }
-        }
-        return fullContacts;
+*/
+        return contacts;
       })
   }
 }

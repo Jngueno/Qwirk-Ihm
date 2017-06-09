@@ -1,8 +1,12 @@
 
 <div class="receiver">
   <h6 class="red-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
-  <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
-    <p>{{message}}</p>
-    <avatar data-size="very-tiny"></avatar>
+  <div class="message valign-wrapper lighten-5 red red-text text-lighten-2">
+    <p>{{message.content}}</p>
+    <avatar data-size="very-tiny" [urlImage]="appConfig.getUrlAPI() + url + user.username"></avatar>
+    <div class="messageStatus"><!--
+      <i class="material-icons" *ngIf="message.messageStatus.status === 'sent'">done</i>
+      <i class="material-icons" *ngIf="message.messageStatus.status === 'delivered' || message.messageStatus.status === 'seen'" [ngClass]="{'red-text text-darken-5': message.messageStatus.status === 'seen'}">done_all</i>-->
+    </div>
   </div>
 </div>

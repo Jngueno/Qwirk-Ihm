@@ -6,6 +6,7 @@ import {removeNgStyles, createNewHosts, createInputTransfer} from '@angularclass
 import {RouterModule, PreloadAllModules} from '@angular/router';
 import { MaterializeModule } from 'angular2-materialize';
 import {Angular2FontAwesomeModule} from 'angular2-font-awesome';
+import {EmojiModule} from 'angular2-emoji';
 //import {MdListModule} from "@angular2-material/list/list";
 
 /*
@@ -51,6 +52,10 @@ import {RecordComponent} from "./chattManager/record/record.component";
 import {VideoComponent} from "./chattManager/video/video.component";
 
 import { FileSelectDirective, FileDropDirective } from 'ng2-file-upload';
+import {SenderComponent} from "./+message/_sender/sender.component";
+import {ReceiverComponent} from "./+message/_receiver/receiver.component";
+import {MessageComponent} from "./+message/message.component";
+import {CommonModule} from "@angular/common";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -90,7 +95,10 @@ type StoreType = {
     GroupComponent,
     ProfileComponent,
     RecordComponent,
-    VideoComponent
+    VideoComponent,
+    SenderComponent,
+    ReceiverComponent,
+    MessageComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -99,7 +107,9 @@ type StoreType = {
     JsonpModule,
     MaterializeModule,
     Angular2FontAwesomeModule,
-    MdListModule,
+    CommonModule,
+    EmojiModule,
+    //MdListModule,
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection

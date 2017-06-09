@@ -87,12 +87,12 @@
 
             <ul class="collection">
               <li *ngFor="let contact of contacts" class="collection-item avatar" (click)="bindCheckMessages(contact)">
-                <img src="http://localhost:8000/user/{{contact.infoContact.username}}" alt="" class="circle">
-                <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{contact.nickname}}</span>
-                  <p>{{contact.infoContact.firstName}} {{contact.infoContact.lastName}}<br>
-                    {{contact.infoContact.email}}
+                <img src="http://localhost:8000/user/{{contact.userObject.username}}" alt="" class="circle">
+                <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{contact.contactObject.nickname}}</span>
+                  <p>{{contact.userObject.firstName}} {{contact.userObject.lastName}}<br>
+                    {{contact.userObject.email}}
                   </p>
-                  <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a></div>
+                  <a href="#!" class="secondary-content"><span class="new badge">{{unreadMessages[contact.userObject._id].length}}</span></a></div>
               </li>
             </ul>
           </div>
@@ -182,9 +182,8 @@
         </ul>
       </div>
     </nav>
-    <div>
-      <div class="message-history">
-        <div class="sender" *ngFor="let mes of messages">
+      <div #messageHistory class="message-history">
+        <!--<div class="sender">
           <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
           <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
             <p>{{mes}}</p>
@@ -197,18 +196,56 @@
             <p>{{recMes}}</p>
             <avatar data-size="very-tiny"></avatar>
           </div>
+        </div>-->
+        <message [user]="user" [contact]="contact" *ngFor="let mes of messages" [message]="mes"></message>
+
+        <div class="isTyping">
+          <p>{{typings}}</p>
         </div>
       </div>
-      <div class="isTyping">
-        <p>{{typings}}</p>
-      </div>
-    </div>
     <div class="message-discussion valign-wrapper">
       <form #sendMessageForm="ngForm">
         <div class="input-field">
-          <textarea [(ngModel)]="message"  id="editable_message" name="message_sender" class="validate materialize-textarea" (input)="notifyContactWriting()" (blur)="blurTypings()"></textarea>
+          <textarea [(ngModel)]="msg"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (keydown.enter)="sendMessage()" (keydown.control.Enter)="sendMessage()" (input)="notifyContactWriting()" (blur)="blurTypings()" (focus)="updateUnreadStatus()"></textarea>
           <label for="editable_message">Edit your message here</label>
-        </div>
+        </div><!--
+        <div class="wdt-emoji-popup">
+          <a href="#" class="wdt-emoji-popup-mobile-closer"> × </a>
+          <div class="wdt-emoji-menu-content">
+            <div id="wdt-emoji-menu-header">
+              <a class="wdt-emoji-tab active" data-group-name="Recent"></a>
+              <a class="wdt-emoji-tab" data-group-name="People"></a>
+              <a class="wdt-emoji-tab" data-group-name="Nature"></a>
+              <a class="wdt-emoji-tab" data-group-name="Foods"></a>
+              <a class="wdt-emoji-tab" data-group-name="Activity"></a>
+              <a class="wdt-emoji-tab" data-group-name="Places"></a>
+              <a class="wdt-emoji-tab" data-group-name="Objects"></a>
+              <a class="wdt-emoji-tab" data-group-name="Symbols"></a>
+              <a class="wdt-emoji-tab" data-group-name="Flags"></a>
+              <a class="wdt-emoji-tab" data-group-name="Custom"></a>
+            </div>
+            <div class="wdt-emoji-scroll-wrapper">
+              <div id="wdt-emoji-menu-items">
+                <input id="wdt-emoji-search" type="text" placeholder="Search">
+                <h3 id="wdt-emoji-search-result-title">Search Results</h3>
+                <div class="wdt-emoji-sections"></div>
+                <div id="wdt-emoji-no-result">No emoji found</div>
+              </div>
+            </div>
+            <div id="wdt-emoji-footer">
+              <div id="wdt-emoji-preview">
+                <span id="wdt-emoji-preview-img"></span>
+                <div id="wdt-emoji-preview-text">
+                  <span id="wdt-emoji-preview-name"></span><br>
+                  <span id="wdt-emoji-preview-aliases"></span>
+                </div>
+              </div>
+              <div id="wdt-emoji-preview-bundle">
+                <span>WDT Emoji Bundle</span>
+              </div>
+            </div>
+          </div>
+        </div>-->
         <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
       </form>
     </div>

@@ -18,6 +18,9 @@ export class AvatarOverlayComponent implements OnInit {
   @Input('profilePic')
   profilePic: any;
 
+  @Input('size')
+  size: string;
+
   constructor(
   ) {}
 

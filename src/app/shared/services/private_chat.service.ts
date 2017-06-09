@@ -4,7 +4,7 @@
 
 import {Injectable} from "@angular/core";
 import {APPCONFIG} from "../../config/param";
-import {Http} from "@angular/http";
+import {Http, Response} from "@angular/http";
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
@@ -16,6 +16,7 @@ export class PrivateChatService {
   reset : any;
   private url = 'http://localhost:8000';
   private socket;
+  private globalSocket;
   constructor(private http: Http) {}
 
   sendMessage(sender, receiver, message){
@@ -24,7 +25,7 @@ export class PrivateChatService {
       roomName = sender.username + receiver.username
       : roomName = receiver.username + sender.username;
     message.roomName = roomName;
-    console.log(JSON.parse(JSON.stringify(message)))
+    //console.log(JSON.parse(JSON.stringify(message)))
     this.socket.emit(roomName, JSON.parse(JSON.stringify(message)));
   }
 
@@ -76,12 +77,12 @@ export class PrivateChatService {
       : roomName = receiver.username + sender.username;
     let observable = new Observable(
       observer => {
-        this.socket = io(this.url + '/privatePeer2Peer');
-        console.log('Receive message');
-        console.log(roomName);
-        this.socket.emit('room', roomName);
+        //this.socket = io(this.url + '/privatePeer2Peer');
+        //console.log('Receive message');
+        //console.log(roomName);
+        //this.socket.emit('room', roomName);
         this.socket.on('isTyping', (data) => {
-          console.log('Receive message');
+          //console.log('Receive message');
           observer.next(data);
         });
         return () => {
@@ -98,8 +99,8 @@ export class PrivateChatService {
       : roomName = receiver.username + sender.username;
     let observable = new Observable(
       observer => {
-        this.socket = io(this.url + '/privatePeer2Peer');
-        this.socket.emit('room', roomName);
+        //this.socket = io(this.url + '/privatePeer2Peer');
+        //this.socket.emit('room', roomName);
         this.socket.on('isTyping', (data) => {
           observer.next(data);
         });
@@ -110,4 +111,46 @@ export class PrivateChatService {
     return observable;
   }
 
+  getMessageWhenMsgStatus(sender, receiver) {
+    let roomName = "";
+    (receiver.username > sender.username) ?
+      roomName = sender.username + receiver.username
+      : roomName = receiver.username + sender.username;
+    let observable = new Observable(
+      observer => {
+        this.socket.on('updateStatus', (data) => {
+          observer.next(data);
+        });
+        return () => {
+          this.socket.disconnect();
+        };
+      });
+    return observable;
+  }
+
+  getAllHistoryContactMessages(contact, start, limit) {
+    return this.http.get(this.url + '/messages/' + contact + '/' + start + '/' + limit)
+      .map((response : Response) => {
+        //console.log(response.json());
+        return response.json();
+      })
+  }
+
+
+  getNewMessagesPush(sender) {
+    let observable = new Observable(
+      observer => {
+        this.socket = io(this.url);
+        this.socket.on('newMessage', (data) => {
+          console.log("Get new messages from qwirk platform", data);
+          if(data.receiverUser.indexOf(sender._id) !== -1) {
+            observer.next(data);
+          }
+        });
+        return () => {
+          this.socket.disconnect();
+        };
+      });
+    return observable;
+  }
 }
