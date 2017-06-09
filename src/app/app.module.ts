@@ -56,6 +56,13 @@ import {SenderComponent} from "./+message/_sender/sender.component";
 import {ReceiverComponent} from "./+message/_receiver/receiver.component";
 import {MessageComponent} from "./+message/message.component";
 import {CommonModule} from "@angular/common";
+import {StoreModule} from "@ngrx/store";
+import {VideoContentReducer} from "./shared/reducers/video.reducer";
+import {VideoSettingReducer} from "./shared/reducers/video.settings.reducer";
+import {PeerReducer} from "./shared/reducers/peer.reducer";
+import {ContactReducer} from "./shared/reducers/contact.reducer";
+import {Ng2EmojiModule} from "ng2-emoji";
+import {FormatText} from "./+message/formatText.pipe";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -98,7 +105,8 @@ type StoreType = {
     VideoComponent,
     SenderComponent,
     ReceiverComponent,
-    MessageComponent
+    MessageComponent,
+    FormatText
   ],
   imports: [ // import Angular's modules
     BrowserModule,
@@ -109,6 +117,13 @@ type StoreType = {
     Angular2FontAwesomeModule,
     CommonModule,
     EmojiModule,
+    Ng2EmojiModule,
+    StoreModule.provideStore({
+      videoState : VideoContentReducer,
+      videoSetting : VideoSettingReducer,
+      peerObject : PeerReducer,
+      contact : ContactReducer
+    }),
     //MdListModule,
     RouterModule.forRoot(ROUTES, { useHash: false, preloadingStrategy: PreloadAllModules })
   ],

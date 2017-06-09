@@ -9,26 +9,16 @@ declare let SimpleWebRTC: any; //this is important
 
 @Injectable()
 export class WebRtcService {
-  @ViewChild('localVideo') localVideo
   webrtc: any; //declare global variable
 
   //construct the simplewebrtc object as service creation
   constructor() {
-    this.webrtc = new SimpleWebRTC({
-      socketio: {},
-      url: 'http://localhost:8888/',
-      connection: null,
-      debug: false,
-      localVideoEl: 'localVideo',
-      remoteVideosEl: '',
-      autoRequestMedia: true,
-      adjustPeerVolume: true,
-      media: {
-        video: true, audio: true
-      }
-    });
+
     console.log("Simple test : ", this.webrtc);
-    // a peer video has been added
+    console.log("Simple test 2");
+  }
+
+  onVideoAdded() {
     this.webrtc.on('videoAdded', function (video, peer) {
       console.log('video added', peer);
       var remotes = document.getElementById('remotes');
@@ -44,6 +34,22 @@ export class WebRtcService {
         remotes.appendChild(container);
       }
     });
-    console.log("Simple test 2");
+  }
+
+  initPeer(localvideo) {
+     this.webrtc = new SimpleWebRTC({
+      // socketio: {},
+      // url: 'http://localhost:8888/',
+      connection: null,
+      debug: false,
+      localVideoEl: localvideo,
+      remoteVideosEl: '',
+      autoRequestMedia: true,
+      adjustPeerVolume: true,
+      media: {
+        video: true, audio: true
+      }
+    });
+     return this.webrtc;
   }
 }

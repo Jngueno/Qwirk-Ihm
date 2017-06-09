@@ -304,7 +304,7 @@ h6 {
 
 .message-discussion form .input-field {
   margin-top: 0;
-  padding-right: 50px;
+  padding-right: 75px;
   padding-left: 5px;
 }
 
@@ -329,7 +329,19 @@ h6 {
 
 .send_message_but {
   bottom: 15px;
-  right: 3%;
+  right: 1%;
+  position: absolute;
+}
+
+.add_emoji_btn {
+  bottom: 15px;
+  right: 4%;
+  position: absolute;
+}
+
+.add_code_btn {
+  bottom: 15px;
+  right: 7%;
   position: absolute;
 }
 
@@ -343,9 +355,44 @@ h6 {
 
 .video-content {
   max-height: 100%;
-  height: calc(100% - 80px) ;
+  height: 100%;
   /*background-color: #80cbc4;*/
-  overflow: auto;
+  overflow: hidden;
+}
+
+.emoji_container {
+  position: absolute;
+  bottom: 60px;
+  right: 5%;
+  border: 2px solid #12A563;
+  background-color: white;
+  width: 33%;
+  height: 60%;
+  overflow-y: scroll;
+  padding-left: 1%;
+}
+
+.emoji-hover {
+  border-bottom: 1px solid #12A563;
+}
+
+.call {
+  text-align: center;
+  margin: -34% 33% 3% 32% !important;
+}
+
+.call div  div ul li {
+  display: inline;
+  margin-left: 2%;
+  margin-right: 2%
+}
+
+.incoming-call-panel {
+  margin: -34% 33% 3% 32% !important;
+}
+
+.outgoing-call-panel {
+
 }
 /*
 .sender h6 {

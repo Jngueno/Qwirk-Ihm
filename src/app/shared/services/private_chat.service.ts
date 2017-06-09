@@ -15,6 +15,7 @@ export class PrivateChatService {
   response : any;
   reset : any;
   private url = 'http://localhost:8000';
+  // private url = 'https://7515068c.ngrok.io';
   private socket;
   constructor(private http: Http) {}
 

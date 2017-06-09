@@ -5,6 +5,7 @@ import {
   Component,
   OnInit, Input
 } from '@angular/core';
+import {Ng2EmojiService} from "ng2-emoji";
 
 @Component({
   selector: 'receiver',
@@ -14,12 +15,18 @@ import {
 export class ReceiverComponent implements OnInit {
   @Input("user")
   user : any;
+  public emojiList = [];
 
+  // public msg: string = "";
   @Input("message")
   message : any;
 
-  constructor(
-  ) {}
+
+
+  constructor() {
+    // this.msg = this.message + ' :joy:'
+    // this.emojiList = Ng2EmojiService.emojis;
+  }
 
   public ngOnInit() {
   }

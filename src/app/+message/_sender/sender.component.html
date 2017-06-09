@@ -1,7 +1,7 @@
 
 <div class="sender">
   <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
-  <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
+  <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2"  [innerHTML]="message">
     <p>{{message}}</p>
     <avatar data-size="very-tiny"></avatar>
   </div>

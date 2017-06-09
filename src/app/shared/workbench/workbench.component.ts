@@ -2,8 +2,8 @@
  * Created by Housseini  Maiga on 3/13/2017.
  */
 import {
-    Component, OnInit, EventEmitter, ViewEncapsulation, OnDestroy, AfterViewChecked,
-    ElementRef, ViewChild, HostListener, Output
+  Component, OnInit, EventEmitter, ViewEncapsulation, OnDestroy, AfterViewChecked,
+  ElementRef, ViewChild, HostListener, Output, OnChanges
 } from '@angular/core';
 import {MaterializeAction} from "angular2-materialize";
 import {UserService} from "../services/user.service";
@@ -14,7 +14,9 @@ import {Subscription} from "rxjs";
 import {Message} from "../models/message";
 import {MessageStatus} from "../models/messageStatus";
 import {PeerConnectionService} from "../services/peerConnection.service";
-
+import {Store} from "@ngrx/store";
+import {IVideoContent} from "../reducers/video.reducer";
+import {Ng2EmojiService} from "ng2-emoji";
 /*import * as wdtEmojiBundle from 'wdt-emoji-bundle';*/
 
 @Component({
@@ -24,7 +26,7 @@ import {PeerConnectionService} from "../services/peerConnection.service";
   encapsulation: ViewEncapsulation.None,
   providers: [PrivateChatService, PeerConnectionService]
 })
-export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
+export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked, OnChanges {
   isCollapse: boolean = false;
   onChanged: string = 'slide-out';
   peer : any;
@@ -44,7 +46,11 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
       tag: 'Google',
     }],
   };
-
+  emojiList = [];
+  profileImg = "../assets/img/avatar.png";
+  userToCall : string;
+  isEmojis : boolean = false;
+  isInComingCall : boolean = false;
   chipsPlaceholder = {
     placeholder: '+Username/Email',
     secondaryPlaceholder: 'Enter username or email',
@@ -115,10 +121,12 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   messages = [];
   receivedMessages = [];
   connection;
+
+
   message;
-isVideo = true;
+ isVideo = false;
   private imessage = new Message();
-  profileImg;
+  // profileImg;
   typings: any;
   private notifyTypings: any;
   private notifyTypingsBlur: Subscription;
@@ -126,25 +134,38 @@ isVideo = true;
   constructor(private userService: UserService,
               private authService : AuthenticationService,
               private pcService:PrivateChatService,
-              private peerService: PeerConnectionService) {
+              private peerService: PeerConnectionService,
+              private store : Store<any>) {
     this.user = {};
+    this.emojiList = Ng2EmojiService.emojis;
   }
   @ViewChild('messageHistory') private messageHistoryContainer: ElementRef;
+
+  ngOnChanges(...args : any[]) {
+
+  }
 
   ngOnInit() {
     let self = this;
     self.getCurrentProfile(function () {
       console.log('getCurrentProfile inner');
       self.getAllUserContacts();
-      self.peer = self.peerService.initPeer();
+        // self.peer.destroy();
+        self.peer = self.peerService.initPeer();
       if(self.peer) {
-        console.log(' self.peer > ',  self.peer);
-        self.media = self.peerService.callReceiveEvent();
-        console.log('self.media > ', self.media);
+        console.error(' self.peer > ',  self.peer);
+        console.error('self.peer id >>> ', self.peer.id);
+        self.peerService.callReceiveEvent();
       }
       //wdtEmojiBundle.init('.wdt-emoji-bundle-enabled');
       //self.fullTypings();
     });
+
+    this.store.select<IVideoContent>('videoState').subscribe( (videosStream : IVideoContent) => {
+      console.log('ngOnInit STORE isvideo > ', videosStream);
+      console.log('before ', videosStream.isVideo);
+      this.isVideo = videosStream.isVideo;
+    })
   }
 
   ngAfterViewChecked() {
@@ -163,7 +184,11 @@ isVideo = true;
   }
 
   onCallStart() {
-      this.isVideo = !this.isVideo;
+      if(this.contact) {
+        this.isInComingCall = !this.isInComingCall;
+        this.userToCall = this.contact.username;
+        this.isVideo = !this.isVideo;
+      }
       console.log('On audio/ video call start : ', this.isVideo);
   }
 
@@ -294,7 +319,7 @@ isVideo = true;
       }
     );
     self.connection = self.pcService.getMessages(self.user, contact.userObject).subscribe(
-      message => {
+      (message : any) => {
         self.messages.push(message.content);
         message.messageStatus.status = 'delivered';
         self.pcService.updateMessageStatus(self.user, self.contact, message);
@@ -326,6 +351,22 @@ isVideo = true;
         this.messages = messages.reverse();
       }
     )
+  }
+
+  addEmoji(emoji : string) :void {
+    console.error('test emoji > ', emoji);
+    this.isEmojis = !this.isEmojis;
+    this.message += ':' + emoji + ': ';
+    console.log(this.message);
+  }
+
+  showEmojis() {
+    this.isEmojis = !this.isEmojis;
+    console.log('showEmojis > ', this.isEmojis)
+  }
+
+  addCodeStyle(){
+    console.log('addCodeStyle > ')
   }
 /*
   @HostListener('window:scroll', ['$event'])
