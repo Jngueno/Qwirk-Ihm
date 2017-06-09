@@ -58,6 +58,9 @@ import {MessageComponent} from "./+message/message.component";
 import {CommonModule} from "@angular/common";
 import {SafePipe} from "./shared/pipe/safe.pipe";
 import {MessagerieComponent} from "./messageHistory/messagerie.component";
+import {CreateGroupComponent} from './group/createGroup.component';
+import {SearchGroupComponent} from './group/searchGroup.component';
+import {CreateChannelComponent} from './channel/createChannel.component';
 
 
 import {VgCoreModule} from 'videogular2/core';
@@ -104,11 +107,14 @@ type StoreType = {
     GroupComponent,
     ProfileComponent,
     RecordComponent,
-    VideoComponent,
     SenderComponent,
     ReceiverComponent,
     MessageComponent,
-    MessagerieComponent
+    MessagerieComponent,
+    VideoComponent,
+    CreateGroupComponent,
+    SearchGroupComponent,
+    CreateChannelComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,

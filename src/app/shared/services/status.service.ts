@@ -13,7 +13,7 @@ export class StatusService {
   private headers : Headers;
   private appConfig = new APPCONFIG();
   constructor(
-    private http : Http,
+    private http : Http
   ) {}
 
   getCurrentStatus() {

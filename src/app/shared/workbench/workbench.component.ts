@@ -62,9 +62,9 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     limit: Infinity,
     minLength: 2
   };
-
   params: string[] = [];
   modalActions1 = new EventEmitter<string|MaterializeAction>();
+  modalIdentifier;
   sizeStatus = "tiny";
   user : any;
   contact : any;/*
@@ -119,6 +119,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   receivedMessages = [];
   connection;
   msg;
+  invitations;
   private imessage = new Message();
   public appConfig = new APPCONFIG();
   profileImg;
@@ -130,6 +131,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   private groupNotifyTypings: any;
   private groupNotifyTypingsBlur: Subscription;
   private fullContact: any;
+  private openModalClass;
   //private renderer: Renderer;
   private counterUnread : Object;
   onUpdateMessageStatus: Subscription;
@@ -147,6 +149,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
               private peerConService : PeerConnectionService,
               private gcService: GroupChatService) {
     this.user = {};
+    this.openModalClass = '';
     this.unreadMessages = {};
     this.counterUnread = {};
     this.groups = [];
@@ -212,6 +215,10 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.notifyTypings.unsubscribe();
   }
 
+  createGroup() {
+    this.groupService.createGroup(this.group)
+  }
+
   addContact(){
     if(this.contacts.length > 0)
     //this.userService.addContact(this.contacts);
@@ -220,12 +227,15 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
       console.log("Aucun contact n'a été ajouté");
   }
 
-  openContactPopin() {
+  openContactPopin(id) {
+    this.modalIdentifier = id
     this.modalActions1.emit({action:"modal",params:['open']});
+    this.openModalClass = 'open';
   }
 
   closeContactopIn() {
     this.modalActions1.emit({action:"modal",params:['close']});
+    this.openModalClass = 'close';
     console.log();
   }
 

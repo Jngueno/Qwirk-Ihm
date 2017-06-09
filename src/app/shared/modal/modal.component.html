@@ -1,14 +1,17 @@
 <!-- Modal Structure -->
-<div id="modal" class="modal" style="width: 100%; height: 100%" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions1">
-  <div class="modal-content">
-    <div class="chips chips-placeholder" materialize="material_chip"  [materializeParams]="[chipsPlaceholder]"  (chip.add)="add($event.detail)" (chip.delete)="delete($event.detail)" (chip.select)="select($event.detail)"></div>
-    <!--<div class="input-field col s12">-->
-    <!--<input type="text" id="autoComplete" materialize="autocomplete" [materializeParams]="[chipsAutoComplete]">-->
-    <!--</div>-->
+
+<createGroup *ngIf="modalIdentifier === 'createGroup'" [modalActions1] = "modalActions1" [openModalClass]="openModalClass" [groups]="groups" [contacts]="contacts"></createGroup>
+<createChannel *ngIf="modalIdentifier === 'createChannel'" [modalActions1] = "modalActions1" ></createChannel>
+<!--<div id="modal" class="modal" style="width: 100%; height: 100%" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions1">-->
+  <!--<div class="modal-content">-->
+    <!--<div class="chips chips-placeholder" materialize="material_chip"  [materializeParams]="[chipsPlaceholder]"  (chip.add)="add($event.detail)" (chip.delete)="delete($event.detail)" (chip.select)="select($event.detail)"></div>-->
+    <!--&lt;!&ndash;<div class="input-field col s12">&ndash;&gt;-->
+    <!--&lt;!&ndash;<input type="text" id="autoComplete" materialize="autocomplete" [materializeParams]="[chipsAutoComplete]">&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
     <!--<md-icon>home</md-icon>-->
-  </div>
-  <div class="modal-footer">
-    <a class="waves-effect waves-green btn-flat" (click)="addContact()">Agree</a>
-    <a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="closeContactopIn()">Close</a>
-  </div>
-</div>
+  <!--</div>-->
+  <!--<div class="modal-footer">-->
+    <!--<a class="waves-effect waves-green btn-flat" (click)="addContact()">Agree</a>-->
+    <!--<a class="modal-action modal-close waves-effect waves-green btn-flat" (click)="closeContactopIn()">Close</a>-->
+  <!--</div>-->
+<!--</div>-->

@@ -66,7 +66,7 @@
 <main class="row">
   <section class="col qwirk_sidebar" [ngClass]="{'open': !isCollapse }">
     <div class="statusSection valign-wrapper">
-      <status [size]="sizeStatus"></status>
+      <status [size]="sizeStatus" (click)="openContactPopin()"></status>
       <div class="userInfos">
         <div class="userAllNames">
           <div>
@@ -82,7 +82,7 @@
     <div class="qwirk_user_relations">
       <ul class="collapsible popout" data-collapsible="accordion"  materialize="collapsible">
         <li class="circle flat-text">
-          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">contacts</i></div>Contact</span></div>
+          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">contacts</i></div>Contact  <i class="material-icons" style="font-size: 17px">add</i></span></div>
           <div class="collapsible-body">
 
             <ul class="collection">
@@ -98,7 +98,7 @@
           </div>
         </li>
         <li class="circle">
-          <div class="collapsible-header circle rounded red red-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people_outline</i></div>Groups</span></div>
+          <div class="collapsible-header circle rounded red red-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people_outline</i></div>Groups  <a (click)="openContactPopin('createGroup')"><i class="material-icons" style="font-size: 17px; color: red">add</i> </a> </span></div>
           <div class="collapsible-body">
 
             <ul class="collection">
@@ -113,7 +113,7 @@
           </div>
         </li>
         <li class="circle">
-          <div class="collapsible-header circle rounded orange orange-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people</i></div>Channels</span></div>
+          <div class="collapsible-header circle rounded orange orange-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people</i></div>Channels  <i class="material-icons" style="font-size: 17px" (click)="openContactPopin('createChannel')">add</i></span></div>
           <div class="collapsible-body">
 
             <ul class="collection">
@@ -137,6 +137,7 @@
     </div>
   </section>
   <section class="col qwirk_content" [ngClass]="{'side_open': !isCollapse }">
+    <modal [modalIdentifier]="modalIdentifier" [modalActions1] = "modalActions1" [openModalClass]="openModalClass"></modal>
     <nav>
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo">Qwirk</a>
