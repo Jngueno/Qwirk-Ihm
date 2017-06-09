@@ -32,7 +32,7 @@ import {Ng2EmojiService} from "ng2-emoji";
   encapsulation: ViewEncapsulation.None,
   providers: [PrivateChatService, PeerConnectionService, GroupChatService]
 })
-export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked, OnChanges {
+export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   isCollapse: boolean = false;
   onChanged: string = 'slide-out';
   isSendFileOpen: boolean;

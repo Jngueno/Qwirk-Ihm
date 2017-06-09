@@ -72,9 +72,8 @@
     </div>
   </section>
   <section class="col qwirk_content" [ngClass]="{'side_open': !isCollapse }">
-    <nav *ngIf="!isVideo">
     <modal [modalIdentifier]="modalIdentifier" [modalActions1] = "modalActions1" [openModalClass]="openModalClass"></modal>
-    <nav>
+    <nav *ngIf="!isVideo">
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo">Qwirk</a>
         <ul class="right hide-on-med-and-down">

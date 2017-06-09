@@ -37,8 +37,8 @@ export class CreateGroupComponent {
   }
 
   createGroup() {
-    console.log(value.name.value)
-    console.log(this.group.name)
+    // console.log(value.name.value)
+    console.log(this.group.name);
     // this.groupService.addGroup(this.group)
   }
 
