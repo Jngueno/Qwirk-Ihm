@@ -82,11 +82,11 @@
     <div class="qwirk_user_relations">
       <ul class="collapsible popout" data-collapsible="accordion"  materialize="collapsible">
         <li class="circle flat-text">
-          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">contacts</i></div>Contact  <i class="material-icons" style="font-size: 17px">add</i></span></div>
+          <div class="collapsible-header circle rounded teal teal-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">contacts</i></div>Contact</span></div><contact [user]="user" [userContacts]="userContacts"></contact>
           <div class="collapsible-body">
 
             <ul class="collection">
-              <li *ngFor="let c of contacts" class="collection-item avatar" (click)="bindCheckMessages(c)">
+              <li *ngFor="let c of contacts" class="collection-item avatar" (click)="bindCheckMessages(c)" [ngClass]="{'isSelected red-border border-lighten-2': isSelected === c._id}">
                 <img src="{{appConfig.getUrlAPI()}}user/{{c.userObject.username}}" alt="" class="circle {{c.userObject.statusData.color}}-border">
                 <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{c.contactObject.nickname}}</span>
                   <p>{{c.userObject.firstName}} {{c.userObject.lastName}}<br>
@@ -100,7 +100,6 @@
         <li class="circle">
           <div class="collapsible-header circle rounded red red-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people_outline</i></div>Groups  <a (click)="openContactPopin('createGroup')"><i class="material-icons" style="font-size: 17px; color: red">add</i> </a> </span></div>
           <div class="collapsible-body">
-
             <ul class="collection">
               <li *ngFor="let group of groups" class="collection-item avatar" (click)="bindCheckGroupMessages(group)">
                 <img src="http://bit.ly/2nJ25ln" alt="" class="circle">
@@ -137,33 +136,17 @@
     </div>
   </section>
   <section class="col qwirk_content" [ngClass]="{'side_open': !isCollapse }">
+    <ng-container  *ngIf="(contact !== undefined && contact !== null) || (group !== undefined && group !== null)">
     <modal [modalIdentifier]="modalIdentifier" [modalActions1] = "modalActions1" [openModalClass]="openModalClass"></modal>
     <nav>
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo">Qwirk</a>
         <ul class="right hide-on-med-and-down">
-          <li><a href="#!"><i class="material-icons">search</i></a></li>
-          <li><a href="#!"><i class="material-icons">view_module</i></a></li>
-          <li><a href="#!"><i class="material-icons">refresh</i></a></li>
           <li><a href="#!"><i class="material-icons">more_vert</i></a></li>
         </ul>
       </div>
     </nav>
     <div #messageHistory id="messageHistory" class="message-history">
-      <!--<div class="sender">
-        <h6 class="right-align teal-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
-        <div class="message valign-wrapper teal lighten-5 teal-text text-lighten-2">
-          <p>{{mes}}</p>
-          <avatar data-size="very-tiny"></avatar>
-        </div>
-      </div>
-      <div class="receiver" *ngFor="let recMes of receivedMessages">
-        <h6 class="red-text text-darken-2">{{receiver.firstName}} {{receiver.lastName}}</h6>
-        <div class="message valign-wrapper red lighten-5 red-text text-lighten-2">
-          <p>{{recMes}}</p>
-          <avatar data-size="very-tiny"></avatar>
-        </div>
-      </div>-->
       <div class="message_container" *ngFor="let mes of messages; let i = index">
         <div class="send_message_date" *ngIf="i === 0 || (messages[i].sendTime | amDateFormat: 'YYYY-MM-DD') !== (messages[i-1].sendTime | amDateFormat: 'YYYY-MM-DD')">
           <div class="divider teal lighten-3"></div>
@@ -204,49 +187,32 @@
           </div>
         </div>
         <div class="input-field message-field">
-          <textarea [(ngModel)]="msg"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (keydown.enter)="sendMessage()" (keydown.control.Enter)="sendMessage()" (input)="notifyWriting()" (blur)="blurTypings()" (focus)="updateUnreadStatus()"></textarea>
+          <textarea [(ngModel)]="msg"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (keyup.enter)="sendMessage()" (keydown.control.Enter)="sendMessage()" (input)="notifyWriting()" (blur)="blurTypings()" (focus)="updateUnreadStatus()"></textarea>
           <label for="editable_message">Edit your message here</label>
-        </div><!--
-        <div class="wdt-emoji-popup">
-          <a href="#" class="wdt-emoji-popup-mobile-closer"> × </a>
-          <div class="wdt-emoji-menu-content">
-            <div id="wdt-emoji-menu-header">
-              <a class="wdt-emoji-tab active" data-group-name="Recent"></a>
-              <a class="wdt-emoji-tab" data-group-name="People"></a>
-              <a class="wdt-emoji-tab" data-group-name="Nature"></a>
-              <a class="wdt-emoji-tab" data-group-name="Foods"></a>
-              <a class="wdt-emoji-tab" data-group-name="Activity"></a>
-              <a class="wdt-emoji-tab" data-group-name="Places"></a>
-              <a class="wdt-emoji-tab" data-group-name="Objects"></a>
-              <a class="wdt-emoji-tab" data-group-name="Symbols"></a>
-              <a class="wdt-emoji-tab" data-group-name="Flags"></a>
-              <a class="wdt-emoji-tab" data-group-name="Custom"></a>
-            </div>
-            <div class="wdt-emoji-scroll-wrapper">
-              <div id="wdt-emoji-menu-items">
-                <input id="wdt-emoji-search" type="text" placeholder="Search">
-                <h3 id="wdt-emoji-search-result-title">Search Results</h3>
-                <div class="wdt-emoji-sections"></div>
-                <div id="wdt-emoji-no-result">No emoji found</div>
-              </div>
-            </div>
-            <div id="wdt-emoji-footer">
-              <div id="wdt-emoji-preview">
-                <span id="wdt-emoji-preview-img"></span>
-                <div id="wdt-emoji-preview-text">
-                  <span id="wdt-emoji-preview-name"></span><br>
-                  <span id="wdt-emoji-preview-aliases"></span>
-                </div>
-              </div>
-              <div id="wdt-emoji-preview-bundle">
-                <span>WDT Emoji Bundle</span>
-              </div>
-            </div>
-          </div>
-        </div>-->
+        </div>
         <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
       </form>
     </div>
+    </ng-container>
+    <ng-container *ngIf="!((contact !== undefined && contact !== null) || (group !== undefined && group !== null))">
+      <div class="cover-all valign-wrapper">
+      <div class="parallax-container skewed top user-definitions">
+        <div class="parallax teal lighten-2" materialize="parallax"></div>
+      </div>
+      <div class="section white center message-to-user">
+        <div class="row container">
+          <h2 class="header">Please start a conversation</h2>
+          <p class="grey-text text-darken-3 lighten-3">To start a conversation you should click on a contact or group or channel.</p>
+        </div>
+      </div>
+      <div class="parallax-container skewed bottom user-definitions">
+        <div class="parallax red lighten-2" materialize="parallax"></div>
+      </div>
+      </div>
+        <!--
+      <div class="container">
+      </div>-->
+    </ng-container>
     <!--<messagerie [messages]="messages" [user]="user" [contact]="contact"></messagerie>-->
   </section>
 </main>

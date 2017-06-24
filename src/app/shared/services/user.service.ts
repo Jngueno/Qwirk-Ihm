@@ -117,5 +117,23 @@ export class UserService {
         return contacts;
       })
   }
+
+  getAllUsers() {
+    return this.http.get(this.url + 'users')
+      .map(response => {
+        return response;
+      })
+  }
+
+  addUserToContact(user) {
+    let data = {"contactemail" : user.email};
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('Hello is getUserByEmail', currentUser);
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.post(this.url + 'contact', data, {headers : this.headers})
+      .map(res => {
+        return res.json();
+      })
+  }
 }
 

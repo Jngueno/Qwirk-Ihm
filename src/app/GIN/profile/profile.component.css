@@ -2,8 +2,10 @@
   position: fixed;
   top: 0;
   bottom: 0;
+  right: 0;
+  left: 250px;/*
   width: 100%;
-  padding-left: 250px;
+  padding-left: 250px;*/
   display: none;
   z-index: 1002;
 }

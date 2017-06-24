@@ -1,83 +1,135 @@
 /**
  * Created by Housseini  Maiga on 4/1/2017.
  */
-import {Component, OnInit, ViewEncapsulation, EventEmitter, Output, Input} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation, EventEmitter, Output, Input, OnChanges} from '@angular/core';
 import {MaterializeAction} from "angular2-materialize";
 import {IUser} from "../shared/models/user";
+import {UserService} from "../shared/services/user.service";
+import {APPCONFIG} from "../config/param";
+import {isUndefined} from "util";
+//import {ContactService} from "../shared/services/contact.service";
+
+
 
 @Component({
   selector: 'contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css'],
-  encapsulation: ViewEncapsulation.None
+  providers: [UserService]
 })
-export class ContactComponent implements OnInit {
-  params: string[] = [];
-  @Output() modalActions1 = new EventEmitter<string|MaterializeAction>();
-  contacts: Object[] = [
-    {"userId" : 0, "firstName": "Housseini", "lastName" : "Maiga", "description" : "Mess with the best.. Die with the rest.", "profilePicture" : "http://bit.ly/2n4OzaM", "username" : "fouss maiga"},
-    {"userId" : 1, "firstName": "Jennyfer", "lastName" : "Ngueno", "description" : "Never give up settle", "profilePicture" : "http://bit.ly/2nJ25ln", "username" : "jngueno"},
-    {"userId" : 2, "firstName": "Ervin", "lastName" : "Larry", "description" : "Autre est en Nous ..!", "profilePicture" : "http://bit.ly/2onErh0", "username" : "TBS"}
-  ];
-  chipsInit = {
-    data: [{
-      tag: 'Apple',
-    }, {
-      tag: 'Microsoft',
-    }, {
-      tag: 'Google',
-    }],
-  };
-  chipsPlaceholder = {
-    placeholder: '+Username/Email',
-    secondaryPlaceholder: 'Enter username or email',
-  };
-  chipsAutoComplete = {
-    'data': {
-      'Jennyfer Ngueno': null,
-      'Ervin Larry': null,
-      'Ario Maiga': null,
-      'Fouss Maiga': null
-    },
+export class ContactComponent implements OnInit, OnChanges {
+  contactModalActions = new EventEmitter<string|MaterializeAction>();
+  openContactClass: string;
+
+  @Input("user")
+  userConnected: any;
+
+  @Input("userContacts")
+  userContacts: Object[];
+  ngOnChanges(changes: any): void {
+    console.log("Contacts get changes", changes);
+    if(changes.userContacts) {
+      let userContactChange:any = changes.userContacts.currentValue;
+      if (userContactChange) {
+        console.log("Contacts get changes", changes.userContacts.currentValue);
+        this.userContacts = userContactChange
+        console.log('Contacts test 2 >>> ', userContactChange);
+      }
+    }
+  }
+
+  autocompleteInit = {
+    data: {},
     limit: Infinity,
-    minLength: 2
+    minLength: 1
   };
-  constructor() {
+
+  data: any;
+  users: any;
+  usersAssociation: any;
+  addedUsers: any;
+  addedContact: any
+  private appConfig: APPCONFIG;
+  private url: string;
+
+  constructor(private userService: UserService,
+              //private contactService : ContactService
+  ) {
+    this.data = {};
+    this.usersAssociation = {};
+    this.addedUsers = [];
+    this.addedContact = [];
+    this.appConfig = new APPCONFIG();
+    this.url = this.appConfig.urlAPI;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    console.log("Contacts add all this",this.userContacts.length);
+    this.getAllUsersApp();
   }
 
-  addContact(){
-    if(this.contacts.length > 0)
-    //this.userService.addContact(this.contacts);
-      console.log("test");
-    else
-      console.log("Aucun contact n'a été ajouté");
-  }
-  openContactPopin() {
-    console.log("openContactPopin - test");
-    this.modalActions1.emit({action:"modal",params:['open']});
-  }
-  closeContactopIn() {
-    this.modalActions1.emit({action:"modal",params:['close']});
-  }
-  add(chip) {
-    console.log("Chip added: " + chip.tag + " And contacts list length is " + this.contacts.length);
-    this.contacts.push(chip.tag);
-    console.log("Chip added: " + chip.tag);
-    console.log("Chip added: " + chip.tag + " And contacts list length is " + this.contacts.length);
-  }
-  delete(chip) {
-    console.log("(1) cChip deleted: " + chip.tag + " And contacts list length is " + this.contacts.length);
-    console.log("Chip deleted: " + chip.tag);
-    let index = this.contacts.indexOf(chip.tag);
-    if(index > -1)
-      this.contacts.splice(index, chip.tag);
-    console.log("(2) Chip deleted: " + chip.tag + " And contacts list length is " + this.contacts.length);
-  }
-  select(chip) {
-    console.log("Chip selected: " + chip.tag);
+
+  openContactModal() {
+    this.contactModalActions.emit({action: "modal", params: ['open']});
+    this.openContactClass = 'open';
   }
 
+  closeContactModal() {
+    this.contactModalActions.emit({action: "modal", params: ['close']});
+    this.openContactClass = 'close';
+  }
+
+  getAllUsersApp() {
+    let self = this;
+    this.userService.getAllUsers().subscribe(
+      res => {
+        console.log("Contacts all users", self.userContacts);
+        self.users = res.json();
+        let data = {};
+        for (let u of self.users) {
+          if (u.username !== self.userConnected.username) {
+            console.log("Contacts to users  : start", self.userContacts[0]);
+             for (let c of self.userContacts) {
+             console.log("Contacts to users  : ", c);
+             if (c["userObject"].username !== u.username) {
+            self.usersAssociation[u.username] = u;
+            data[u.username] = self.url + 'user/' + u.username;
+            data[u.email] = self.url + 'user/' + u.username;
+             }
+             }
+          }
+        }
+        self.data = data;
+      }
+    );
+  }
+
+  addToAddedUsers(params: any) {
+    let intermediate = this.addedUsers;
+
+    intermediate.push(this.usersAssociation[params.value.trim()]);
+
+    params.value = "";
+
+    this.addedUsers = Array.from(new Set(intermediate.map((u) => u)));
+  }
+
+  removeToAddedUsers(u: any) {
+    let index = this.addedUsers.indexOf(u);
+    if (index > -1) {
+      this.addedUsers.splice(index, 1);
+    }
+  }
+
+  addAllUsersToContacts() {
+    let self = this;
+
+    for (let user of self.addedUsers) {
+      this.userService.addUserToContact(user).subscribe(
+        contact => {
+          self.addedContact.push(contact);
+        }
+      )
+    }
+  }
 }

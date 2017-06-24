@@ -126,6 +126,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   typings: any;
   private notifyTypings: any;
   private notifyTypingsBlur: Subscription;
+  private userContacts : any = [];
 
   groupTypings: any;
   private groupNotifyTypings: any;
@@ -141,6 +142,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   private groups: any;
   private channels:any;
   group: any;
+  private isSelected: string|string|string;
   constructor(private userService: UserService,
               private authService : AuthenticationService,
               private renderer : Renderer,
@@ -156,6 +158,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.channels = [];
     this.isSendFileOpen = false;
     this.notifyTypings = null;
+    this.userContacts = [];
   }
   @ViewChild('messageHistory') private messageHistoryContainer: ElementRef;
 
@@ -207,7 +210,9 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
       this.messageHistoryContainer.nativeElement.scrollTop = this.messageHistoryContainer.nativeElement.scrollHeight;
     } catch(err) { }*/
     let objDiv = document.getElementById("messageHistory");
-    objDiv.scrollTop = objDiv.scrollHeight;
+    if (objDiv) {
+      objDiv.scrollTop = objDiv.scrollHeight;
+    }
   }
 
   ngOnDestroy() {
@@ -312,17 +317,23 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   getAllUserContacts() {
+    let self = this;
     this.userService.getAllContacts(this.user).subscribe(contacts => {
       //console.log(contacts);
       let newContacts = [];
       for(let c of contacts) {
         if(c.userObject) {
           newContacts.push(c);
+          //self.userContacts.push(c.userObject);
           this.unreadMessages[c.userObject._id] = [];
+          console.log('userContacts >45454>> ', this.userContacts)
         }
       }
-      console.log("Get all contacts", newContacts);
+      console.log("Get all contacts", newContacts, self.userContacts);
       this.contacts = newContacts;
+      console.log('e-tgfutegfyegyfer', contacts);
+      this.userContacts = this.contacts;
+      console.log('userContacts >>54545> ', this.userContacts)
       return contacts;
     })
   }
@@ -373,6 +384,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   bindCheckMessages(contact) {
     let self = this;
+    this.isSelected = contact._id;
     self.contact = contact.userObject;
     self.group = null;
     self.fullContact = contact;

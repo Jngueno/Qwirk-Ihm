@@ -824,7 +824,11 @@ nav a {
 
 html, body{
   height: 100%;
-  font-family: Arial, Helvetica, sans-serif
+  font-family: GillSans, Calibri, Trebuchet, sans-serif;
+}
+
+.border {
+  border: 1px solid;
 }
 
 .radial {
@@ -875,6 +879,10 @@ html, body{
     tansition-delay: 0s;
     color: lighten($red, 15);
   }
+}
+
+.modal-overlay {
+  display: none !important;
 }
 
 .radial {

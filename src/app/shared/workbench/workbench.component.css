@@ -340,6 +340,45 @@ h6 {
   border-radius: 20px;
 }
 
+.skewed {
+  -webkit-transform: skewY(-15deg);
+  -moz-transform: skewY(-15deg);
+  -ms-transform: skewY(-15deg);
+  -o-transform: skewY(-15deg);
+  transform: skewY(-15deg);
+}
+
+
+.skewed.top {
+  top: -250px;
+  bottom: calc(50% + 250px);
+}
+
+.skewed.bottom {
+  bottom: -250px;
+  top: calc(50% + 250px);
+}
+
+.cover-all {
+  height: 100%;
+  width: 100%;
+}
+
+.message-to-user {
+  width: 100%;
+}
+
+.user-definitions {
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+  height: auto !important;
+}
+
+.isSelected {
+  border-bottom: 3px solid !important;
+}
+
 #editable_message {
   margin: 0;
   border: 1px solid #9e9e9e;
