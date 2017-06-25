@@ -98,7 +98,7 @@
           </div>
         </li>
         <li class="circle">
-          <div class="collapsible-header circle rounded red red-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people_outline</i></div>Groups  <a (click)="openContactPopin('createGroup')"><i class="material-icons" style="font-size: 17px; color: red">add</i> </a> </span></div>
+          <div class="collapsible-header circle rounded red red-text text-lighten-3"><span><div class="icon-container"><i class="material-icons">people_outline</i></div>Groups</span></div><createGroup [contacts]="contacts" [user]="user"></createGroup>
           <div class="collapsible-body">
             <ul class="collection">
               <li *ngFor="let group of groups" class="collection-item avatar" (click)="bindCheckGroupMessages(group)">

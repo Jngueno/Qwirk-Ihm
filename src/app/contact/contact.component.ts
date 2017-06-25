@@ -88,15 +88,9 @@ export class ContactComponent implements OnInit, OnChanges {
         let data = {};
         for (let u of self.users) {
           if (u.username !== self.userConnected.username) {
-            console.log("Contacts to users  : start", self.userContacts[0]);
-             for (let c of self.userContacts) {
-             console.log("Contacts to users  : ", c);
-             if (c["userObject"].username !== u.username) {
             self.usersAssociation[u.username] = u;
             data[u.username] = self.url + 'user/' + u.username;
             data[u.email] = self.url + 'user/' + u.username;
-             }
-             }
           }
         }
         self.data = data;

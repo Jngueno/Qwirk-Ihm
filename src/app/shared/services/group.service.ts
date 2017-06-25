@@ -31,7 +31,12 @@ export class GroupService {
 
   addGroup(content) {
     let body = content || '{}';
-    return this.http.post(this.url + 'groups', JSON.stringify(body))
+    let self = this;
+    return this.http.post(this.url + 'groups', body).map(
+      res => {
+        return res;
+      }
+    )
   }
 
   updateGroup(content) {
