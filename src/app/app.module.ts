@@ -69,6 +69,7 @@ import {VgOverlayPlayModule} from 'videogular2/overlay-play';
 import {VgBufferingModule} from 'videogular2/buffering';
 import {MomentModule} from "angular2-moment";
 import {FormatTextPipe} from "./shared/pipe/formatText.pipe";
+import {Ng2EmojiModule} from "ng2-emoji";
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -122,6 +123,7 @@ type StoreType = {
     BrowserModule,
     FormsModule,
     HttpModule,
+    Ng2EmojiModule,
     JsonpModule,
     MaterializeModule,
     Angular2FontAwesomeModule,

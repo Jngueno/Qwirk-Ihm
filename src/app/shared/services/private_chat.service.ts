@@ -41,7 +41,7 @@ export class PrivateChatService {
       : roomName = receiver.username + sender.username;
     let observable = new Observable(
       observer => {
-        this.socket = io(this.appConfig.getUrlAPI() + 'privatePeer2Peer');
+        this.socket = io(this.appConfig.getUrlAPI() + 'privatePeer2Peer', {'transports': ['websocket', 'polling']});
 
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         let userRoom = {"user" : currentUser.user_id, "room" : roomName};
@@ -144,7 +144,7 @@ export class PrivateChatService {
   getNewMessagesPush(sender) {
     let observable = new Observable(
       observer => {
-        this.socket = io(this.appConfig.getUrlAPI());
+        this.socket = io(this.appConfig.getUrlAPI(), {'transports': ['websocket', 'polling']});
         this.socket.on('newMessage', (data) => {
           //console.log("Get new messages from qwirk platform",sender, data.receiverUser);
           if(data.receiverUser.indexOf(sender._id) !== -1) {

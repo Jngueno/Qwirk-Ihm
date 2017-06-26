@@ -3,7 +3,7 @@
   <h6 class="red-text text-darken-2">{{user.firstName}} {{user.lastName}}</h6>
   <div class="message valign-wrapper lighten-5 red red-text text-lighten-2">
     <div class="circle message-time  {{user.statusData.color}} {{user.statusData.color}}-border white-text"><time>{{message.sendTime | amDateFormat: 'HH:mm'}}</time></div>
-    <p *ngIf="!message.media">{{message.content | formattext}}</p>
+    <p *ngIf="!message.media" [innerHTML]="message.content | formattext">{{message.content}}</p>
     <div class="mediaContainer" *ngIf="message.media">
       <div class="image-container" *ngIf="message.media.contentType.indexOf('image') >= 0">
             <div class="card">

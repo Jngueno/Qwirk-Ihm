@@ -182,6 +182,9 @@
             <span class="white teal lighten-5 teal-border border-lighten-3 teal-text text-lighten-3"><time>{{mes.sendTime | amDateFormat:'LL'}}</time></span>
           </div>
           <message [user]="user" [contact]="contact" [group]="group" [message]="mes"></message>
+            <div class="emoji_container" *ngIf="isEmojis">
+              <span class="emoji-hover" *ngFor="let emoji of emojiList" [innerHTML]="(':'+emoji+':') | emojis"  (click)="addEmoji(emoji)"></span>
+            </div>
           </ng-container>
         </div>
         </ng-container>
@@ -220,6 +223,8 @@
             <textarea [(ngModel)]="msg"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (keyup.enter)="sendMessage()" (keydown.control.Enter)="sendMessage()" (input)="notifyWriting()" (blur)="blurTypings()" (focus)="updateUnreadStatus()"></textarea>
             <label for="editable_message">Edit your message here</label>
           </div>
+          <button class="btn btn-flat circle btn-floating add_emoji_btn teal lighten-3" (click)="showEmojis()"><i class="material-icons">stars</i></button>
+          <button class="btn btn-flat circle btn-floating add_code_btn teal lighten-3" (click)="addCodeStyle()"><i class="material-icons">code</i></button>
           <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
         </form>
       </div>

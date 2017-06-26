@@ -18,6 +18,7 @@ import {APPCONFIG} from "../../config/param";
 import {GroupService} from "../services/group.service";
 import {GroupChatService} from "../services/group_chat.service";
 import * as moment from 'moment/moment';
+import {Ng2EmojiService} from "ng2-emoji";
 
 /*import * as wdtEmojiBundle from 'wdt-emoji-bundle';*/
 
@@ -126,6 +127,8 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   public appConfig = new APPCONFIG();
   profileImg;
   typings: any;
+  emojiList = [];
+  isEmojis : boolean = false;
   private notifyTypings: any;
   private notifyTypingsBlur: Subscription;
   private userContacts : any = [];
@@ -161,6 +164,7 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.isSendFileOpen = false;
     this.notifyTypings = null;
     this.userContacts = [];
+    this.emojiList = Ng2EmojiService.emojis;
   }
   @ViewChild('messageHistory') private messageHistoryContainer: ElementRef;
 
@@ -313,6 +317,18 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
         return res;
       }
     )
+  }
+
+  addEmoji(emoji : string) :void {
+  console.error('test emoji > ', emoji);
+  this.isEmojis = !this.isEmojis;
+  this.msg += ':' + emoji + ': ';
+  console.log(this.msg);
+}
+
+  showEmojis() {
+    this.isEmojis = !this.isEmojis;
+    console.log('showEmojis > ', this.isEmojis)
   }
 
   onModalActionChanged(data : any){

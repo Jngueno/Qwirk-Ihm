@@ -47,7 +47,7 @@ export class GroupChatService {
     console.log("Hey is me", userRoom);
     let observable = new Observable(
       observer => {
-        this.socket = io(this.appConfig.getUrlAPI() + 'groupSocket');
+        this.socket = io(this.appConfig.getUrlAPI() + 'groupSocket', {'transports': ['websocket', 'polling']});
         this.socket.emit('room', userRoom);
         this.socket.on(roomName, (data) => {
           observer.next(data);
@@ -140,7 +140,7 @@ export class GroupChatService {
     let roomName = group._id;
     let observable = new Observable(
       observer => {
-        this.socket = io(this.appConfig.getUrlAPI());
+        this.socket = io(this.appConfig.getUrlAPI(), {'transports': ['websocket', 'polling']});
         //this.socket.emit('room', roomName);
         this.socket.on('newGroupMessage', (data) => {
           //console.log("Get new messages from qwirk platform",sender, data.receiverUser);
