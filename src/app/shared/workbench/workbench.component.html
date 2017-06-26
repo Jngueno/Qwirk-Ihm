@@ -86,14 +86,21 @@
           <div class="collapsible-body">
 
             <ul class="collection">
-              <li *ngFor="let c of contacts" class="collection-item avatar" (click)="bindCheckMessages(c)" [ngClass]="{'isSelected red-border border-lighten-2': isSelected === c._id}">
-                <img src="{{appConfig.getUrlAPI()}}user/{{c.userObject.username}}" alt="" class="circle {{c.userObject.statusData.color}}-border">
-                <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{c.contactObject.nickname}}</span>
-                  <p>{{c.userObject.firstName}} {{c.userObject.lastName}}<br>
-                    {{c.userObject.email}}
-                  </p>
-                  <a href="#!" class="secondary-content"><span class="badge">{{counterUnread[c.contactObject.user]}}</span></a></div>
+              <ng-container *ngFor="let c of contacts" >
+              <li *ngIf="!c.contactObject.isRefuse" class="collection-item avatar" (click)="bindCheckMessages(c)" [ngClass]="{'isSelected red-border border-lighten-2': isSelected === c._id}">
+                  <img src="{{appConfig.getUrlAPI()}}user/{{c.userObject.username}}" alt="" class="circle {{c.userObject.statusData.color}}-border">
+                  <div class="secondary-part" [ngClass]="{'hiddendiv': isCollapse}"><span class="title">{{c.contactObject.nickname}}</span>
+                    <p>{{c.userObject.firstName}} {{c.userObject.lastName}}<br>
+                      {{c.userObject.email}}
+                    </p>
+                    <div href="#!" *ngIf="c.isPending && c.userEmail !== user.email">
+                      <a class="btn border btn-floating btn-flat btn-small teal-border" (click)="acceptInvitation(c)"><i class="material-icons teal-text">check</i></a>
+                      <a class="btn border btn-floating btn-flat btn-small red-border" (click)="refuseInvitation(c)"><i class="material-icons red-text">close</i></a>
+                    </div>
+                    <span class="badge">{{counterUnread[c.userObject._id]}}</span>
+                  </div>
               </li>
+              </ng-container>
             </ul>
           </div>
         </li>
@@ -131,87 +138,127 @@
 
     <button class="btn btn-flat btn-small qwirk_sidebar_expand teal lighten-3" (click)="expand_sidebar()"><i class="material-icons">chevron_right</i></button>
     <div class="user_action_but">
-    <logout></logout>
-    <profile></profile>
+      <logout></logout>
+      <profile></profile>
     </div>
   </section>
   <section class="col qwirk_content" [ngClass]="{'side_open': !isCollapse }">
-    <ng-container  *ngIf="(contact !== undefined && contact !== null) || (group !== undefined && group !== null)">
-    <modal [modalIdentifier]="modalIdentifier" [modalActions1] = "modalActions1" [openModalClass]="openModalClass"></modal>
-    <nav>
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo">Qwirk</a>
-        <ul class="right hide-on-med-and-down">
-          <li><a href="#!"><i class="material-icons">more_vert</i></a></li>
-        </ul>
-      </div>
-    </nav>
-    <div #messageHistory id="messageHistory" class="message-history">
-      <div class="message_container" *ngFor="let mes of messages; let i = index">
-        <div class="send_message_date" *ngIf="i === 0 || (messages[i].sendTime | amDateFormat: 'YYYY-MM-DD') !== (messages[i-1].sendTime | amDateFormat: 'YYYY-MM-DD')">
-          <div class="divider teal lighten-3"></div>
-          <span class="white teal lighten-5 teal-border border-lighten-3 teal-text text-lighten-3"><time>{{mes.sendTime | amDateFormat:'LL'}}</time></span>
-        </div>
-        <message [user]="user" [contact]="contact" [group]="group" [message]="mes"></message>
-      </div>
-
-    </div>
-    <div class="isTyping center-align">
-      <p>{{typings}}</p>
-    </div>
-    <div class="message-discussion valign-wrapper">
-      <form #sendMessageForm="ngForm">
-        <div class="fullscreen red lighten-3" (click)="toggleIsSendFile()" [ngClass]="{overlay: isSendFileOpen}"></div>
-            <div class="sendFile radial teal lighten-3 file-field input-field" [ngClass]="{open: isSendFileOpen}">
-              <input type="file" name="file_user" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/pdf, text/*, image/*, video/*" (change)="changeFileMessage($event)" ngModel>
-              <button class="fa fa-file-o fa-2x file-field input-field" id="fa-1">
-                <input type="file" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, text/csv, .csv" name="file_user" (change)="changeFileMessage($event)" ngModel>
-              </button>
-              <button class="fa fa-picture-o fa-2x file-field input-field" id="fa-2">
-                <input type="file" accept="image/*" name="file_user" ngModel (change)="changeFileMessage($event)">
-              </button>
-              <button class="fa fa-file-video-o fa-2x file-field input-field" id="fa-3">
-                <input  type="file" accept="video/*" name="file_user" ngModel (change)="changeFileMessage($event)"l>
-              </button>
-              <button class="red lighten-3 fab file-field input-field" (click)="toggleIsSendFile()">
-                <i class="fa fa-paperclip" id="plus"></i>
-              </button>
-            </div>
-        <div id="files_to_send" class="modal bottom-sheet">
+    <ng-container  *ngIf="((contact !== undefined && contact !== null) || (group !== undefined && group !== null)) && (fullContact !== undefined  && fullContact!== null && !fullContact.isPending)">
+      <modal [modalIdentifier]="modalIdentifier" [modalActions1] = "modalActions1" [openModalClass]="openModalClass"></modal>
+      <ul id="dropdown1" class="dropdown-content">
+        <li *ngIf="!fullContact.contactObject.isBlocked"><a href="#!" (click)="toggleBlockedContact()">Block</a></li>
+        <li *ngIf="fullContact.contactObject.isBlocked"><a href="#!" (click)="toggleBlockedContact()">Unblock</a></li>
+        <li><a class="modal-trigger" (click)="openRenameContactPopin()" href="#!">Rename</a></li>
+      </ul>
+      <div id="rename" class="modal bottom-sheet" materialize="modal" [materializeParams]="[{dismissible: true}]" [materializeActions]="modalActionsRename">
+        <form #changeNickname="ngForm" >
           <div class="modal-content">
-            <h4>Modal Header</h4>
-            <p>A bunch of text</p>
+            <div class="row">
+              <div class="input-field col s12">
+                <input id="nickname" type="text" name="nickname" class="active validate" ngModel required="" aria-required="true">
+                <label for="nickname" data-error="nickname is not valid">Nickname</label>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            <button type="button" class="modal-action modal-close waves-effect waves-green btn-flat" (click)="renameContact(changeNickname)">Send</button>
           </div>
+        </form>
+      </div>
+      <nav>
+        <div class="nav-wrapper">
+          <a href="#!" class="brand-logo">Qwirk</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a class="dropdown-button" materialize="dropdown" data-activates="dropdown1" href="#!"><i class="material-icons">more_vert</i></a></li>
+          </ul>
         </div>
-        <div class="input-field message-field">
-          <textarea [(ngModel)]="msg"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (keyup.enter)="sendMessage()" (keydown.control.Enter)="sendMessage()" (input)="notifyWriting()" (blur)="blurTypings()" (focus)="updateUnreadStatus()"></textarea>
-          <label for="editable_message">Edit your message here</label>
+      </nav>
+      <div #messageHistory id="messageHistory" class="message-history">
+        <ng-container *ngIf="messages !== undefined && messages !== null && messages.length > 0">
+        <div class="message_container" *ngFor="let mes of messages; let i = index">
+          <ng-container *ngIf="mes !== undefined && messages[i-1] !== undefined">
+          <div class="send_message_date" *ngIf="i === 0 || (mes.sendTime | amDateFormat: 'YYYY-MM-DD') !== (messages[i-1].sendTime | amDateFormat: 'YYYY-MM-DD')">
+            <div class="divider teal lighten-3"></div>
+            <span class="white teal lighten-5 teal-border border-lighten-3 teal-text text-lighten-3"><time>{{mes.sendTime | amDateFormat:'LL'}}</time></span>
+          </div>
+          <message [user]="user" [contact]="contact" [group]="group" [message]="mes"></message>
+          </ng-container>
         </div>
-        <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
-      </form>
-    </div>
+        </ng-container>
+      </div>
+      <div class="isTyping center-align">
+        <p>{{typings}}</p>
+      </div>
+      <div class="message-discussion valign-wrapper" *ngIf="!fullContact.contactObject.isBlocked">
+        <form #sendMessageForm="ngForm">
+          <div class="fullscreen red lighten-3" (click)="toggleIsSendFile()" [ngClass]="{overlay: isSendFileOpen}"></div>
+          <div class="sendFile radial teal lighten-3 file-field input-field" [ngClass]="{open: isSendFileOpen}">
+            <input type="file" name="file_user" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/pdf, text/*, image/*, video/*" (change)="changeFileMessage($event)" ngModel>
+            <button class="fa fa-file-o fa-2x file-field input-field" id="fa-1">
+              <input type="file" accept="application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, text/plain, application/pdf, text/csv, .csv" name="file_user" (change)="changeFileMessage($event)" ngModel>
+            </button>
+            <button class="fa fa-picture-o fa-2x file-field input-field" id="fa-2">
+              <input type="file" accept="image/*" name="file_user" ngModel (change)="changeFileMessage($event)">
+            </button>
+            <button class="fa fa-file-video-o fa-2x file-field input-field" id="fa-3">
+              <input  type="file" accept="video/*" name="file_user" ngModel (change)="changeFileMessage($event)"l>
+            </button>
+            <button class="red lighten-3 fab file-field input-field" (click)="toggleIsSendFile()">
+              <i class="fa fa-paperclip" id="plus"></i>
+            </button>
+          </div>
+          <div id="files_to_send" class="modal bottom-sheet">
+            <div class="modal-content">
+              <h4>Modal Header</h4>
+              <p>A bunch of text</p>
+            </div>
+            <div class="modal-footer">
+              <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            </div>
+          </div>
+          <div class="input-field message-field">
+            <textarea [(ngModel)]="msg"  id="editable_message" name="message_sender" class="validate materialize-textarea wdt-emoji-bundle-enabled wdt-emoji-open-on-colon" (keyup.enter)="sendMessage()" (keydown.control.Enter)="sendMessage()" (input)="notifyWriting()" (blur)="blurTypings()" (focus)="updateUnreadStatus()"></textarea>
+            <label for="editable_message">Edit your message here</label>
+          </div>
+          <button class="btn btn-flat circle btn-floating send_message_but teal lighten-3" (click)="sendMessage()"><i class="material-icons">send</i></button>
+        </form>
+      </div>
     </ng-container>
     <ng-container *ngIf="!((contact !== undefined && contact !== null) || (group !== undefined && group !== null))">
       <div class="cover-all valign-wrapper">
-      <div class="parallax-container skewed top user-definitions">
-        <div class="parallax teal lighten-2" materialize="parallax"></div>
-      </div>
-      <div class="section white center message-to-user">
-        <div class="row container">
-          <h2 class="header">Please start a conversation</h2>
-          <p class="grey-text text-darken-3 lighten-3">To start a conversation you should click on a contact or group or channel.</p>
+        <div class="parallax-container skewed top user-definitions">
+          <div class="parallax teal lighten-2" materialize="parallax"></div>
+        </div>
+        <div class="section white center message-to-user">
+          <div class="row container">
+            <h2 class="header">Please start a conversation</h2>
+            <p class="grey-text text-darken-3 lighten-3">To start a conversation you should click on a contact or group or channel.</p>
+          </div>
+        </div>
+        <div class="parallax-container skewed bottom user-definitions">
+          <div class="parallax red lighten-2" materialize="parallax"></div>
         </div>
       </div>
-      <div class="parallax-container skewed bottom user-definitions">
-        <div class="parallax red lighten-2" materialize="parallax"></div>
+      <!--
+    <div class="container">
+    </div>-->
+    </ng-container>
+    <ng-container *ngIf="fullContact !== undefined  && fullContact!== null  && fullContact.isPending">
+
+      <div class="cover-all valign-wrapper">
+        <div class="parallax-container skewed top user-definitions">
+          <div class="parallax teal lighten-2" materialize="parallax"></div>
+        </div>
+        <div class="section white center message-to-user">
+          <div class="row container">
+            <h2 class="header">Waiting for {{fullContact.userObject.username}} approval...</h2>
+            <p class="grey-text text-darken-3 lighten-3">This user has not accept your invitation yet.</p>
+          </div>
+        </div>
+        <div class="parallax-container skewed bottom user-definitions">
+          <div class="parallax red lighten-2" materialize="parallax"></div>
+        </div>
       </div>
-      </div>
-        <!--
-      <div class="container">
-      </div>-->
     </ng-container>
     <!--<messagerie [messages]="messages" [user]="user" [contact]="contact"></messagerie>-->
   </section>

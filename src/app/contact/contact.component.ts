@@ -101,7 +101,14 @@ export class ContactComponent implements OnInit, OnChanges {
   addToAddedUsers(params: any) {
     let intermediate = this.addedUsers;
 
-    intermediate.push(this.usersAssociation[params.value.trim()]);
+    if(this.usersAssociation[params.value.trim()]) {
+      intermediate.push(this.usersAssociation[params.value.trim()]);
+    }
+    else {
+      if(this.validateEmail(params.value.trim())) {
+        intermediate.push({email : params.value.trim(), firstName : "Unknown", lastName : "Unknown"});
+      }
+    }
 
     params.value = "";
 
@@ -113,6 +120,11 @@ export class ContactComponent implements OnInit, OnChanges {
     if (index > -1) {
       this.addedUsers.splice(index, 1);
     }
+  }
+
+  validateEmail(email) {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
   }
 
   addAllUsersToContacts() {

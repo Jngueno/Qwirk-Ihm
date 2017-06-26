@@ -86,9 +86,9 @@ export class CreateGroupComponent {
       res => {
         self.contacts = res;
         let data = {};
+
         for (let c of self.contacts) {
-          if (c.userObject.username !== self.userConnected.username) {
-            console.log(c.userObject);
+          if (c.userObject && c.userObject.username !== self.userConnected.username) {
 
             self.usersAssociation[c.userObject.username] = c.userObject;
             data[c.userObject.username] = self.url + 'user/' + c.userObject.username;

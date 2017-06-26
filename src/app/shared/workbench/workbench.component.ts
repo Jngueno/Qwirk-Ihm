@@ -64,6 +64,8 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
   };
   params: string[] = [];
   modalActions1 = new EventEmitter<string|MaterializeAction>();
+
+  modalActionsRename = new EventEmitter<string|MaterializeAction>();
   modalIdentifier;
   sizeStatus = "tiny";
   user : any;
@@ -238,10 +240,79 @@ export class WorkbenchComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.openModalClass = 'open';
   }
 
+  openRenameContactPopin() {
+    this.modalActionsRename.emit({action:"modal",params:['open']});
+  }
+
+  closeRenameContactPopin() {
+    this.modalActionsRename.emit({action:"modal",params:['close']});
+  }
+
   closeContactopIn() {
     this.modalActions1.emit({action:"modal",params:['close']});
     this.openModalClass = 'close';
     console.log();
+  }
+
+  renameContact(form : any) {
+    let user = {"nickname" : form.value.nickname, "contactemail" : this.contact.email};
+    /*user = form.value.n;
+    user['contactemail'] = this.contact.email;*/
+    let self = this;
+    this.userService.renameContact(user).subscribe(
+      res => {
+        let fullContact = {};
+        let index = self.contacts.map(function(e) { return e["_id"]; }).indexOf(res.relationId);
+        fullContact = self.contacts[index];
+        fullContact['contactObject'].nickname = form.value.nickname;
+        self.contact = fullContact;
+        self.contacts[index] = fullContact;
+        self.closeRenameContactPopin();
+        return res;
+      }
+    )
+  }
+
+  toggleBlockedContact() {
+    let self = this;
+    console.log("Blocked contact", this.fullContact.contactObject);
+    let user = {"contactemail" : this.fullContact.contactObject.contactEmail, "isBlocked" : !this.fullContact.contactObject.isBlocked};
+    this.userService.blockedContact(user).subscribe(
+      res => {
+        console.log("Blocked contact", res);
+        let index = self.contacts.map(function(e) { return e["_id"]; }).indexOf(res.relationId);
+        self.fullContact['contactObject'].isBlocked = user.isBlocked;
+
+        self.contacts[index] = self.fullContact;
+      }
+    )
+  }
+
+  acceptInvitation(c) {
+    let self = this;
+    let user = {"contactemail" : c.contactObject.contactEmail};
+    this.userService.acceptContact(user).subscribe(
+      res => {
+        let index = self.contacts.map(function(e) { return e["_id"]; }).indexOf(res.relationId);
+        c.isPending = false;
+        self.scrollToBottom();
+        //self.contacts[index] = self.fullContact;
+        return res;
+      }
+    )
+  }
+
+  refuseInvitation(c) {
+    let self = this;
+    let user = {"contactemail" : c.contactObject.contactEmail};
+    this.userService.refuseContact(user).subscribe(
+      res => {
+        let index = self.contacts.map(function(e) { return e["_id"]; }).indexOf(res.relationId);
+        c.contactObject.isRefuse = true;
+        //self.contacts[index] = self.fullContact;
+        return res;
+      }
+    )
   }
 
   onModalActionChanged(data : any){

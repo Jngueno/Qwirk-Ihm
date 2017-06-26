@@ -135,5 +135,45 @@ export class UserService {
         return res.json();
       })
   }
+
+  renameContact(user) {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('Hello is getUserByEmail', currentUser);
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.put(this.url + 'contact/rename', user, {headers : this.headers})
+      .map(res => {
+        return res.json();
+      });
+  }
+
+  blockedContact(user) {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('Hello is getUserByEmail', currentUser);
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.put(this.url + 'contact/block', user, {headers : this.headers})
+      .map(res => {
+        return res.json();
+      })
+  }
+
+  acceptContact(contactRel) {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('Hello is getUserByEmail', currentUser);
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.put(this.url + 'contact/accept', contactRel, {headers : this.headers})
+      .map(res => {
+        return res.json();
+      })
+  }
+
+  refuseContact(user) {
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log('Hello is getUserByEmail', currentUser);
+    this.headers = new Headers({'Authorization': 'Bearer ' + currentUser.token});
+    return this.http.put(this.url + 'contact/refuse', user, {headers : this.headers})
+      .map(res => {
+        return res.json();
+      })
+  }
 }
 
